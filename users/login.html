@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Login</title>
+
+		<script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?features=Promise%2CPromise.prototype.finally%2Cfetch%2CTextEncoder"></script>
+		<script src="src/js/authentication.js"></script>
+
+		<script>
+			function login() {
+				let username = document.getElementById("input-name").value;
+				let password = document.getElementById("input-password").value;
+				let stayLogedIn = document.getElementById("input-stayLogedIn").checked;
+				Api.login(username, password, stayLogedIn).then(function(result) {
+					Api.fetch("api/test/test0").then(console.log);
+					Api.fetch("api/test/test1").then(console.log);
+					Api.fetch("api/test/test2").then(console.log);
+					Api.fetch("api/test/test3").then(console.log);
+					Api.fetch("api/test/test4").then(console.log);
+				});
+				Api.onRequiresRelogin = function() { console.log("RequiresRelogin"); };
+			}
+
+			function logout() {
+				Api.logout();
+			}
+		</script>
+	</head>
+	<body>
+		<a href="index.html">Home</a><br>
+		<input type="text" id="input-name" placeholder="Username"><br>
+		<input type="password" id="input-password" placeholder="Password"><br>
+		<button onclick="login()">Login</button>
+		<input type="checkbox" id="input-stayLogedIn"><br>
+		<button onclick="logout()">Logout</button>
+	</body>
+</html>

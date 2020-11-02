@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="icon" href="assets/images/icon.png" />
+    <title>Overview</title>
+    <style>
+      body {
+        margin:0px;
+        font-family:arial;
+      }
+      table {
+        border-collapse:collapse;
+      }
+      #template td {
+        border:solid;
+        border-width:1px;
+        padding:5px;
+      }
+      #template th {
+        padding: 5px;
+      }
+      #headerList {
+        list-style-type:none;
+        width:100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #222;
+        height:75px;
+        align-items: center; /* Align-Items und Display-Flex zentrieren Listen-Elemente Vertikal */
+        display: flex;
+      }
+      #headerLogo {
+        height:50px;
+      }
+      #login_formular {
+        float:right;
+        margin-right:100px;
+      }
+      #dashboard {
+        margin-left:25px;
+        margin-right:25px;
+        background-color:#DDD;
+        padding:25px;
+        min-height:80vh;
+      }
+      #dashDisplayLeft {
+        float:left;
+        width:55%;
+        border:solid;
+        border-width:1px;
+        height:100%;
+        padding:15px;
+      }
+      #dashDisplayRight {
+        float:right;
+        width: 40%;
+        border:solid;
+        border-width:1px;
+        height:100%;
+        padding:15px;
+      }
+      #template {
+        width:100%;
+      }
+      .listSortIcon:hover {
+        cursor:pointer;
+        color:limegreen;
+      }
+      .headerElement {
+        float:left;
+        width:calc(100% / 5); /* Divident steht für Anzahl der Header Elemente */
+      }
+      .headerElement a {
+        display:block;
+        text-align: center;
+        color:white;
+        font-size:1.5vw;
+        text-decoration: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="header">
+      <ul id="headerList">
+        <li class="headerElement"><a href="index.html"><img id="headerLogo" src="assets/images/logo.png"></a></li>
+        <li class="headerElement"><a href="wares/stockList.html">Warenbestand</a></li>
+        <li class="headerElement"><a href="events/eventManagement.html">Events</a></li>
+        <li class="headerElement"><a href="wares/stockList.html">Wareneingang</a></li>
+        <li class="headerElement"><a href="users/login.html">Login</a></li>
+      </ul>
+    </div>
+    <br>
+    <div id="dashboard">
+      <div id="dashDisplayLeft">
+        <h2>Suche</h2>
+        <input type="input" placeholder="Suche Liste" />
+        <button>search</button><br><br>
+        <table id="template"></table>
+      </div>
+      <div id="dashDisplayRight">
+        <h2>Warenstatistiken</h2>
+        <div id="wareStatistikDIV">
+        </div>
+      </div>
+    </div>
+    <script>
+      printTemplateList();
+
+      function printTemplateList() {
+        let table = document.getElementById("template");
+        let html = `<tr>
+          <th>Datum <a class="material-icons listSortIcon">swap_vert</a></th>
+          <th>Listen</th>
+          <th>Kilogramm Gesamt <a class="material-icons listSortIcon">swap_vert</a></th>
+          <th>Info 3</th>
+          <th>Info 4</th>
+        </tr>`;
+
+        for (let i=0; i < 25; i++) {
+          html += '<tr>';
+          html += '<td>12.9.2020</td>';
+          html += '<td>Bestandliste</td>';
+          html += '<td>500KG</td>';
+          html += '<td>info'+i+'</td>';
+          html += '<td>info'+i+'</td>';
+          html += '</tr>';
+        }
+        table.innerHTML = html;
+      }
+    </script>
+  </body>
+</html>
