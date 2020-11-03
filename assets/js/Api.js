@@ -2,8 +2,16 @@
 
 const Api = (function() {
 	const apiServerAdress = "https://localhost:5001/";
+	const apiCreateUserPage = "api/user/create";
 	const apiLoginPage = "api/user/login";
 	const apiRefreshTokenPage = "api/user/refreshToken";
+	const apiChangeUsernamePage = "api/user/changeUsername";
+	const apiChangePasswordPage = "api/user/changePassword";
+	const apiChangeGroupPage = "api/user/changeGroup";
+	const apiDeleteUserPage = "api/user/delete";
+	const apiCreateGroupPage = "api/group/create";
+	const apiChangePermissionsPage = "api/group/changePermissions";
+	const apiDeleteGroupPage = "api/group/delete";
 
 	let jwtToken = null;
 	let refreshTokenTimeout = null;
@@ -12,11 +20,19 @@ const Api = (function() {
 
 	const output = {
 		"fetch": fetchFromApi3,
+		"fetchSimple": fetchFromApiSimple,
+		"createUser": createUser,
 		"login": login2,
 		"logout": logout,
 		"isLogedin": isLogedin,
 		"isStayLogedIn": isStayLogedIn,
-		"hashPassword": hashPassword,
+		"changeUsername": changeUsername,
+		"changePassword": changePassword,
+		"changeGroup": changeGroup,
+		"deleteUser": deleteUser,
+		"createGroup": createGroup,
+		"changePermissions": changePermissions,
+		"deleteGroup": deleteGroup,
 		"onRequiresRelogin": function() {}
 	};
 
@@ -153,21 +169,12 @@ const Api = (function() {
 				"headers": headers
 			});
 		} else {
-			if(typeof(data) === "object") {
-				headers["Content-Type"] = "application/json";
-				promise = fetch(apiServerAdress + path, {
-					method: "POST",
-					"headers": headers,
-					body: JSON.stringify(data)
-				});
-			} else {
-				headers["Content-Type"] = "text/plain";
-				promise = fetch(apiServerAdress + path, {
-					method: "POST",
-					"headers": headers,
-					body: data
-				});
-			}
+			headers["Content-Type"] = "application/json";
+			promise = fetch(apiServerAdress + path, {
+				method: "POST",
+				"headers": headers,
+				body: JSON.stringify(data)
+			});
 		}
 		promise.then(function(response) {
 			if(response.status === 401) {
@@ -214,6 +221,50 @@ const Api = (function() {
 		return fetchFromApi2(path, data);
 	}
 
+	function fetchFromApiSimple(path, data) {
+		return new Promise(function(resolve, reject) {
+			fetchFromApi3(path, data).then(function(response) {
+				if(response.ok) {
+					let contentType = response.headers.get("Content-Type");
+					console.log(contentType);
+					if(typeof(contentType) === "string" && contentType.startsWith("application/json")) {
+						response.json().then(function(obj) {
+							resolve(obj);
+						}).catch(function(_) {
+							response.text().then(function(str) {
+								resolve(str);
+							}).catch(function(error3) {
+								reject(error3);
+							});
+						});
+					} else {
+						response.text().then(function(str) {
+							resolve(str);
+						}).catch(function(error2) {
+							reject(error2);
+						});
+					}
+				} else {
+					resolve(null);
+				}
+			}).catch(function(error) {
+				reject(error);
+			})
+		});
+	}
+
+	function createUser(username, password, groupname) {
+		return new Promise(function(resolve, reject) {
+			hashPassword(password).then(function(passwordHash) {
+				fetchFromApi3(apiCreateUserPage, { Username: username, Password: passwordHash, Groupname: groupname }).then(function(response) {
+					resolve(response.ok);
+				}).catch(function(error) {
+					reject(error);
+				});
+			});
+		});
+	}
+
 	function login(username, password) {
 		return new Promise(function(resolve, _) {
 			fetchFromApi(apiLoginPage, { Username: username, Password: password }, true, function(response) {
@@ -233,6 +284,7 @@ const Api = (function() {
 	}
 
 	function login2(username, password, stayLogedIn) {
+		logout();
 		return new Promise(function(resolve, reject) {
 			hashPassword(password).then(function(passwordHash) {
 				if(stayLogedIn === true) {
@@ -271,6 +323,78 @@ const Api = (function() {
 
 	function isStayLogedIn() {
 		return _username !== null && _password !== null;
+	}
+
+	function changeUsername(oldUsername, newUsername) {
+		return new Promise(function(resolve, reject) {
+			fetchFromApi3(apiChangeUsernamePage, { OldUsername: oldUsername, NewUsername: newUsername }).then(function(response) {
+				resolve(response.ok);
+			}).catch(function(error) {
+				reject(error);
+			});
+		});
+	}
+
+	function changePassword(username, password) {
+		return new Promise(function(resolve, reject) {
+			hashPassword(password).then(function(passwordHash) {
+				fetchFromApi3(apiChangePasswordPage, { Username: username, Password: passwordHash }).then(function(response) {
+					resolve(response.ok);
+				}).catch(function(error) {
+					reject(error);
+				});
+			});
+		});
+	}
+
+	function changeGroup(username, groupname) {
+		return new Promise(function(resolve, reject) {
+			fetchFromApi3(apiChangeGroupPage, { Username: username, Groupname: groupname }).then(function(response) {
+				resolve(response.ok);
+			}).catch(function(error) {
+				reject(error);
+			});
+		});
+	}
+
+	function deleteUser(username) {
+		return new Promise(function(resolve, reject) {
+			fetchFromApi3(apiDeleteUserPage, username).then(function(response) {
+				resolve(response.ok);
+			}).catch(function(error) {
+				reject(error);
+			});
+		});
+	}
+
+	function createGroup(groupname, permissions) {
+		return new Promise(function(resolve, reject) {
+			fetchFromApi3(apiCreateGroupPage, { Groupname: groupname, Permissions: permissions }).then(function(response) {
+				resolve(response.ok);
+			}).catch(function(error) {
+				reject(error);
+			});
+		});
+	}
+
+	function changePermissions(groupname, permissions) {
+		return new Promise(function(resolve, reject) {
+			fetchFromApi3(apiChangePermissionsPage, { Groupname: groupname, Permissions: permissions }).then(function(response) {
+				resolve(response.ok);
+			}).catch(function(error) {
+				reject(error);
+			});
+		});
+	}
+
+	function deleteGroup(groupname) {
+		return new Promise(function(resolve, reject) {
+			fetchFromApi3(apiDeleteGroupPage, groupname).then(function(response) {
+				resolve(response.ok);
+			}).catch(function(error) {
+				reject(error);
+			});
+		});
 	}
 
 	return output;
