@@ -226,7 +226,6 @@ const Api = (function() {
 			fetchFromApi3(path, data).then(function(response) {
 				if(response.ok) {
 					let contentType = response.headers.get("Content-Type");
-					console.log(contentType);
 					if(typeof(contentType) === "string" && contentType.startsWith("application/json")) {
 						response.json().then(function(obj) {
 							resolve(obj);
