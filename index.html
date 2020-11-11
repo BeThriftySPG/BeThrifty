@@ -2,6 +2,12 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <script src="assets/js/jquery.js"></script>
+    <script>
+      $(function(){
+            $("#includedContent").load("include/header.html");
+      });
+    </script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="icon" href="assets/images/icon.png" />
     <title>Overview</title>
@@ -21,20 +27,7 @@
       #template th {
         padding: 5px;
       }
-      #headerList {
-        list-style-type:none;
-        width:100%;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: #222;
-        height:75px;
-        align-items: center; /* Align-Items und Display-Flex zentrieren Listen-Elemente Vertikal */
-        display: flex;
-      }
-      #headerLogo {
-        height:50px;
-      }
+
       #login_formular {
         float:right;
         margin-right:100px;
@@ -83,15 +76,7 @@
     </style>
   </head>
   <body>
-    <div id="header">
-      <ul id="headerList">
-        <li class="headerElement"><a href="index.html"><img id="headerLogo" src="assets/images/logo.png"></a></li>
-        <li class="headerElement"><a href="wares/stockList.html">Warenbestand</a></li>
-        <li class="headerElement"><a href="events/eventManagement.html">Events</a></li>
-        <li class="headerElement"><a href="wares/stockList.html">Wareneingang</a></li>
-        <li class="headerElement"><a href="users/login.html">Login</a></li>
-      </ul>
-    </div>
+    <div id="includedContent"></div>
     <br>
     <h1>Dashboard 5</h1>
     <div id="dashboard">
