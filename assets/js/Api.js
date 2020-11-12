@@ -1,7 +1,7 @@
 "use strict";
 
 const Api = (function() {
-	const apiServerAdress = "https://localhost:5001/";
+	const apiServerAdress = "https://whitehelmet.ddns.net:5001/";
 	const apiCreateUserPage = "api/user/create";
 	const apiLoginPage = "api/user/login";
 	const apiRefreshTokenPage = "api/user/refreshToken";
@@ -10,6 +10,7 @@ const Api = (function() {
 	const apiChangeGroupPage = "api/user/changeGroup";
 	const apiDeleteUserPage = "api/user/delete";
 	const apiCreateGroupPage = "api/group/create";
+	const apiChangeGroupnamePage = "api/group/changeGroupname";
 	const apiChangePermissionsPage = "api/group/changePermissions";
 	const apiDeleteGroupPage = "api/group/delete";
 
@@ -31,6 +32,7 @@ const Api = (function() {
 		"changeGroup": changeGroup,
 		"deleteUser": deleteUser,
 		"createGroup": createGroup,
+		"changeGroupname": changeGroupname,
 		"changePermissions": changePermissions,
 		"deleteGroup": deleteGroup,
 		"onRequiresRelogin": function() {}
@@ -369,6 +371,16 @@ const Api = (function() {
 	function createGroup(groupname, permissions) {
 		return new Promise(function(resolve, reject) {
 			fetchFromApi3(apiCreateGroupPage, { Groupname: groupname, Permissions: permissions }).then(function(response) {
+				resolve(response.ok);
+			}).catch(function(error) {
+				reject(error);
+			});
+		});
+	}
+
+	function changeGroupname(oldGroupname, newGroupname) {
+		return new Promise(function(resolve, reject) {
+			fetchFromApi3(apiChangeGroupnamePage, { OldGroupname: oldGroupname, NewGroupname: newGroupname }).then(function(response) {
 				resolve(response.ok);
 			}).catch(function(error) {
 				reject(error);
