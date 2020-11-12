@@ -2,8 +2,10 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
+    <script src="https://bethriftyspg.github.io/assets/js/jquery.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="icon" href="assets/images/icon.png" />
+    <link href="https://bethriftyspg.github.io/assets/css/header.css" rel="stylesheet">
+    <link rel="icon" href="https://bethriftyspg.github.io/assets/images/icon.png" />
     <title>Overview</title>
     <style>
       body {
@@ -21,20 +23,7 @@
       #template th {
         padding: 5px;
       }
-      #headerList {
-        list-style-type:none;
-        width:100%;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: #222;
-        height:75px;
-        align-items: center; /* Align-Items und Display-Flex zentrieren Listen-Elemente Vertikal */
-        display: flex;
-      }
-      #headerLogo {
-        height:50px;
-      }
+
       #login_formular {
         float:right;
         margin-right:100px;
@@ -69,29 +58,10 @@
         cursor:pointer;
         color:limegreen;
       }
-      .headerElement {
-        float:left;
-        width:calc(100% / 5); /* Divident steht für Anzahl der Header Elemente */
-      }
-      .headerElement a {
-        display:block;
-        text-align: center;
-        color:white;
-        font-size:1.5vw;
-        text-decoration: none;
-      }
     </style>
   </head>
   <body>
-    <div id="header">
-      <ul id="headerList">
-        <li class="headerElement"><a href="index.html"><img id="headerLogo" src="assets/images/logo.png"></a></li>
-        <li class="headerElement"><a href="wares/stockList.html">Warenbestand</a></li>
-        <li class="headerElement"><a href="events/eventManagement.html">Events</a></li>
-        <li class="headerElement"><a href="wares/stockList.html">Wareneingang</a></li>
-        <li class="headerElement"><a href="users/login.html">Login</a></li>
-      </ul>
-    </div>
+    <div id="includeHeader"></div>
     <br>
     <h1>Dashboard 5</h1>
     <div id="dashboard">
@@ -134,3 +104,4 @@
     </script>
   </body>
 </html>
+<script>$(function(){ $("#includeHeader").load("https://bethriftyspg.github.io/include/header.html"); });</script>
