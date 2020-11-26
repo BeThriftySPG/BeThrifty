@@ -3,37 +3,47 @@
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Login</title>
-
+		<script src="/assets/js/jquery.js"></script>
 		<script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?features=Promise%2CPromise.prototype.finally%2Cfetch%2CTextEncoder"></script>
-		<script src="../assets/js/Api.js"></script>
-
+		<link rel="icon" href="/assets/images/icon.png" />
+		<script src="/assets/js/Api.js"></script>
 		<script>
-			function login() {
+			async function login() {
 				let username = document.getElementById("input-name").value;
 				let password = document.getElementById("input-password").value;
 				let stayLogedIn = document.getElementById("input-stayLogedIn").checked;
-				Api.login(username, password, stayLogedIn).then(function(result) {
-					Api.fetch("api/test/test0").then(console.log);
-					Api.fetch("api/test/test1").then(console.log);
-					Api.fetch("api/test/test2").then(console.log);
-					Api.fetch("api/test/test3").then(console.log);
-					Api.fetch("api/test/test4").then(console.log);
-				});
-				Api.onRequiresRelogin = function() { console.log("RequiresRelogin"); };
+				try {
+					let status = await Api.login(username, password, stayLogedIn);
+
+					console.log("Login status: " + status);
+					if(status) {
+						document.getElementById("loginResult").innerHTML = "Login successful.";
+						window.location.replace("/index.html");
+					} else {
+						document.getElementById("loginResult").innerHTML = "Wrong Username/Password.";
+					}
+					Api.onRequiresRelogin = function() { console.log("RequiresRelogin"); };
+				} catch(e) {
+						console.log(e);
+						document.getElementById("loginResult").innerHTML = "Connection to server failed.";
+				}
 			}
+
 
 			function logout() {
 				Api.logout();
 			}
 		</script>
+		<title>Login</title>
 	</head>
 	<body>
-		<a href="index.html">Home</a><br>
+		<div id="includeHeader"></div>
 		<input type="text" id="input-name" placeholder="Username"><br>
 		<input type="password" id="input-password" placeholder="Password"><br>
 		<button onclick="login()">Login</button>
 		<input type="checkbox" id="input-stayLogedIn"><br>
 		<button onclick="logout()">Logout</button>
+		<p id="loginResult"></p>
+		<script>$(function(){ $("#includeHeader").load("/include/header.html"); });</script>
 	</body>
 </html>
