@@ -46,7 +46,6 @@ aside .toggle {
 aside .side-inner {
   padding: 30px 0;
   height: 100vh;
-  overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   -ms-overflow-style: none;
 }
