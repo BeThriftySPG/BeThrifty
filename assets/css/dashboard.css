@@ -1,0 +1,48 @@
+	table {
+		border-collapse:collapse;
+	}
+	#login_formular {
+		float:right;
+		margin-right:100px;
+	}
+	#dashboard {
+		background-color:#DDD;
+		padding:25px;
+		min-height:80vh;
+	}
+	#WarenzugangSelectCat {
+		width:300px;
+	}
+	#newStockPopup td {
+		padding:5px;
+		max-width:300px;
+		border:none;
+		border-width:1px;
+	}
+	#newStockPopup table {
+		border:none;
+		width:100%;
+	}
+	#addCatIcon {
+		user-select: none;
+		transition: 0.1s;
+	}
+	#addCatIcon:hover {
+		transform: rotateZ(90deg);
+		cursor: pointer;
+		transition: 0.25s;
+	}
+	#dashboardTable {
+		width:100%;
+	}
+	#dashboardTable td {
+		width:50%;
+	}
+	.dashboardTableTitle {
+		text-align: center;
+		font-size: 30px;
+	}
+	.listSortIcon:hover {
+		cursor:pointer;
+		color:limegreen;
+	}

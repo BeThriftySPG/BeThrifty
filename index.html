@@ -2,100 +2,62 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <script src="/assets/js/jquery.js"></script>
+		<title>Overview</title>
     <link rel="icon" href="/assets/images/icon.png" />
-    <title>Overview</title>
-    <style>
-      table {
-        border-collapse:collapse;
-      }
-      #template td {
-        border:solid;
-        border-width:1px;
-        padding:5px;
-      }
-      #template th {
-        padding: 5px;
-      }
-
-      #login_formular {
-        float:right;
-        margin-right:100px;
-      }
-      #dashboard {
-        margin-left:25px;
-        margin-right:25px;
-        background-color:#DDD;
-        padding:25px;
-        min-height:80vh;
-      }
-      #dashDisplayLeft {
-        float:left;
-        width:55%;
-        border:solid;
-        border-width:1px;
-        height:100%;
-        padding:15px;
-      }
-      #dashDisplayRight {
-        float:right;
-        width: 40%;
-        border:solid;
-        border-width:1px;
-        height:100%;
-        padding:15px;
-      }
-      #template {
-        width:100%;
-      }
-      .listSortIcon:hover {
-        cursor:pointer;
-        color:limegreen;
-      }
-    </style>
+		<link rel="stylesheet" href="/assets/css/dashboard.css">
+		<link rel="stylesheet" href="/assets/css/black_white_button.css">
+		<link rel="stylesheet" href="/assets/js/jQuerySelectric/selectric.css">
+		<link rel="stylesheet" href="/assets/css/jquery.modal.css" />
+		<link rel="stylesheet" href="/assets/css/popup.css">
   </head>
   <body>
     <div id="includeHeader"></div>
-    <br>
-    <h1>Dashboard</h1>
-    <div id="dashboard">
-      <div id="dashDisplayLeft">
-        <h2>Suche</h2>
-        <input type="input" placeholder="Suche Liste" />
-        <button>search</button><br><br>
-        <table id="template"></table>
-      </div>
-      <div id="dashDisplayRight">
-        <h2>Warenstatistiken</h2>
-        <div id="wareStatistikDIV">
-        </div>
-      </div>
-    </div>
-    <script>
-      printTemplateList();
+    <main>
+	    <h1>Dashboard</h1>
+	    <div id="dashboard">
+				<a class="blackWhiteButton" style="float:right;padding:10px 15px;margin-bottom:25px" onclick="OpenNeuerWareneingang()">NEUE WARE</a><br><br>
+				<table id="dashboardTable">
+					<tr>
+						<th class="dashboardTableTitle"></th>
+						<th class="dashboardTableTitle"></th>
+					</tr>
+					<tr>
+						<td><table id="template"></table></td>
+			      <td></td>
+					</tr>
+				</table>
+	    </div>
 
-      function printTemplateList() {
-        let table = document.getElementById("template");
-        let html = `<tr>
-          <th>Datum <a class="material-icons listSortIcon">swap_vert</a></th>
-          <th>Listen</th>
-          <th>Kilogramm Gesamt <a class="material-icons listSortIcon">swap_vert</a></th>
-          <th>Info 3</th>
-          <th>Info 4</th>
-        </tr>`;
+			<!-- Popup for ADDING stock -->
+			<div id="newStockPopup" class="modal widePopup">
+				<table>
+					<tr><th colspan="2"><h1>Neuer Wareneingang</h1></th></tr>
+					<tr><td colspan="2"><input class="catInput" type="text" placeholder="Warenzugang in Kg" onfocus="ValidateInputKg(this, true)" onfocusout="ValidateInputKg(this, false)" /></td></tr>
+					<tr>
+						<td style="padding-top:10px"><select id="WarenzugangSelectCat"></select></td>
+						<td><span onclick="OpenNeueWarenKategorie()" class="material-icons" id="addCatIcon">add_circle</span></td>
+					</tr>
+					<tr><td colspan="2"><input class="catInput" type="text" value="Am " disabled /></td></tr>
+					<tr>
+						<td style="padding-top:15px"><a class="blackWhiteButton" onclick="UploadNewCategory()">hinzufügen</a></td>
+						<td><a class="blackWhiteButton" href="#" rel="modal:close">zurück</a></td>
+					</tr>
+				</table>
+			</div>
 
-        for (let i=0; i < 25; i++) {
-          html += '<tr>';
-          html += '<td>12.9.2020</td>';
-          html += '<td>Bestandliste</td>';
-          html += '<td>500KG</td>';
-          html += '<td>info'+i+'</td>';
-          html += '<td>info'+i+'</td>';
-          html += '</tr>';
-        }
-        table.innerHTML = html;
-      }
-    </script>
-    <script>$(function(){ $("#includeHeader").load("/include/header.html"); });</script>
+			<!-- Popup for CREATING a Category -->
+			<div id="newStockCategory" class="modal">
+				<h1>Neue Spezifikation</h1>
+				<input type="text" placeholder="Bezeichnung" style="width:50%;padding:8px"><br><br>
+				<a href="" class="blackWhiteButton">Bestätigen</a>
+				<a href="" class="blackWhiteButton" style="float:right">Abbrechen</a>
+			</div>
+		</main>
+
+		<script src="/assets/js/jquery.js"></script>
+		<script src="/assets/js/jquery.modal.js"></script>
+		<script src="/assets/js/jQuerySelectric/jquery.selectric.js"></script>
+    <script src="/assets/js/dashboard.js"></script>
+		<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
   </body>
 </html>

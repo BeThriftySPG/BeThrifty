@@ -1,0 +1,31 @@
+.blackWhiteButton {
+	border:solid;
+	text-decoration: none;
+	color:#444;
+	background-color: white;
+	padding:5px 8px;
+	border-width:1px;
+	border-color:#888;
+	font-size:15px;
+	font-weight:400;
+	text-align: center;
+	user-select: none;
+}
+.blackWhiteButton:hover {
+	background-color: #222;
+	color:#FFF;
+	border-color:rgba(0, 0, 0, 0);
+	cursor:pointer;
+	transition: 0.1s;
+}
+.blackWhiteButton:active {
+	background-color: #555;
+	transition: 0s;
+}
+.deleteButton {
+	color:white;
+	background-color: #f44336;
+}
+.deleteButton:hover {
+	background-color: #C22114;
+}

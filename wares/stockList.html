@@ -2,299 +2,98 @@
 <html lang="en" dir="ltr">
 	<head>
 		<meta charset="utf-8">
-		<title></title>
+		<title>Warenliste</title>
 		<link rel="stylesheet" href="/assets/css/jquery.modal.css" />
-		<style media="screen">
-			#stockList {
-				user-select: none;
-				margin:25px;
-			}
-			#stockList li {
-				list-style-type:none;
-				padding:10px 0px;
-			}
-			#addSackButton {
-				margin-top:10px;
-			}
-			#boxContainer {
-				width:85vw;
-				padding:10px;
-				max-width: 1400px;
-				min-width: 1000px;
-				margin: auto;
-				background-color: #EEE;
-				border-radius: 6px;
-			}
-			.stockItem {
-				padding:10px 0px;
-				border-radius: 2px;
-				transition: 0.1s;
-
-				border-right:solid;
-				border-color:rgba(0, 0, 0, 0);
-			}
-			.stockItem:hover {
-				cursor:pointer;
-				border-color:rgb(100, 100, 100);
-				transition: 0.2s;
-			}
-			.stockItem li {
-				font-size:22px;
-				padding-right: 10px;
-				display:inline;
-			}
-			.sackItem {
-				padding:5px;
-			}
-			.sackItem li {
-				display:inline;
-				margin-left:15px;
-			}
-			.sackList {
-				list-style-type:none;
-				padding:15px 0px;
-			}
-			.itemTitle {
-				border:solid;
-				display:inline-block;
-				width:200px;
-				text-align:center;
-				border-color:rgba(0, 0, 0, 0);
-				background-color: #222;
-				color:white;
-				font-weight: bold;
-				font-size: 22px;
-				border-radius: 3px;
-				padding:0px 0px !important;
-			}
-			.itemTitle:hover {
-				color:#222;
-				background-color: rgba(0, 0, 0, 0);
-				border-color: rgba(40, 40, 40, 255);
-			}
-			.sackGewicht {
-				width: 35px;
-				border:none;
-				border-bottom:solid;
-				border-width:1px;
-				text-align:right;
-				font-size:16px;
-				background-color: rgba(0, 0, 0, 0);
-			}
-			.sackGewicht:hover {
-				background-color: #EEE;
-				pointer:cursor;
-			}
-			.sackGewicht:focus {
-				background-color: #FFF;
-				outline-width: 0;
-			}
-			.deleteSackIcon {
-				color:#AAA;
-				font-size:14px !important;
-				line-height: 0;
-				transition: 0.1s;
-				user-select: none;
-			}
-			.deleteSackIcon:hover {
-				color:#E40;
-				cursor:pointer;
-				transform:rotateZ(90deg);
-				transition: 0.1s;
-			}
-			.button {
-				text-decoration: none;
-				color:#333;
-				background-color: #EEE;
-				padding:5px;
-				border:solid;
-				border-width:1px;
-				border-radius:2px;
-				border-color:rgb(133, 133, 133);
-				font-size:13px;
-				font-weight:400;
-			}
-			.button:hover {
-				background-color: #E82;
-				color:#FFF;
-				border-color:#DDD;
-				cursor:pointer;
-				transition: 0.1s;
-			}
-			.deleteButton {
-				color:white;
-				background-color: #f44336;
-			}
-			.deleteButton:hover {
-				background-color: #C22114;
-			}
-			.catInput {
-				width: 70%;
-				padding: 10px;
-				margin-top:10px;
-			}
-			.collapse-arrow {
-				font-size: 25px !important;
-				vertical-align: bottom !important;
-				display: inline-flex !important;
-			}
-			#categoryPopup {
-				max-width:600px;
-			}
-		</style>
+		<link rel="stylesheet" href="/assets/css/popup.css">
+		<link rel="stylesheet" href="/assets/css/stock_list.css">
+		<link rel="stylesheet" href="/assets/css/black_white_button.css">
 	</head>
 	<body>
 		<div id="includeHeader"></div>
-		<div id="boxContainer">
-			<h1 style="margin:25px">Stock List</h1>
+		<main>
+			<div id="boxContainer">
+				<h1>Stock List</h1>
 
-			<!-- Prefab for one StockList -->
-			<ul id="stockList">
-				<li class="stock">
-					<ul onclick="" class="stockItem">
-						<li><a class="catItem itemTitle">Jean Hose</a></li>
-						<li><a class="catItem" style="padding-left:25px">Säcke 5</a></li>
-						<li>|</li>
-						<li><a class="catItem">Gesamtgewicht 50Kg</a></li>
-						<li>|</li>
-						<li><a class="catItem">Minmalgewicht 5Kg</a></li>
-						<li>|</li>
-						<li><span class="material-icons collapse-arrow" style="float:right">arrow_right</span></li>
-						<li><a id="editCatButton" class="button" style="margin-right:0px;float:right; margin-right:25px;" onclick=''>bearbeiten</a></li>
-					</ul>
-					<div id="sackListDiv">
-						<ul class="sackList">
-					<li>
-						<ul class="sackItem">
-							<li>Sack 1</li>
-							<li><input type="textfield" class="sackGewicht" value="5" /> Kg</li>
-							<li><span class="material-icons deleteSackIcon" onclick='$("#deleteSackPopup").modal({fadeDuration: 100});'>close</span></li>
+				<!-- Prefab for one StockList -->
+				<ul id="stockList">
+					<li class="stock">
+						<ul onclick="" class="stockItem">
+							<li><a class="catItem itemTitle">Jean Hose</a></li>
+							<li><a class="catItem" style="padding-left:25px">Säcke 5</a></li>
+							<li>|</li>
+							<li><a class="catItem">Gesamtgewicht 50Kg</a></li>
+							<li>|</li>
+							<li><a class="catItem">Minmalgewicht 5Kg</a></li>
+							<li>|</li>
+							<li><span class="material-icons collapse-arrow" style="float:right">arrow_right</span></li>
+							<li><a class="blackWhiteButton" id="editCatButton" style="margin-right:0px;float:right; margin-right:25px;" onclick=''>bearbeiten</a></li>
 						</ul>
+						<div id="sackListDiv">
+							<ul class="sackList">
+						<li>
+							<ul class="sackItem">
+								<li>Sack 1</li>
+								<li><input type="text" class="sackGewicht" value="5" /> Kg</li>
+								<li><span class="material-icons deleteSackIcon" onclick='$("#deleteSackPopup").modal({fadeDuration: 100});'>close</span></li>
+							</ul>
+						</li>
+						<li id="addSackButton"><a class="blackWhiteButton" onclick="UploadNewSack()">Neuer Sack</a></li>
+							</ul>
+						</div>
 					</li>
-					<li id="addSackButton"><a class="button" onclick="UploadNewSack()">Neuer Sack</a></li>
-						</ul>
-					</div>
-				</li>
-				<li id="addStockButton"><a class="button" onclick='$("#categoryPopup").modal({fadeDuration: 100});'>Ware hinzufügen</a></li>
-			</ul>
+					<li id="addStockButton"><a class="blackWhiteButton" onclick='$("#categoryPopup").modal({fadeDuration: 100});'>Ware hinzufügen</a></li>
+				</ul>
 
-			<!-- Popup for CREATING a Category -->
-			<div id="categoryPopup" class="modal">
-				<form action="index.html" method="post">
-					<h1>Neue Warenkategorie hinzufügen</h1>
-					<input class="catInput" type="textfield" placeholder="Kategoriename" /><br>
-					<input class="catInput" type="textfield" placeholder="Spezifikation" /><br>
-					<input class="catInput" type="number" value="0" step="0.1" placeholder="Mindestgewicht" /><br><br>
-					<a onclick="UploadNewCategory()" class="button" style="float:left">hinzufügen</a>
-					<a class="button" style="float:right" rel="modal:close">zurück</a>
-				</form>
+				<!-- Popup for CREATING a Category -->
+				<div id="categoryPopup" class="modal">
+					<form action="index.html" method="post">
+						<h1>Neue Warenkategorie hinzufügen</h1>
+						<input class="catInput" type="text" placeholder="Kategoriename" /><br>
+						<input class="catInput" type="text" placeholder="Spezifikation" /><br>
+						<input class="catInput" type="number" value="0" step="0.1" placeholder="Mindestgewicht" /><br><br>
+						<a class="blackWhiteButton" onclick="UploadNewCategory()" style="float:left">hinzufügen</a>
+						<a class="blackWhiteButton" style="float:right" rel="modal:close" href="#">zurück</a>
+					</form>
+				</div>
+
+				<!-- Popup for EDITING a Category -->
+				<div id="editCategoryPopup" class="modal">
+					<form action="index.html" method="post">
+						<h1>Warenkategorie bearbeiten</h1>
+						<input class="catInput" type="text" placeholder="Kategoriename" /><br>
+						<input class="catInput" type="text" placeholder="Spezifikation" /><br>
+						<input class="catInput" type="number" value="0" step="0.1" placeholder="Mindestgewicht" /><br><br>
+						<a class="blackWhiteButton" onclick="UpdateCategory()" style="float:left" href="#">Aktualisieren</a>
+						<a class="blackWhiteButton" id="deleteButton" onclick="DeleteCategory()" style="float:left;margin-left:10px" href="#">Löschen</a>
+						<a class="blackWhiteButton" style="float:right" rel="modal:close" href="#">zurück</a>
+					</form>
+				</div>
+
+				<!-- Popup for deleting a Sack -->
+				<div id="deleteSackPopup" class="modal">
+					<p>Bist du sicher, dass du diesen Sack löschen willst?</p>
+					<a onclick="DeleteSack()" class="blackWhiteButton deleteButton" style="float:left" href="#">bestätigen</a>
+					<a class="blackWhiteButton" style="float:right" rel="modal:close" href="#">zurück</a>
+				</div>
+
+				<!-- Popup for deleting a Category -->
+				<div id="deleteCategoryPopup" class="modal">
+					<p>Bist du sicher, dass du diese Kategorie löschen willst?</p>
+					<a onclick="DeleteCategory()" class="blackWhiteButton deleteButton" style="float:left" href="#">bestätigen</a>
+					<a class="blackWhiteButton" id="returnButton" style="float:right" rel="modal:close" href="#">zurück</a>
+				</div>
+
 			</div>
-
-			<!-- Popup for EDITING a Category -->
-			<div id="editCategoryPopup" class="modal">
-				<form action="index.html" method="post">
-					<h1>Warenkategorie bearbeiten</h1>
-					<input class="catInput" type="textfield" placeholder="Kategoriename" /><br>
-					<input class="catInput" type="textfield" placeholder="Spezifikation" /><br>
-					<input class="catInput" type="number" value="0" step="0.1" placeholder="Mindestgewicht" /><br><br>
-					<a onclick="UpdateCategory()" class="button" style="float:left">Aktualisieren</a>
-					<a id="deleteButton" onclick="DeleteCategory()" class="button" style="float:left;margin-left:10px">Löschen</a>
-					<a class="button" style="float:right" rel="modal:close">zurück</a>
-				</form>
-			</div>
-
-			<!-- Popup for deleting a Sack -->
-			<div id="deleteSackPopup" class="modal">
-				<p>Bist du sicher, dass du diesen Sack löschen willst?</p>
-				<a onclick="DeleteSack()" class="button deleteButton" style="float:left">bestätigen</a>
-				<a class="button" style="float:right" rel="modal:close">zurück</a>
-			</div>
-
-			<!-- Popup for deleting a Category -->
-			<div id="deleteCategoryPopup" class="modal">
-				<p>Bist du sicher, dass du diese Kategorie löschen willst?</p>
-				<a onclick="DeleteCategory()" class="button deleteButton" style="float:left">bestätigen</a>
-				<a id="returnButton" class="button" style="float:right" rel="modal:close">zurück</a>
-			</div>
-
-		</div>
-		<script type="text/javascript" src="/assets/js/jquery.js"></script>
-		<script type="text/javascript" src="/assets/js/jquery.modal.js"></script>
+		</main>
+		<script src="/assets/js/jquery.js"></script>
+		<script src="/assets/js/jquery.modal.js"></script>
+		<script src="/assets/js/stock_list.js"></script>
+		<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
 		<script>
-			var stockList = document.getElementById("stockList");
-			var stockClone = document.getElementsByClassName("stock")[0].cloneNode(true);
-			var sackClone = stockClone.getElementsByClassName("sackItem")[0].cloneNode(true);
-			document.getElementsByClassName("stock")[0].style.display = "none";
-
-			$('#categoryPopup').on($.modal.AFTER_CLOSE, function(event, modal) {
-				// Clear popup form
-			  event.target.getElementsByClassName("catInput")[0].value = "";
-				event.target.getElementsByClassName("catInput")[1].value = "";
-				event.target.getElementsByClassName("catInput")[2].value = 0;
-			});
-
 			PrintCategory({title: "Jean", specification: "Hose", sacks: [20, 15, 18.5, 19.2, 15.5], minWeight: 0.5});
 			PrintCategory({title: "Shorts", specification: "Hose", sacks: [19, 17, 13.8], minWeight: 0.3});
 			PrintCategory({title: "T-Shirt", specification: "Hemd", sacks: [4.6, 8, 7, 5, 9.5, 8], minWeight: 0.2});
 			PrintCategory({title: "Langshirt", specification: "Hemd", sacks: [], minWeight: 0.2});
-
-			function UploadNewCategory() {
-
-			}
-			function PrintCategory(data) {
-				let content = stockList.querySelector("#addStockButton");
-				let node = stockClone.cloneNode(true);
-				let sackList = node.getElementsByClassName("sackList")[0];
-				let inputs = node.querySelectorAll(".catItem");
-				let button = node.querySelector("#addSackButton");
-				sackList.innerHTML = "";
-				inputs[0].innerHTML = data["title"] + " " + data["specification"];
-				inputs[1].innerHTML = "Säcke " + data["sacks"].length;
-				let sumWeight = 0;
-				for(let i = 0; i < data["sacks"].length; i++) {
-					let s = sackClone.cloneNode(true);
-					s.querySelector("li").innerHTML = "Sack " + (i + 1);
-					s.querySelector(".sackGewicht").value = data["sacks"][i];
-					sackList.appendChild(s);
-					sumWeight += data["sacks"][i];
-				}
-				inputs[2].innerHTML = "Gesamtgewicht " + sumWeight + "Kg";	// calculate
-				inputs[3].innerHTML = "min. Gewicht " + data["minWeight"] + "Kg";
-				let sackDiv = node.querySelector("#sackListDiv");
-				let stockCollArrow = node.getElementsByClassName("collapse-arrow")[0];
-				sackDiv.id = ("sackListDiv_" + inputs[0].innerHTML).replace(/ /g,'.');
-
-				node.getElementsByClassName("stockItem")[0].onclick = function ToggleCategory() {
-					if(sackDiv.style.display == "none") {
-						sackDiv.style.display = "inherit";
-						stockCollArrow.style.transform = "rotateZ(90deg)";
-					} else {
-						sackDiv.style.display = "none";
-						stockCollArrow.style.transform = "rotateZ(0deg)";
-					}
-				};
-				node.querySelector("#editCatButton").onclick = function EditCategory() {
-					event.stopPropagation();
-					let node = document.getElementById("editCategoryPopup");
-					let inputs = node.getElementsByClassName("catInput");
-					let delButton = node.querySelector("#deleteButton");
-					inputs[0].value = data["title"];
-					inputs[1].value = data["specification"];
-					inputs[2].value = data["minWeight"];
-					delButton.onclick = function DeleteButton() {
-						$("#deleteCategoryPopup").modal({fadeDuration: 100, closeExisting: false});
-					}
-					$("#editCategoryPopup").modal({fadeDuration: 100});
-				}
-				sackDiv.style.display = "none";
-				sackList.appendChild(button);
-				stockList.appendChild(node);
-				stockList.appendChild(content);
-			}
-			function UploadNewSack() {
-
-			}
 		</script>
-		<script>$(function(){ $("#includeHeader").load("/include/header.html"); });</script>
 	</body>
 </html>

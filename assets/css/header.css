@@ -1,6 +1,13 @@
 body {
   font-family:arial;
   margin:0px;
+	background-color: #efefef;
+}
+a {
+	text-decoration: none;
+}
+main {
+	padding:75px 30px 0px 100px;
 }
 #headerList {
   list-style-type:none;
