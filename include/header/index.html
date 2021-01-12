@@ -10,6 +10,39 @@
 <!-- Style -->
 <link rel="stylesheet" href="/include/header/css/style.css">
 
+<style>
+	.userSubmit {
+		width:50%;
+		color:#888;
+		opacity: 0;
+		transition: 0.2s;
+	}
+	.userInput {
+		margin-bottom:10px;
+		margin-top:0px;
+		border-width:1px;
+		opacity: 0;
+		transition: 0.2s;
+	}
+	#input-stayLogedIn {
+		opacity: 0;
+		margin-bottom:10px;
+	}
+	.show-sidebar #input-stayLogedIn, .show-sidebar #label-stayLogedIn, .show-sidebar .userInput, .show-sidebar .userSubmit {
+		opacity: 1;
+		transition: 0.2s;
+	}
+	#label-stayLogedIn {
+		opacity: 0;
+		color:#888;
+	}
+	#logo-name {
+		font-family: arial;
+		font-size: 25px;
+	}
+
+</style>
+
 <aside class="sidebar">
   <div class="toggle">
     <a href="#" class="burger js-menu-toggle" data-toggle="collapse" data-target="#main-navbar">
@@ -19,18 +52,16 @@
   <div class="side-inner">
     <div class="logo-wrap">
       <div class="logo">
-        <span>J</span>
+        <span id="logo-letter"></span>
       </div>
-      <span class="logo-text">Julian</span>
+      <span class="logo-text" id="logo-name"></span>
     </div>
-    <!-- <div class="search-form">
-      <form action="#">
-        <span class="wrap-icon">
-          <span class="icon-search2"></span>
-        </span>
-        <input type="text" class="form-control" placeholder="Search...">
-      </form>
-    </div> -->
+		<div class="search-form">
+      <input type="text" class="catInput userInput" id="input-name" placeholder="Benutzername">
+			<input type="password" class="catInput userInput" id="input-password" placeholder="Passwort"><br>
+			<input type="checkbox" id="input-stayLogedIn" /><label id="label-stayLogedIn" for="input-stayLogedIn" style="padding-left:5px;font-size:14px">merken</label><br>
+			<button class="blackWhiteButton userSubmit" id="submitLoginButton" value="confirm" onclick="login()">Login</button>
+    </div>
     <div class="nav-menu">
       <ul>
         <li class="active"><a href="/index.html" class="d-flex align-items-center"><span class="material-icons">home</span><span class="menu-text">Home</span></a></li>
@@ -38,10 +69,61 @@
         <li><a href="/events/eventManagement.html" class="d-flex align-items-center"><span class="material-icons">event</span><span class="menu-text">Events</span></a></li>
         <li><a href="/users/benutzerverwaltung.html" class="d-flex align-items-center"><span class="material-icons">account_box</span><span class="menu-text">Benutzerverwaltung</span></a></li>
         <li><a href="#" class="d-flex align-items-center"><span class="material-icons">settings</span><span class="menu-text">Settings</span></a></li>
-      </ul>
+				<li><a href="#" class="d-flex align-items-center"><input type="submit" class="blackWhiteButton userSubmit" id="logoutButton" value="Logout" onclick="logout()" /></a></li>
+			</ul>
     </div>
   </div>
 </aside>
 
+<script src="/assets/js/Api.js"></script>
 <script src="/include/header/js/popper.min.js"></script>
 <script src="/include/header/js/main.js"></script>
+<script>
+	HeaderCheckLogin();
+
+	async function HeaderCheckLogin() {
+		await Api.init();
+		if(Api.isLoggedin()) {
+			let name = (await Api.fetchSimple("Api/user")).username;
+			document.getElementById("input-name").style.display = "none";
+			document.getElementById("input-password").style.display = "none";
+			document.getElementById("submitLoginButton").style.display = "none";
+			document.getElementById("input-stayLogedIn").style.display = "none";
+			document.getElementById("label-stayLogedIn").style.display = "none";
+			document.getElementById("logo-name").innerHTML = name;
+			document.getElementById("logo-letter").innerHTML = name[0];
+		} else {
+			document.getElementsByClassName("logo")[0].style.display = "none";
+			document.getElementById("logoutButton").style.display = "none";
+			document.getElementById("logo-name").innerHTML = "Login Required";
+			document.getElementById("logo-letter").innerHTML = "";
+			document.getElementById("logo-name").style.position = "initial";
+			document.getElementById("logo-name").style.marginLeft = "20px";
+			document.getElementsByClassName("userInput")[0].style.marginTop = "20px";
+		}
+	}
+	function logout() {
+		Api.logout();
+		window.location.replace("/index.html");
+	}
+	async function login() {
+		console.log("Logging in...");
+		let username = document.getElementById("input-name").value;
+		let password = document.getElementById("input-password").value;
+		let stayLogedIn = document.getElementById("input-stayLogedIn").checked;
+
+		try {
+			let status = await Api.login(username, password, stayLogedIn);
+
+			console.log("Login status: " + status);
+			if(status) {
+				window.location.replace("/index.html");
+			} else {
+
+			}
+			Api.onRequiresRelogin = function() { console.log("RequiresRelogin"); };
+		} catch(e) {
+				console.log(e);
+		}
+	}
+</script>

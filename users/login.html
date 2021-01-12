@@ -33,6 +33,12 @@
 			function logout() {
 				Api.logout();
 			}
+
+			setTimeout(HeaderCheckLogin, 100);
+
+			function HeaderCheckLogin() {
+				console.log(Api.isLogedin());
+			}
 		</script>
 		<title>Login</title>
 	</head>
@@ -44,6 +50,6 @@
 		<input type="checkbox" id="input-stayLogedIn"><br>
 		<button onclick="logout()">Logout</button>
 		<p id="loginResult"></p>
-		<script>$(function(){ $("#includeHeader").load("/include/header.html"); });</script>
+
 	</body>
 </html>

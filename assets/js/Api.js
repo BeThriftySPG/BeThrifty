@@ -20,13 +20,14 @@ const Api = (function() {
 	let _password = null;
 
 	const output = {
+		"init": init,
 		"fetch": fetchFromApi3,
 		"fetchSimple": fetchFromApiSimple,
 		"createUser": createUser,
 		"login": login2,
 		"logout": logout,
-		"isLogedin": isLogedin,
-		"isStayLogedIn": isStayLogedIn,
+		"isLoggedin": isLoggedin,
+		"isStayLoggedIn": isStayLoggedIn,
 		"changeUsername": changeUsername,
 		"changePassword": changePassword,
 		"changeGroup": changeGroup,
@@ -35,27 +36,33 @@ const Api = (function() {
 		"changeGroupname": changeGroupname,
 		"changePermissions": changePermissions,
 		"deleteGroup": deleteGroup,
-		"onRequiresRelogin": function() {}
+		"onRequiresRelogin": function() {},
 	};
 
-	_username = localStorage.getItem("username");
-	_password = localStorage.getItem("password");
-	if(typeof(_username) === "string" && typeof(_password) === "string") {
-		login(_username, _password).then(function(result) {
-			if(result !== true) {
+	function init() {
+		return new Promise(function(resolve, _) {
+			_username = localStorage.getItem("username");
+			_password = localStorage.getItem("password");
+			if(typeof(_username) === "string" && typeof(_password) === "string") {
+				login(_username, _password).then(function(result) {
+					if(result !== true) {
+						_username = null;
+						_password = null;
+						localStorage.removeItem("username");
+						localStorage.removeItem("password");
+					}
+					resolve();
+				});
+			} else {
 				_username = null;
 				_password = null;
-				localStorage.removeItem("username");
-				localStorage.removeItem("password");
+				const token = sessionStorage.getItem("jwt-token");
+				if(typeof(token) !== "undefined") {
+					setJwtToken(token);
+				}
+				resolve();
 			}
 		});
-	} else {
-		_username = null;
-		_password = null;
-		const token = sessionStorage.getItem("jwt-token");
-		if(typeof(token) !== "undefined") {
-			setJwtToken(token);
-		}
 	}
 
 	function setJwtToken(token) {
@@ -284,11 +291,11 @@ const Api = (function() {
 		});
 	}
 
-	function login2(username, password, stayLogedIn) {
+	function login2(username, password, stayLoggedIn) {
 		logout();
 		return new Promise(function(resolve, reject) {
 			hashPassword(password).then(function(passwordHash) {
-				if(stayLogedIn === true) {
+				if(stayLoggedIn === true) {
 					_username = username;
 					_password = passwordHash;
 					localStorage.setItem("username", username);
@@ -318,11 +325,11 @@ const Api = (function() {
 		localStorage.removeItem("password");
 	}
 
-	function isLogedin() {
+	function isLoggedin() {
 		return jwtToken !== null;
 	}
 
-	function isStayLogedIn() {
+	function isStayLoggedIn() {
 		return _username !== null && _password !== null;
 	}
 
