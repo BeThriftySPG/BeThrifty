@@ -12,12 +12,41 @@
 }
 body {
 	margin:0px;
+	padding-left: 100px;
+}
+#eventsOpenDiv > .viewDivToolbar {
+	width:100%;
+	background-color: #EEE;
+}
+#viewContainer {
+	position: relative;
+	margin: auto;
+	border:none;
+	border-top:solid;
+	top:25px;
+	font-size: 20px;
+	border-color:#444;
+	width:1200px;
+}
+#viewContainer > legend {
+	font-size:40px;
+	font-family:Quicksand;
+	padding:0px 20px;
+	margin-bottom:25px;
+}
+#viewContainer > .viewDivs {
+	margin:10px;
+}
+#newEventDiv {
+
+}
+#submitNewEventBtn {
+	margin-top:10px;
 }
 .toggleViewBar {
 	width:100%;
 	padding:2px 10px 2px 0px;
 	font-size: 20px;
-	max-width: 1000px;
 }
 .toggleViewBar td {
 	width:100%;
@@ -32,41 +61,20 @@ body {
 	cursor:pointer;
 	opacity: 0.8;
 }
-#eventsOpenDiv > .viewDivToolbar {
-	width:100%;
-	background-color: #EEE;
-}
-#viewContainer {
-	position: relative;
-	margin:auto;
-	border:none;
-	border-top:solid;
-	top:50px;
-	min-height: 90vh;
-	font-size: 20px;
-	border-color:#444;
-}
-#viewContainer > .viewDivs {
-	margin:10px;
-}
-#newEventDiv {
-
-}
-#submitNewEventBtn {
-	margin-top:10px;
-}
 .catInput {
 	outline:none;
 	border-width:1px;
 }
 .newEventInput {
+	border-style:solid;
 	max-width: 200px;
+}
+.newEventInput.required {
+	border-color:red;
+	background-color:#FEEFEF;
 }
 .viewDivToolbar {
 	margin:20px 0px;
-}
-.dataTables_wrapper {
-
 }
 .toggleArrowButton {
 	width:40px;
@@ -81,26 +89,31 @@ body {
 	vertical-align: middle;
 }
 .viewDivs {
-	padding-top:25px;
 }
 .dataTables_filter {
 	float:inherit !important;
 	text-align:inherit !important;
 }
+.eventTableContent th {
+	text-align: left;
+	padding-left:10px !important;
+}
+.editEventLink {
+	border-bottom: 1px dotted #AAA;
+}
+.editEventLink:hover {
+	color:#00F;
+}
 
-@media only screen and (max-width: 1300px) {
-	.viewDivs {
-		/*max-width: 500px;*/
-	}
+@media only screen and (max-width: 1400px) {
 	#viewContainer {
 		font-size: 18px;
+		width:800px;
 	}
 }
-@media only screen and (max-width: 1100px) {
-	.viewDivs {
-		/*max-width: 500px;*/
-	}
+@media only screen and (max-width: 1000px) {
 	#viewContainer {
 		font-size: 14px;
+		width:600px;
 	}
 }

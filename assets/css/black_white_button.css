@@ -11,14 +11,14 @@
 	text-align: center;
 	user-select: none;
 }
-.blackWhiteButton:hover {
+.blackWhiteButton:hover:enabled {
 	background-color: #222;
 	color:#FFF;
 	border-color:rgba(0, 0, 0, 0);
 	cursor:pointer;
 	transition: 0.1s;
 }
-.blackWhiteButton:active {
+.blackWhiteButton:active:enabled {
 	background-color: #555;
 	transition: 0s;
 }
@@ -28,4 +28,7 @@
 }
 .deleteButton:hover {
 	background-color: #C22114;
+}
+.blackWhiteButton:disabled {
+	opacity: 0.5;
 }

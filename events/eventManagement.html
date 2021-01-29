@@ -16,15 +16,18 @@
 	<body>
 		<div id="includeHeader"></div>
 
-		<fieldset id="viewContainer" style="margin-left:100px">
-			<legend style="font-size:40px;font-family:Quicksand;padding:0px 20px">Events</legend>
+		<fieldset id="viewContainer">
+			<legend>Events</legend>
 			<div class="viewDivs" id="newEventDiv">
 				<button id="toggleNewEvent" class="blackWhiteButton" onclick="ToggleNewEvent()">Neues Event anlegen</button>
 				<form id="newEventForm" method="post" style="display:none">
-					<input type="text" class="catInput newEventInput" placeholder="Eventname:"><br>
-					<input type="text" class="catInput newEventInput" placeholder="Datum:"><br>
-					<input type="text" class="catInput newEventInput" placeholder="Ort:"><br>
-					<input type="submit" id="submitNewEventBtn" class="blackWhiteButton" value="Erstellen">
+					<input type="text" id="newEventName" class="catInput newEventInput required" placeholder="Eventname:" oninput="RequiredInput(this)"><br>
+					<input type="date" id="newEventDatum" class="catInput newEventInput required" placeholder="yyyy-mm-tt" oninput="RequiredInput(this)"><br>
+					<input type="text" id="newEventOrt" class="catInput newEventInput required" placeholder="Ort:" oninput="RequiredInput(this)">
+					<input type="text" id="newEventPostleitzahl" class="catInput newEventInput required" placeholder="Plz:" style="width:50px" oninput="RequiredInput(this)">
+					<input type="text" id="newEventStrasse" class="catInput newEventInput" placeholder="Straße:" style="width:150px">
+					<input type="text" id="newEventHausnummer" class="catInput newEventInput" placeholder="Nr." style="width:50px"><br>
+					<input type="button" onclick="CreateNewEvent()" id="submitNewEventBtn" class="blackWhiteButton" value="Erstellen" disabled>
 				</form>
 			</div>
 			<div class="viewDivs" id="eventsOpenDiv">
@@ -38,16 +41,9 @@
 					<div style="background-color:pink" class="viewDivToolbar"></div>
 					<table style="width:100%;max-width:1000px;" class="eventTableContent display cell-border responsive nowrap">
 						<thead>
-							<tr>
-								<th>Eventname</th>
-								<th>Datum</th>
-								<th>Ort</th>
-								<th>Status</th>
-								<th>Details</th>
-							</tr>
 						</thead>
 						<tbody>
-							<tr>
+							<!--tr>
 								<td>Graz Messehalle</td>
 								<td>18.01.2021</td>
 								<td>Graz</td>
@@ -130,7 +126,7 @@
 								<td>Wien</td>
 								<td>Offen</td>
 								<td><a class="eventList">Eventlisten</a></td>
-							</tr>
+							</tr-->
 						</tbody>
 						<!--tfoot>
 							<tr>
@@ -147,7 +143,7 @@
 			<div class="viewDivs" id="eventsClosedDiv">
 				<table class="toggleViewBar" onclick="ToggleEventViews('eventsClosedDiv')">
 					<tr>
-						<td style="padding-left:25px">Eventstatus: Closed</td>
+						<td style="padding-left:25px">Eventstatus: Geschlossen</td>
 						<td style="width:50px;border:none;background:none"><button class="toggleArrowButton"><span class="material-icons">keyboard_arrow_up</span></button></td>
 					</tr>
 				</table>
@@ -155,16 +151,9 @@
 					<div class="viewDivToolbar"></div>
 					<table style="width:100%;max-width:1000px" class="eventTableContent display cell-border responsive nowrap">
 						<thead>
-							<tr>
-								<th>Eventname</th>
-								<th>Datum</th>
-								<th>Ort</th>
-								<th>Status</th>
-								<th>Details</th>
-							</tr>
 						</thead>
 						<tbody>
-							<tr>
+							<!--tr>
 								<td>Graz Messehalle</td>
 								<td>18.01.2021</td>
 								<td>Graz</td>
@@ -247,7 +236,7 @@
 								<td>Wien</td>
 								<td>Offen</td>
 								<td><a class="eventList">Eventlisten</a></td>
-							</tr>
+							</tr-->
 						</tbody>
 						<!--tfoot>
 							<tr>
@@ -263,11 +252,13 @@
 			</div>
 		</fieldset>
 
+		<script src="/assets/js/Api.js"></script>
 		<script src="/assets/js/jquery.js"></script>
 		<script src="/assets/js/jquery.modal.js"></script>
+		<script src="/assets/js/moment.js"></script>
 		<script type="text/javascript" charset="utf8" src="/assets/js/datatables/datatables.min.js"></script>
 		<script type="text/javascript" charset="utf8" src="/assets/js/datatables/dataTables.responsive.min.js"></script>
-		<script src="/assets/js/events.js"></script>
 		<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
+		<script src="/assets/js/events.js"></script>
 	</body>
 </html>
