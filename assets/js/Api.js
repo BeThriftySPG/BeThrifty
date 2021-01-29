@@ -1,7 +1,7 @@
 "use strict";
 
 const Api = (function() {
-	const apiServerAdress = "https://whitehelmet.ddns.net:5001/";
+	const apiServerAdress = "http://localhost:5000/";	// https://whitehelmet.ddns.net:500/
 	const apiCreateUserPage = "api/user/create";
 	const apiLoginPage = "api/user/login";
 	const apiRefreshTokenPage = "api/user/refreshToken";

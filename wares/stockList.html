@@ -7,93 +7,22 @@
 		<link rel="stylesheet" href="/assets/css/popup.css">
 		<link rel="stylesheet" href="/assets/css/stock_list.css">
 		<link rel="stylesheet" href="/assets/css/black_white_button.css">
+		<link rel="stylesheet" type="text/css" href="/assets/js/datatables/datatables.min.css"/>
 	</head>
 	<body>
 		<div id="includeHeader"></div>
 		<main>
 			<div id="boxContainer">
-				<h1>Stock List</h1>
 
-				<!-- Prefab for one StockList -->
-				<ul id="stockList">
-					<li class="stock">
-						<ul onclick="" class="stockItem">
-							<li><a class="catItem itemTitle">Jean Hose</a></li>
-							<li><a class="catItem" style="padding-left:25px">Säcke 5</a></li>
-							<li>|</li>
-							<li><a class="catItem">Gesamtgewicht 50Kg</a></li>
-							<li>|</li>
-							<li><a class="catItem">Minmalgewicht 5Kg</a></li>
-							<li>|</li>
-							<li><span class="material-icons collapse-arrow" style="float:right">arrow_right</span></li>
-							<li><a class="blackWhiteButton" id="editCatButton" style="margin-right:0px;float:right; margin-right:25px;" onclick=''>bearbeiten</a></li>
-						</ul>
-						<div id="sackListDiv">
-							<ul class="sackList">
-						<li>
-							<ul class="sackItem">
-								<li>Sack 1</li>
-								<li><input type="text" class="sackGewicht" value="5" /> Kg</li>
-								<li><span class="material-icons deleteSackIcon" onclick='$("#deleteSackPopup").modal({fadeDuration: 100});'>close</span></li>
-							</ul>
-						</li>
-						<li id="addSackButton"><a class="blackWhiteButton" onclick="UploadNewSack()">Neuer Sack</a></li>
-							</ul>
-						</div>
-					</li>
-					<li id="addStockButton"><a class="blackWhiteButton" onclick='$("#categoryPopup").modal({fadeDuration: 100});'>Ware hinzufügen</a></li>
-				</ul>
-
-				<!-- Popup for CREATING a Category -->
-				<div id="categoryPopup" class="modal">
-					<form action="index.html" method="post">
-						<h1>Neue Warenkategorie hinzufügen</h1>
-						<input class="catInput" type="text" placeholder="Kategoriename" /><br>
-						<input class="catInput" type="text" placeholder="Spezifikation" /><br>
-						<input class="catInput" type="number" value="0" step="0.1" placeholder="Mindestgewicht" /><br><br>
-						<a class="blackWhiteButton" onclick="UploadNewCategory()" style="float:left">hinzufügen</a>
-						<a class="blackWhiteButton" style="float:right" rel="modal:close" href="#">zurück</a>
-					</form>
-				</div>
-
-				<!-- Popup for EDITING a Category -->
-				<div id="editCategoryPopup" class="modal">
-					<form action="index.html" method="post">
-						<h1>Warenkategorie bearbeiten</h1>
-						<input class="catInput" type="text" placeholder="Kategoriename" /><br>
-						<input class="catInput" type="text" placeholder="Spezifikation" /><br>
-						<input class="catInput" type="number" value="0" step="0.1" placeholder="Mindestgewicht" /><br><br>
-						<a class="blackWhiteButton" onclick="UpdateCategory()" style="float:left" href="#">Aktualisieren</a>
-						<a class="blackWhiteButton" id="deleteButton" onclick="DeleteCategory()" style="float:left;margin-left:10px" href="#">Löschen</a>
-						<a class="blackWhiteButton" style="float:right" rel="modal:close" href="#">zurück</a>
-					</form>
-				</div>
-
-				<!-- Popup for deleting a Sack -->
-				<div id="deleteSackPopup" class="modal">
-					<p>Bist du sicher, dass du diesen Sack löschen willst?</p>
-					<a onclick="DeleteSack()" class="blackWhiteButton deleteButton" style="float:left" href="#">bestätigen</a>
-					<a class="blackWhiteButton" style="float:right" rel="modal:close" href="#">zurück</a>
-				</div>
-
-				<!-- Popup for deleting a Category -->
-				<div id="deleteCategoryPopup" class="modal">
-					<p>Bist du sicher, dass du diese Kategorie löschen willst?</p>
-					<a onclick="DeleteCategory()" class="blackWhiteButton deleteButton" style="float:left" href="#">bestätigen</a>
-					<a class="blackWhiteButton" id="returnButton" style="float:right" rel="modal:close" href="#">zurück</a>
-				</div>
 
 			</div>
 		</main>
 		<script src="/assets/js/jquery.js"></script>
 		<script src="/assets/js/jquery.modal.js"></script>
 		<script src="/assets/js/stock_list.js"></script>
+		<script type="text/javascript" src="/assets/js/datatables/datatables.min.js"></script>
 		<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
 		<script>
-			PrintCategory({title: "Jean", specification: "Hose", sacks: [20, 15, 18.5, 19.2, 15.5], minWeight: 0.5});
-			PrintCategory({title: "Shorts", specification: "Hose", sacks: [19, 17, 13.8], minWeight: 0.3});
-			PrintCategory({title: "T-Shirt", specification: "Hemd", sacks: [4.6, 8, 7, 5, 9.5, 8], minWeight: 0.2});
-			PrintCategory({title: "Langshirt", specification: "Hemd", sacks: [], minWeight: 0.2});
 		</script>
 	</body>
 </html>

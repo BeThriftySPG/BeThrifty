@@ -1,0 +1,106 @@
+@font-face {
+  font-family: Quicksand;
+  src: url(/assets/fonts/Quicksand-Regular.ttf);
+}
+@font-face {
+  font-family: Rubik;
+  src: url(/assets/fonts/Rubik-Regular.ttf);
+}
+
+* {
+	outline: none;
+}
+body {
+	margin:0px;
+}
+.toggleViewBar {
+	width:100%;
+	padding:2px 10px 2px 0px;
+	font-size: 20px;
+	max-width: 1000px;
+}
+.toggleViewBar td {
+	width:100%;
+	background-color: #222;
+	color:white;
+	border: none;
+	border-color:#888;
+	border-radius: 2px;
+	border-width:1px;
+}
+.toggleViewBar .toggleArrowButton:hover,td:hover {
+	cursor:pointer;
+	opacity: 0.8;
+}
+#eventsOpenDiv > .viewDivToolbar {
+	width:100%;
+	background-color: #EEE;
+}
+#viewContainer {
+	position: relative;
+	margin:auto;
+	border:none;
+	border-top:solid;
+	top:50px;
+	min-height: 90vh;
+	font-size: 20px;
+	border-color:#444;
+}
+#viewContainer > .viewDivs {
+	margin:10px;
+}
+#newEventDiv {
+
+}
+#submitNewEventBtn {
+	margin-top:10px;
+}
+.catInput {
+	outline:none;
+	border-width:1px;
+}
+.newEventInput {
+	max-width: 200px;
+}
+.viewDivToolbar {
+	margin:20px 0px;
+}
+.dataTables_wrapper {
+
+}
+.toggleArrowButton {
+	width:40px;
+	height:40px;
+	background-color: #222;
+	color:white;
+	border:none;
+	float:right;
+}
+.toggleArrowButton span {
+	font-size: 25px;
+	vertical-align: middle;
+}
+.viewDivs {
+	padding-top:25px;
+}
+.dataTables_filter {
+	float:inherit !important;
+	text-align:inherit !important;
+}
+
+@media only screen and (max-width: 1300px) {
+	.viewDivs {
+		/*max-width: 500px;*/
+	}
+	#viewContainer {
+		font-size: 18px;
+	}
+}
+@media only screen and (max-width: 1100px) {
+	.viewDivs {
+		/*max-width: 500px;*/
+	}
+	#viewContainer {
+		font-size: 14px;
+	}
+}

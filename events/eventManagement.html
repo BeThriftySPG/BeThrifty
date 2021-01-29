@@ -2,18 +2,272 @@
 <html lang="en" dir="ltr">
 	<head>
 		<meta charset="utf-8">
-		<title></title>
+		<title>Events</title>
+
+
+		<link rel="stylesheet" href="/assets/js/datatables/datatables.css">
+		<link rel="stylesheet" href="/assets/js/datatables/responsive.dataTables.min.css">
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link rel="stylesheet" href="/assets/css/events.css">
+		<style media="screen">
+
+		</style>
 	</head>
 	<body>
 		<div id="includeHeader"></div>
-		<main>
-			<h1>Events</h1>
 
-		</main>
+		<fieldset id="viewContainer" style="margin-left:100px">
+			<legend style="font-size:40px;font-family:Quicksand;padding:0px 20px">Events</legend>
+			<div class="viewDivs" id="newEventDiv">
+				<button id="toggleNewEvent" class="blackWhiteButton" onclick="ToggleNewEvent()">Neues Event anlegen</button>
+				<form id="newEventForm" method="post" style="display:none">
+					<input type="text" class="catInput newEventInput" placeholder="Eventname:"><br>
+					<input type="text" class="catInput newEventInput" placeholder="Datum:"><br>
+					<input type="text" class="catInput newEventInput" placeholder="Ort:"><br>
+					<input type="submit" id="submitNewEventBtn" class="blackWhiteButton" value="Erstellen">
+				</form>
+			</div>
+			<div class="viewDivs" id="eventsOpenDiv">
+				<table class="toggleViewBar" onclick="ToggleEventViews('eventsOpenDiv')">
+					<tr>
+						<td style="padding-left:25px">Eventstatus: Offen</td>
+						<td style="width:25px;border:none;background:none"><button class="toggleArrowButton"><span class="material-icons">keyboard_arrow_up</span></button></td>
+					</tr>
+				</table>
+				<div class="content">
+					<div style="background-color:pink" class="viewDivToolbar"></div>
+					<table style="width:100%;max-width:1000px;" class="eventTableContent display cell-border responsive nowrap">
+						<thead>
+							<tr>
+								<th>Eventname</th>
+								<th>Datum</th>
+								<th>Ort</th>
+								<th>Status</th>
+								<th>Details</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Graz Messehalle</td>
+								<td>18.01.2021</td>
+								<td>Graz</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Wien Studentenhotel</td>
+								<td>18.07.2021</td>
+								<td>Wien</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Klosterneuburg Babenbergehalle</td>
+								<td>25.04.2021</td>
+								<td>Niederösterreich</td>
+								<td>Closed</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Wien Rathaus</td>
+								<td>12.06.2021</td>
+								<td>Wien</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Graz Messehalle</td>
+								<td>18.01.2021</td>
+								<td>Graz</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Wien Studentenhotel</td>
+								<td>18.07.2021</td>
+								<td>Wien</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Klosterneuburg Babenbergehalle</td>
+								<td>25.04.2021</td>
+								<td>Niederösterreich</td>
+								<td>Closed</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Wien Rathaus</td>
+								<td>12.06.2021</td>
+								<td>Wien</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Graz Messehalle</td>
+								<td>18.01.2021</td>
+								<td>Graz</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Wien Studentenhotel</td>
+								<td>18.07.2021</td>
+								<td>Wien</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Klosterneuburg Babenbergehalle</td>
+								<td>25.04.2021</td>
+								<td>Niederösterreich</td>
+								<td>Closed</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Wien Rathaus</td>
+								<td>12.06.2021</td>
+								<td>Wien</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+						</tbody>
+						<!--tfoot>
+							<tr>
+								<th>Eventname</th>
+								<th>Datum</th>
+								<th>Ort</th>
+								<th>Status</th>
+								<th>Details</th>
+							</tr>
+						</tfoot-->
+					</table>
+				</div>
+			</div>
+			<div class="viewDivs" id="eventsClosedDiv">
+				<table class="toggleViewBar" onclick="ToggleEventViews('eventsClosedDiv')">
+					<tr>
+						<td style="padding-left:25px">Eventstatus: Closed</td>
+						<td style="width:50px;border:none;background:none"><button class="toggleArrowButton"><span class="material-icons">keyboard_arrow_up</span></button></td>
+					</tr>
+				</table>
+				<div class="content">
+					<div class="viewDivToolbar"></div>
+					<table style="width:100%;max-width:1000px" class="eventTableContent display cell-border responsive nowrap">
+						<thead>
+							<tr>
+								<th>Eventname</th>
+								<th>Datum</th>
+								<th>Ort</th>
+								<th>Status</th>
+								<th>Details</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Graz Messehalle</td>
+								<td>18.01.2021</td>
+								<td>Graz</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Wien Studentenhotel</td>
+								<td>18.07.2021</td>
+								<td>Wien</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Klosterneuburg Babenbergehalle</td>
+								<td>25.04.2021</td>
+								<td>Niederösterreich</td>
+								<td>Closed</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Wien Rathaus</td>
+								<td>12.06.2021</td>
+								<td>Wien</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Graz Messehalle</td>
+								<td>18.01.2021</td>
+								<td>Graz</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Wien Studentenhotel</td>
+								<td>18.07.2021</td>
+								<td>Wien</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Klosterneuburg Babenbergehalle</td>
+								<td>25.04.2021</td>
+								<td>Niederösterreich</td>
+								<td>Closed</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Wien Rathaus</td>
+								<td>12.06.2021</td>
+								<td>Wien</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Graz Messehalle</td>
+								<td>18.01.2021</td>
+								<td>Graz</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Wien Studentenhotel</td>
+								<td>18.07.2021</td>
+								<td>Wien</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Klosterneuburg Babenbergehalle</td>
+								<td>25.04.2021</td>
+								<td>Niederösterreich</td>
+								<td>Closed</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+							<tr>
+								<td>Wien Rathaus</td>
+								<td>12.06.2021</td>
+								<td>Wien</td>
+								<td>Offen</td>
+								<td><a class="eventList">Eventlisten</a></td>
+							</tr>
+						</tbody>
+						<!--tfoot>
+							<tr>
+								<th>Eventname</th>
+								<th>Datum</th>
+								<th>Ort</th>
+								<th>Status</th>
+								<th>Details</th>
+							</tr>
+						</tfoot-->
+					</table>
+				</div>
+			</div>
+		</fieldset>
 
 		<script src="/assets/js/jquery.js"></script>
 		<script src="/assets/js/jquery.modal.js"></script>
-		<script src="/assets/js/stock_list.js"></script>
+		<script type="text/javascript" charset="utf8" src="/assets/js/datatables/datatables.min.js"></script>
+		<script type="text/javascript" charset="utf8" src="/assets/js/datatables/dataTables.responsive.min.js"></script>
+		<script src="/assets/js/events.js"></script>
 		<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
 	</body>
 </html>
