@@ -64,7 +64,7 @@ async function LoadEventTables() {
 		let loc = moment(eventsClosed[i].date);
 		loc.locale("de");
 		data1[i] = [];
-		data1[i][0] = "<a class='editEventLink' title='Bearbeiten'>" + eventsClosed[i].eventname + "</a>";
+		data1[i][0] = "<a class='editEventLink' title='Bearbeiten' href='eventOverview.html?id=" + eventsClosed[i].id + "'>" + eventsClosed[i].eventname + "</a>";
 		data1[i][1] = "<span style='display:none'>" + loc.unix() + "</span>" + loc.format("ll");
 		data1[i][2] = eventsClosed[i].city;
 		data1[i][3] = eventsClosed[i].postcode;
@@ -73,12 +73,12 @@ async function LoadEventTables() {
 		let loc = moment(eventsOpened[i].date);
 		loc.locale("de");
 		data2[i] = [];
-		data2[i][0] = "<a class='editEventLink' title='Bearbeiten'>" + eventsOpened[i].eventname + "</a>";
+		data2[i][0] = "<a class='editEventLink' title='Bearbeiten' href='eventOverview.html?id=" + eventsOpened[i].id + "'>" + eventsOpened[i].eventname + "</a>";
 		data2[i][1] = "<span style='display:none'>" + loc.unix() + "</span>" + loc.format("ll");
 		data2[i][2] = eventsOpened[i].city;
 		data2[i][3] = eventsOpened[i].postcode;
 	}
-
+	console.log(data1);
 	// Initializing dataTables
 	var eventOpenTable = $("#eventsOpenDiv").find(".eventTableContent").DataTable({
 		paging: false,
@@ -110,6 +110,7 @@ async function LoadEventTables() {
 
 async function Initiliaze() {
 	await Api.init();
+	HeaderCheckLogin();
 	LoadEventTables();
 }
 

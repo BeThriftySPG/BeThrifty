@@ -1,3 +1,12 @@
+@font-face {
+  font-family: Quicksand;
+  src: url(/assets/fonts/Quicksand-Regular.ttf);
+}
+@font-face {
+  font-family: Rubik;
+  src: url(/assets/fonts/Rubik-Regular.ttf);
+}
+
 body {
   font-family:arial;
   margin:0px;
@@ -26,6 +35,9 @@ main {
 .headerElement {
   float:left;
   width:calc(100% / 5); /* Divident steht für Anzahl der Header Elemente */
+}
+.catInput {
+	padding:10px;
 }
 .headerElement a {
   display:block;

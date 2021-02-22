@@ -1,0 +1,100 @@
+.newWarePopup {
+	min-width:900px;
+	min-height:600px;
+	border-radius: 0px;
+	font-size:20px;
+	padding-left:100px;
+}
+.newWarePopup ul {
+	list-style: none;
+	padding:0px;
+}
+.newWarePopup select {
+	min-height:35px;
+	min-width:100px;
+	padding:10px 20px;
+	text-align: center;
+	font-size:18px;
+	transition: 0.1s;
+	color:#666;
+}
+.newWarePopup select:hover {
+	cursor:pointer;
+	background-color: #222;
+	color:#FFF;
+	transition: 0.2s;
+}
+.newWarePopup option {
+	font-size: 20px;
+}
+.newWarePopup li {
+	padding:0px;
+	margin: 20px 0px;
+}
+.newWarePopup .confBtn {
+	position: absolute;
+	margin:30px;
+	margin-left: 100px;
+	bottom:0px;
+}
+.newWarePopup input {
+	padding:10px;
+	padding-left: 5px;
+	width:75%;
+	font-size:20px;
+	border:none;
+	border-bottom:solid;
+}
+.newWarePopup input:focus {
+	background-color: #EEE;
+	border-bottom-color:#44F !important;
+}
+.blackWhiteButton {
+	min-height:40px;
+	min-width:150px;
+	font-size: 20px !important;
+}
+#newWareDate {
+	border:none;
+	background-color: rgba(0, 0, 0, 0);
+	font-size: 20px;
+}
+#addCatIcon {
+	vertical-align: middle;
+	margin-left: 5px;
+}
+.newCatBtn {
+	font-size: 18px !important;
+	color:#666 !important;
+	padding:10px 20px !important;
+}
+.errorMessage {
+	color:red;
+	font-size:20px;
+}
+#newStockCategory input {
+	max-width: 75%;
+}
+#newCatSub {
+	position: absolute;
+	margin-left:-150px;
+	margin-top:2px;
+}
+#newWareErrorMessage {
+	color:red;
+	font-size:20px;
+}
+option {
+	font-size:25px;
+}
+
+@media only screen and (max-width: 1400px) {
+	.newWarePopup {
+		min-width:800px !important;
+	}
+}
+@media only screen and (max-width: 1000px) {
+	.newWarePopup {
+		min-width:700px !important;
+	}
+}

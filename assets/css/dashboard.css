@@ -1,48 +1,107 @@
-	table {
-		border-collapse:collapse;
-	}
-	#login_formular {
-		float:right;
-		margin-right:100px;
-	}
+table {
+	border-collapse:collapse;
+}
+#login_formular {
+	float:right;
+	margin-right:100px;
+}
+#dashboard {
+	background-color:#DDD;
+	padding:25px;
+	min-height:80vh;
+	max-width: 1400px;
+	margin:auto;
+}
+#WarenzugangSelectCat {
+	width:300px;
+}
+#newStockPopup td {
+	padding:5px;
+	max-width:300px;
+	border:none;
+	border-width:1px;
+}
+#newStockPopup table {
+	border:none;
+	width:100%;
+}
+#addCatIcon {
+	user-select: none;
+	transition: 0.1s;
+}
+#addCatIcon:hover {
+	transform: rotateZ(90deg);
+	cursor: pointer;
+	transition: 0.25s;
+}
+#dashboardTable {
+	width:100%;
+}
+#dashboardTable td {
+	width:50%;
+}
+.dashboardTableTitle {
+	text-align: center;
+	font-size: 30px;
+}
+.listSortIcon:hover {
+	cursor:pointer;
+	color:limegreen;
+}
+.graph {
+	height:90%;
+	border:none;
+	font-family:Quicksand;
+}
+.graph legend {
+	font-size: 20px;
+	padding:0px 20px;
+}
+.item {
+	background-color:#FFF !important;
+}
+
+@media only screen and (max-width: 1400px) {
 	#dashboard {
-		background-color:#DDD;
-		padding:25px;
-		min-height:80vh;
+
 	}
-	#WarenzugangSelectCat {
-		width:300px;
+}
+
+@media only screen and (max-width: 1000px) {
+	.grid {
+
 	}
-	#newStockPopup td {
-		padding:5px;
-		max-width:300px;
-		border:none;
-		border-width:1px;
-	}
-	#newStockPopup table {
-		border:none;
-		width:100%;
-	}
-	#addCatIcon {
-		user-select: none;
-		transition: 0.1s;
-	}
-	#addCatIcon:hover {
-		transform: rotateZ(90deg);
-		cursor: pointer;
-		transition: 0.25s;
-	}
-	#dashboardTable {
-		width:100%;
-	}
-	#dashboardTable td {
-		width:50%;
-	}
-	.dashboardTableTitle {
-		text-align: center;
-		font-size: 30px;
-	}
-	.listSortIcon:hover {
-		cursor:pointer;
-		color:limegreen;
-	}
+}
+
+/* Required Muuri Layout Engine CSS */
+
+.grid {
+	position: relative;
+	margin:auto;
+
+}
+.item {
+	display: block;
+	position: absolute;
+	height: 300px;
+	min-width:200px;
+	margin: 5px;
+	z-index: 1;
+	background-color: #FFF;
+	border-radius:8px;
+	padding:20px 10px 0px 10px;
+}
+.item.muuri-item-dragging {
+	z-index: 3;
+}
+.item.muuri-item-releasing {
+	z-index: 2;
+}
+.item.muuri-item-hidden {
+	z-index: 0;
+}
+.item-content {
+	position: relative;
+	width: 100%;
+	height: 100%;
+}

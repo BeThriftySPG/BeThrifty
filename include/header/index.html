@@ -3,7 +3,6 @@
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="/include/header/fonts/icomoon/style.css">
 <link href="/assets/css/header.css" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/popup.css">
 <link rel="stylesheet" href="/assets/css/black_white_button.css">
 
 <!-- Bootstrap CSS -->
@@ -81,8 +80,6 @@
 <script src="/include/header/js/popper.min.js"></script>
 <script src="/include/header/js/main.js"></script>
 <script>
-	HeaderCheckLogin();
-
 	async function HeaderCheckLogin() {
 		await Api.init();
 		if(Api.isLoggedin()) {

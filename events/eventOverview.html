@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Event Overview</title>
+
+		<link rel="stylesheet" href="/assets/css/tabs.css">
+		<link rel="stylesheet" href="/assets/js/datatables/datatables.css">
+		<link rel="stylesheet" href="/assets/js/datatables/responsive.dataTables.min.css">
+		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link rel="stylesheet" href="/assets/css/events.css">
+	</head>
+	<body>
+		<div id="includeHeader"></div>
+
+		<fieldset id="viewContainer">
+			<legend>Event Overview</legend>
+
+			<div class="tab_panel">
+				<ul class="tabs group">
+					<li><a class="active" href="#/one">Start</a></li>
+					<li><a href="#/two">Abschluss</a></li>
+					<li><a href="#/three">Übersicht</a></li>
+					<li id="infoTab"><a href="#/three"></a></li>
+				</ul>
+				<div id="tab_content">
+					<div id="one" class="tab">
+						<button class="blackWhiteButton eventStatusButton openEvent" id="openEventBtn" onclick="OpenCloseEvent()">-</button>
+						<div class="eventHeader eventEdit">
+							<span class="material-icons headerIcon">redo</span>
+							<span class="eventName"></span>
+							<div class="tab_buttons">
+								<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
+								<button class="blackWhiteButton" onclick="ToggleEditView()">Bearbeiten</button>
+							</div>
+							<hr></hr>
+							<div id="mainInfo">
+								<ul>
+									<li class="eventLocation"></li>
+									<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+									<li class="eventDate"></li>
+								</ul>
+							</div><br>
+							<div id="editInfo">
+								<form id="eventForm" method="post">
+									<input type="text" id="eventName" class="catInput newEventInput required" placeholder="Eventname:" oninput="RequiredInput(this)"><br>
+									<input type="date" id="eventDatum" class="catInput newEventInput required" placeholder="yyyy-mm-tt" oninput="RequiredInput(this)"><br>
+									<input type="text" id="eventOrt" class="catInput newEventInput required" placeholder="Ort:" oninput="RequiredInput(this)">
+									<input type="text" id="eventPLZ" class="catInput newEventInput required" placeholder="Plz:" style="width:50px" oninput="RequiredInput(this)">
+									<input type="text" id="newStrasse" class="catInput newEventInput" placeholder="Straße:" style="width:150px">
+									<input type="text" id="eventHausnummer" class="catInput newEventInput" placeholder="Nr." style="width:50px"><br>
+									<input type="text" id="eventPhone" class="catInput newEventInput" placeholder="Telefonnummer"><br><br>
+									<input type="button" onclick="" id="updateEventBtn" class="blackWhiteButton" value="Aktualisieren" disabled><br><br>
+								</form>
+								<hr></hr>
+							</div>
+						</div>
+					</div>
+					<div id="two" class="tab" style="display:none">
+						<button class="blackWhiteButton eventStatusButton closeEvent" id="closeEventBtn" onclick="OpenCloseEvent()">-</button>
+						<div class="eventHeader">
+							<span class="material-icons headerIcon">undo</span>
+							<span class="eventName"></span>
+							<div class="tab_buttons">
+								<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
+								</div>
+								<hr></hr>
+								<ul>
+									<li class="eventLocation"></li>
+									<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+									<li class="eventDate"></li>
+								</ul>
+							</div>
+						</div>
+						<div id="three" class="tab" style="display:none">
+					<div class="eventHeader">
+						<span class="material-icons headerIcon">view_quilt</span>
+						<span class="eventName"></span>
+						<div class="tab_buttons">
+							<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
+						</div>
+						<hr></hr>
+						<ul>
+							<li class="eventLocation"></li>
+							<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+							<li class="eventDate"></li>
+						</ul>
+					</div>
+				</div>
+				</div>
+			</div>
+		</fieldset>
+
+	<script src="/assets/js/Api.js"></script>
+	<script src="/assets/js/jquery.js"></script>
+	<script src="/assets/js/jquery.modal.js"></script>
+	<script src="/assets/js/moment.js"></script>
+	<script src="/assets/js/tabs.js"></script>
+	<script src="/assets/js/eventOverview.js"></script>
+	<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
+	</body>
+</html>

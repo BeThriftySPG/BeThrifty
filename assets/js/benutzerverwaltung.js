@@ -19,23 +19,6 @@ var permissionNames =  { // Converts variable names to language
 	"GroupDelete": "Gruppe löschen"
 };
 
-// Redirect if not logged in
-if(!Api.isLogedin()) {
-	//document.body.innerHTML = "";
-	//window.location.replace("/error401.html");
-}
-
-// Initialize "Select" elements
-$('select').selectric({
-	maxHeight: 200,
-	inheritOriginalWidth: true
-});
-
-// Loads all avialable Groups and Permissions on page-load
-FetchUserGroups();
-FetchPermissions();
-FetchUsers();
-
 async function FetchUsers() {
 	const userTable = document.getElementById("userTable");
 
@@ -302,3 +285,23 @@ function BuildEditGroupPermissions() {
 	}
 	$('select').selectric('refresh');
 }
+
+async function Initiliaze() {
+	await Api.init();
+	HeaderCheckLogin();
+
+	// Initialize "Select" elements
+	$('select').selectric({
+		maxHeight: 200,
+		inheritOriginalWidth: true
+	});
+
+	// Loads all avialable Groups and Permissions on page-load
+	FetchUserGroups();
+	FetchPermissions();
+	FetchUsers();
+}
+
+$(function () {
+	Initiliaze();
+});

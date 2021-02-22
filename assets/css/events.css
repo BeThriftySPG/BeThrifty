@@ -1,11 +1,4 @@
-@font-face {
-  font-family: Quicksand;
-  src: url(/assets/fonts/Quicksand-Regular.ttf);
-}
-@font-face {
-  font-family: Rubik;
-  src: url(/assets/fonts/Rubik-Regular.ttf);
-}
+
 
 * {
 	outline: none;
@@ -110,10 +103,49 @@ body {
 		font-size: 18px;
 		width:800px;
 	}
+	#tab_content {
+		width:800px;
+	}
+	ul.tabs {
+		width:800px;
+	}
+	.eventName {
+		font-size: 30px !important;
+	}
+	.headerIcon {
+		font-size: 25px !important;
+	}
+	.tab_buttons {
+		padding:0px !important;
+		margin-top:10px !important;
+	}
+	.tab_buttons button {
+		font-size: 14px !important;
+	}
 }
 @media only screen and (max-width: 1000px) {
 	#viewContainer {
 		font-size: 14px;
 		width:600px;
+	}
+	#tab_content {
+		width:600px;
+	}
+	ul.tabs {
+		width:600px;
+	}
+	.eventName {
+		font-size: 20px !important;
+	}
+	.headerIcon {
+		font-size: 15px !important;
+	}
+	.tab_buttons {
+		padding:0px !important;
+		margin:0px !important;
+
+	}
+	.tab_buttons button {
+		font-size: 12px !important;
 	}
 }

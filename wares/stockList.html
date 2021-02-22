@@ -4,25 +4,80 @@
 		<meta charset="utf-8">
 		<title>Warenliste</title>
 		<link rel="stylesheet" href="/assets/css/jquery.modal.css" />
-		<link rel="stylesheet" href="/assets/css/popup.css">
-		<link rel="stylesheet" href="/assets/css/stock_list.css">
+		<link rel="stylesheet" href="/assets/css/stockList.css">
 		<link rel="stylesheet" href="/assets/css/black_white_button.css">
-		<link rel="stylesheet" type="text/css" href="/assets/js/datatables/datatables.min.css"/>
+		<link rel="stylesheet" href="/assets/css/events.css">
+		<link rel="stylesheet" type="text/css" href="/assets/js/datatables/datatables.css"/>
 	</head>
 	<body>
 		<div id="includeHeader"></div>
 		<main>
-			<div id="boxContainer">
+			<fieldset id="viewContainer">
+				<legend>Events</legend>
+				<button class="blackWhiteButton" style="float:right;padding:10px 15px;margin-bottom:25px" onclick="OpenNewWarePopup()">NEUE WARE</button><br><br>
 
+				<div class="viewDivs" id="eventsOpenDiv">
+					<p>Warenliste</p><hr>
+					<div class="content">
+						<div style="background-color:pink" class="viewDivToolbar"></div>
+						<table style="width:100%;max-width:1000px;" class="wareListTable display cell-border responsive nowrap">
+						</table>
+					</div>
+				</div>
+				<table id="stockTable" class="display cell-border responsive">
 
+				</table>
+			</fieldset>
+
+			<!-- Popup for ADDING stock -->
+			<div id="newStockPopup" class="modal newWarePopup">
+				<h1>Neuer Wareneingang</h1>
+				<p>Hier werden neue Wareneingänge verzeichnet.</p><br>
+				<ul>
+					<li>
+						<input id="newWareKg" placeholder="Warenzugang in Kg" oninput="CheckInputKg()" onfocus="ValidateInputKg(this, true)" onfocusout="ValidateInputKg(this, false)" autocomplete="off" />
+					</li>
+					<li>
+						<select id="newWareCat" onchange="ValidateSelectedCategory(this)"></select>
+						<select id="newWareSpec" onchange="CheckInputKg()" style="margin-left:10px"></select>
+					</li>
+					<li><button class="blackWhiteButton newCatBtn" onclick="OpenNewCatPopup()">Neuer Warentyp<span class="material-icons" id="addCatIcon">add_circle</span></button></li>
+					<li>
+						<input id="newWareDate" disabled />
+					</li>
+					<li>
+						<span id="newWareErrorMessage" class="errorMessage"></span><br>
+						<span id="newWareWarningMessage" class="errorMessage" style="color:#bf8300"></span>
+					</li>
+				</ul>
+				<a><button class="blackWhiteButton confBtn" style="left:0px" onclick="UploadNewWare()">Bestätigen</button></a>
+				<a rel="modal:close"><button class="blackWhiteButton confBtn" style="margin-left:175px">Abbrechen</button></a>
 			</div>
+
+			<!-- Popup for CREATING a Category -->
+			<div id="newStockCategory" class="modal newWarePopup">
+				<h1>Neuer Warentyp</h1>
+				<p>Hier kann ein neuer Warentyp mit einer Kategorie angelegt werden.</p><br>
+				<ul>
+					<li>
+						<input list="newCatSub" id="newCatName" placeholder="Neue Kategorie*" autocomplete="off">
+						<datalist id="newCatSub"></datalist>
+					</li>
+					<li><input id="newCatSpec" placeholder="Sub-Kategorie*" autocomplete="off"></li>
+					<li><input id="newCatMinWeight" placeholder="Mindestgewicht" autocomplete="off"></li><br>
+				</ul>
+					<p id="newCatErrorMessage" class="errorMessage">&nbsp;</p>
+				<br><br>
+				<button onclick="UploadNewCategory()" class="blackWhiteButton">Bestätigen</button>
+				<a rel="modal:close"><button class="blackWhiteButton">Abbrechen</button></a>
+			</div>
+
 		</main>
 		<script src="/assets/js/jquery.js"></script>
 		<script src="/assets/js/jquery.modal.js"></script>
+		<script src="/assets/js/Api.js"></script>
 		<script src="/assets/js/stock_list.js"></script>
 		<script type="text/javascript" src="/assets/js/datatables/datatables.min.js"></script>
 		<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
-		<script>
-		</script>
 	</body>
 </html>
