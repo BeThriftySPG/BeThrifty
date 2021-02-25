@@ -54,15 +54,6 @@
 	min-width:150px;
 	font-size: 20px !important;
 }
-#newWareDate {
-	border:none;
-	background-color: rgba(0, 0, 0, 0);
-	font-size: 20px;
-}
-#addCatIcon {
-	vertical-align: middle;
-	margin-left: 5px;
-}
 .newCatBtn {
 	font-size: 18px !important;
 	color:#666 !important;
@@ -72,6 +63,24 @@
 	color:red;
 	font-size:20px;
 }
+.deleteBtn {
+	background-color:var(--red) !important;
+	color:white !important;
+}
+.addBtn {
+	background-color:var(--green) !important;
+	color:white !important;
+}
+#newWareDate, #removeWareDate {
+	border:none;
+	background-color: rgba(0, 0, 0, 0);
+	font-size: 20px;
+}
+#addCatIcon {
+	vertical-align: middle;
+	margin-left: 5px;
+}
+
 #newStockCategory input {
 	max-width: 75%;
 }
@@ -80,7 +89,7 @@
 	margin-left:-150px;
 	margin-top:2px;
 }
-#newWareErrorMessage {
+#newWareErrorMessage, #removeWareErrorMessage {
 	color:red;
 	font-size:20px;
 }
@@ -88,13 +97,76 @@ option {
 	font-size:25px;
 }
 
+/* Datatable */
+#stockTable {
+	box-shadow: 0px 0px 20px #CCC;
+	margin-top:30px;
+	width:inherit !important;
+}
+#stockTable .alignRight {
+	text-align: right;
+}
+#stockTable .tools {
+	text-align: left;
+	float:left;
+}
+#stockTable .add, #stockTable .remove {
+	color:#888;
+	padding:5px;
+	text-align: center;
+	font-size: 15px;
+	border:solid;
+	border-width:1px;
+	border-color:rgba(0, 0, 0, 0);
+	text-shadow: 0px 0px 1px #555;
+}
+#stockTable .add:hover, #stockTable .remove:hover {
+	cursor:pointer;
+	border-color: #222;
+	color:#111;
+}
+#stockTable th {
+	font-family:Quicksand;
+	text-align: center !important;
+}
+#stockTable td {
+	font-family:Quicksand;
+	border-color:#DDD;
+}
+.dataTables_filter, .advancedFilter, input {
+	font-size:20px !important;
+	vertical-align: middle;
+	font-family:Quicksand;
+	padding:5px;
+	min-height:40px;
+}
+.advancedFilter {
+	margin-left: 10px;
+	transition: 0.1s;
+}
+.advancedFilter:focus {
+	background-color: #222;
+	color:white;
+	cursor:pointer;
+	transition: 0.1s;
+}
+
 @media only screen and (max-width: 1400px) {
 	.newWarePopup {
 		min-width:800px !important;
+	}
+	#stockList {
+		max-width:800px !important;
 	}
 }
 @media only screen and (max-width: 1000px) {
 	.newWarePopup {
 		min-width:700px !important;
+	}
+	#stockList {
+		max-width:700px !important;
+	}
+	#stockList td {
+		font-size:30px !important;
 	}
 }

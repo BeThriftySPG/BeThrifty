@@ -11,7 +11,6 @@
   <body style="font-family:Quicksand">
     <div id="includeHeader"></div>
     <main>
-
 	    <div id="dashboard">
 				<h1>Dashboard</h1>
 				<br>
@@ -19,11 +18,15 @@
 				<!-- Responsive Dashboard GridList -->
 				<div class="grid">
 
+					<!-- Jedes dieser Div's steht für eine Zelle, kopieren eines Divs fügt eine neue hinzu
+								mit style="width:800px;height:600px" kann man die jeweilige Größe eine Zelle festlegen -->
 				  <div class="item" style="width:400px;height:400px">
-				    <div class="item-content diagram1">
+				    <div class="item-content diagram1"> <!-- "diagram1" dient als Identifikation der Zelle da, diese sollte unique sein -->
+							<!-- Hier kommt jegliches HTML rein, in dem Fall ist es ein Diagramm -->
 							<fieldset class="graph">
 								<legend>Diagramm 1</legend>
 							</fieldset>
+							<!-- Ende -->
 				    </div>
 				  </div>
 
@@ -37,7 +40,7 @@
 
 					<div class="item" style="width:400px">
 				    <div class="item-content">
-
+							<!-- Hier kommt der HTML-Content der Zelle rein -->
 				    </div>
 				  </div>
 				</div>
@@ -54,6 +57,6 @@
 		<script src="https://cdn.jsdelivr.net/npm/muuri@0.9.3/dist/muuri.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/web-animations-js@2.3.2/web-animations.min.js"></script>
 		<script src="/assets/js/dashboard.js"></script>
-		<!-- <script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script> -->
+		<!-- Javascript für E-Charts und Dashboard befinden sich in dashboard.js -->
   </body>
 </html>

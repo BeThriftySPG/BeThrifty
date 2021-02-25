@@ -1,10 +1,9 @@
 
-
-// Initialize "Select" elements
-
 function GenerateGrid() {
-	var grid = new Muuri('.grid', {
-		dragEnabled: true,
+	// Initialisiert das Dashboard
+	var grid = new Muuri('.grid', {	// Initialisiert das Dashboard im Klassenname ".grid"
+		dragEnabled: true,	// Kann man Zellen ziehen?
+		// Layout-Einstellungen. fillGaps ist interessant
 		layout: {
 			fillGaps: false,
 			horizontal: false,
@@ -14,7 +13,7 @@ function GenerateGrid() {
 		},
 		layoutOnResize: true,
 		layoutOnInit: true,
-		layoutDuration: 200,
+		layoutDuration: 200,	// Snap-Geschwindigkeit
 		dragStartPredicate: {
 	    distance: 100,
 	    delay: 0,
@@ -24,29 +23,34 @@ function GenerateGrid() {
 
 function GenerateECharts() {
 	// Chart 1
+	// echarts.init("<Klassenname>") => Erstellt ein Diagramm dort, wo sich diese Klasse befindet. Siehe index.html
+	// .find("<Klassenname>") => Erstellt das Diagramm anstattt direkt in der Klasse ".diagram1" in der Unterklasse ".graph"
+	//													 Da Klassen mehrfach vorkommen können Index-[0]
+	//													 {renderer: 'svg'} => Render das E-Chart mit SVG-Methode anstatt mit Canvas (Es gibt für beides Vor-Nachteile)
 	var chart1 = echarts.init($(".diagram1").find(".graph")[0], null, {renderer: 'svg'});
 
-  chart1.setOption({
+	// Konfiguriert das Diagramm (Diagrammart, Aussehen, Daten, etc...)
+	// Für jede Diagrammart gibt es unterschiedliche Parameter, diese können gut hier eingesehen werden: https://echarts.apache.org/examples/en/index.html
+	// Hier wird ein Tortendiagramm erstellt
+	chart1.setOption({
+		// Damit ist das Diagramm nicht Regenbogenfarbig, sondern eintönig mit Helligkeitsstufen
 		visualMap: {
-			// hide visualMap component; use lightness mapping only
-			show: false,
-			// mapping with min value at 80
-			min: 80,
-			// mapping with max value at 600
-			max: 600,
+			show: false,	// Zeigt Farbengradient an
+			min: 80,	// Minimale Helligkeit
+			max: 800,	// Maximale Helligkeit
 			inRange: {
-					// mapping lightness from 0 to 1
-					colorLightness: [0, 1]
+					colorLightness: [0, 1]	// Farbstufen
 		}
 	},
 	series : [
 		{
-			name: 'Reference Page',
-			type: 'pie',
-			radius: '70%',
-			roseType: "angle",
+			name: 'Reference Pagesss',	// Irgendeine Bezeichnung fürs Diagramm
+			type: 'pie',	// Tortendiagramm
+			radius: '70%',	// Größe des Diagramms
+			roseType: "angle",	// Damit ist es nicht rund, sondern zackig geformt
+			// Daten die das Diagramm anzeigen soll
 			data:[
-				{value:400, name:'Hosen'},
+				{value:400, name:'Hosen'},	// Daten werden mittels Objekt übergeben. Eine Zeile => 1 Datensatz
 				{value:335, name:'Hemden'},
 				{value:310, name:'Jacken'},
 				{value:274, name:'Röcke'}
@@ -56,21 +60,20 @@ function GenerateECharts() {
 	});
 }
 
+// Startfunktion der Seite
 async function Initiliaze() {
 	await Api.init();
+	// Passt den Login bereich an, je nachdem ob man Ein/Aus-geloggt ist.
 	HeaderCheckLogin();
-	
-	// Generating GridList
+
+	// Funktion zum Generieren der E-Charts
 	GenerateECharts();
+	// Funktion zum Initialisieren des Responsive Dashboards
 	GenerateGrid();
 
-
-	$('select').selectric({
-		maxHeight: 200,
-		inheritOriginalWidth: true
-	});
 }
 
+// Wird beim Aufrufen der Seite ausgeführt
 $(function () {
 	Initiliaze();
 });

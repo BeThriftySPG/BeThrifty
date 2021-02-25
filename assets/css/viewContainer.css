@@ -1,0 +1,35 @@
+#viewContainer {
+	position: relative;
+	margin: auto;
+	border:none;
+	border-top:solid;
+	top:25px;
+	font-size: 20px;
+	border-color:#444;
+	width:1200px;
+}
+#viewContainer > legend {
+	font-size:40px;
+	font-family:Quicksand;
+	padding:0px 20px;
+	margin-bottom:25px;
+}
+#viewContainer > .viewDivs {
+	margin:10px;
+}
+.dataTables_filter {
+	float:inherit !important;
+	text-align:inherit !important;
+}
+@media only screen and (max-width: 1400px) {
+	#viewContainer {
+		font-size: 18px;
+		width:800px;
+	}
+}
+@media only screen and (max-width: 1000px) {
+	#viewContainer {
+		font-size: 14px;
+		width:600px;
+	}
+}

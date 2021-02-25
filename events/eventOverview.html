@@ -6,9 +6,10 @@
 
 		<link rel="stylesheet" href="/assets/css/tabs.css">
 		<link rel="stylesheet" href="/assets/js/datatables/datatables.css">
-		<link rel="stylesheet" href="/assets/js/datatables/responsive.dataTables.min.css">
+		<!--link rel="stylesheet" href="/assets/js/datatables/responsive.dataTables.min.css"-->
 		<link rel="preconnect" href="https://fonts.gstatic.com">
 		<link rel="stylesheet" href="/assets/css/events.css">
+		<link rel="stylesheet" href="/assets/css/viewContainer.css">
 	</head>
 	<body>
 		<div id="includeHeader"></div>
@@ -41,6 +42,8 @@
 									<li class="eventDate"></li>
 								</ul>
 							</div><br>
+							<div id="startStockTables">
+							</div>
 							<div id="editInfo">
 								<form id="eventForm" method="post">
 									<input type="text" id="eventName" class="catInput newEventInput required" placeholder="Eventname:" oninput="RequiredInput(this)"><br>
@@ -96,6 +99,8 @@
 	<script src="/assets/js/jquery.modal.js"></script>
 	<script src="/assets/js/moment.js"></script>
 	<script src="/assets/js/tabs.js"></script>
+	<script type="text/javascript" charset="utf8" src="/assets/js/datatables/datatables.min.js"></script>
+	<script type="text/javascript" charset="utf8" src="/assets/js/datatables/dataTables.responsive.min.js"></script>
 	<script src="/assets/js/eventOverview.js"></script>
 	<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
 	</body>

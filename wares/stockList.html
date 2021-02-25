@@ -6,18 +6,19 @@
 		<link rel="stylesheet" href="/assets/css/jquery.modal.css" />
 		<link rel="stylesheet" href="/assets/css/stockList.css">
 		<link rel="stylesheet" href="/assets/css/black_white_button.css">
-		<link rel="stylesheet" href="/assets/css/events.css">
-		<link rel="stylesheet" type="text/css" href="/assets/js/datatables/datatables.css"/>
+		<link rel="stylesheet" href="/assets/css/viewContainer.css">
+		<link rel="stylesheet" type="text/css" href="/assets/js/datatables/datatables.min.css"/>
 	</head>
 	<body>
 		<div id="includeHeader"></div>
 		<main>
 			<fieldset id="viewContainer">
-				<legend>Events</legend>
-				<button class="blackWhiteButton" style="float:right;padding:10px 15px;margin-bottom:25px" onclick="OpenNewWarePopup()">NEUE WARE</button><br><br>
+				<legend>Warenlager</legend>
+				<button class="blackWhiteButton" style="float:right;padding:10px 15px;margin-bottom:25px;margin-left:10px" onclick="OpenDeleteWarePopup()">Ware Entfernen</button>
+				<button class="blackWhiteButton" style="float:right;padding:10px 15px;margin-bottom:25px;" onclick="OpenNewWarePopup()">Ware Hinzufügen</button><br><br>
 
 				<div class="viewDivs" id="eventsOpenDiv">
-					<p>Warenliste</p><hr>
+
 					<div class="content">
 						<div style="background-color:pink" class="viewDivToolbar"></div>
 						<table style="width:100%;max-width:1000px;" class="wareListTable display cell-border responsive nowrap">
@@ -31,26 +32,51 @@
 
 			<!-- Popup for ADDING stock -->
 			<div id="newStockPopup" class="modal newWarePopup">
-				<h1>Neuer Wareneingang</h1>
+				<h1>Waren Eingang</h1>
 				<p>Hier werden neue Wareneingänge verzeichnet.</p><br>
 				<ul>
 					<li>
 						<input id="newWareKg" placeholder="Warenzugang in Kg" oninput="CheckInputKg()" onfocus="ValidateInputKg(this, true)" onfocusout="ValidateInputKg(this, false)" autocomplete="off" />
 					</li>
 					<li>
-						<select id="newWareCat" onchange="ValidateSelectedCategory(this)"></select>
+						<select id="newWareCat" onchange="ValidateSelectedCategory(this, 'add')"></select>
 						<select id="newWareSpec" onchange="CheckInputKg()" style="margin-left:10px"></select>
 					</li>
 					<li><button class="blackWhiteButton newCatBtn" onclick="OpenNewCatPopup()">Neuer Warentyp<span class="material-icons" id="addCatIcon">add_circle</span></button></li>
-					<li>
+					<li style="margin:0px">
 						<input id="newWareDate" disabled />
 					</li>
-					<li>
+					<li style="margin:0px">
 						<span id="newWareErrorMessage" class="errorMessage"></span><br>
 						<span id="newWareWarningMessage" class="errorMessage" style="color:#bf8300"></span>
 					</li>
 				</ul>
-				<a><button class="blackWhiteButton confBtn" style="left:0px" onclick="UploadNewWare()">Bestätigen</button></a>
+				<a><button class="blackWhiteButton confBtn addBtn" style="left:0px" onclick="UploadNewWare()">Hinzufügen</button></a>
+				<a rel="modal:close"><button class="blackWhiteButton confBtn" style="margin-left:175px">Abbrechen</button></a>
+			</div>
+
+			<!-- Popup for REMOVING stock -->
+			<div id="removeStockPopup" class="modal newWarePopup">
+				<h1>Waren Entnahme</h1>
+				<p>Hier werden Kilogramm von einer bestehenden Ware entfernt.</p><br>
+				<ul>
+					<li>
+						<input id="removeWareKg" placeholder="Warenabgang in Kg" oninput="CheckInputKg()" onfocus="ValidateInputKg(this, true)" onfocusout="ValidateInputKg(this, false)" autocomplete="off" />
+					</li>
+					<li>
+						<select id="removeWareCat" onchange="ValidateSelectedCategory(this, 'remove')"></select>
+						<select id="removeWareSpec" onchange="CheckInputKg()" style="margin-left:10px"></select>
+					</li>
+					<li>
+						<button class="blackWhiteButton newCatBtn" onclick="RemoveCategory()">Entferne Warentyp<span class="material-icons" id="addCatIcon">remove_circle</span></button></li>
+					</li>
+					<li style="margin:0px"><input id="removeWareDate" disabled /></li>
+					<li style="margin:0px">
+						<span id="removeWareErrorMessage" class="errorMessage"></span><br>
+						<span id="removeWareWarningMessage" class="errorMessage" style="color:#bf8300"></span>
+					</li>
+				</ul>
+				<a><button class="blackWhiteButton confBtn deleteBtn" style="left:0px" onclick="UploadRemoveWare()">Entnehmen</button></a>
 				<a rel="modal:close"><button class="blackWhiteButton confBtn" style="margin-left:175px">Abbrechen</button></a>
 			</div>
 

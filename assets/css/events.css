@@ -1,37 +1,6 @@
-
-
-* {
-	outline: none;
-}
-body {
-	margin:0px;
-	padding-left: 100px;
-}
 #eventsOpenDiv > .viewDivToolbar {
 	width:100%;
 	background-color: #EEE;
-}
-#viewContainer {
-	position: relative;
-	margin: auto;
-	border:none;
-	border-top:solid;
-	top:25px;
-	font-size: 20px;
-	border-color:#444;
-	width:1200px;
-}
-#viewContainer > legend {
-	font-size:40px;
-	font-family:Quicksand;
-	padding:0px 20px;
-	margin-bottom:25px;
-}
-#viewContainer > .viewDivs {
-	margin:10px;
-}
-#newEventDiv {
-
 }
 #submitNewEventBtn {
 	margin-top:10px;
@@ -83,10 +52,7 @@ body {
 }
 .viewDivs {
 }
-.dataTables_filter {
-	float:inherit !important;
-	text-align:inherit !important;
-}
+
 .eventTableContent th {
 	text-align: left;
 	padding-left:10px !important;

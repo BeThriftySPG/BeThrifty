@@ -6,6 +6,9 @@
   font-family: Rubik;
   src: url(/assets/fonts/Rubik-Regular.ttf);
 }
+* {
+	outline: none;
+}
 
 body {
   font-family:arial;
