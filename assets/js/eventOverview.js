@@ -6,6 +6,7 @@ var categories;
 var categoryNames;
 var startStock;
 var endStock;
+var startTable;
 
 async function LoadEvent() {
 	ev = await Api.fetchSimple("api/event", eventId);
@@ -115,48 +116,115 @@ function ToggleEventViews(name) {
 	}
 }
 
-async function PrintStartTables() {
-	console.log(stock);
-	let stockDiv = $("#startStockTables");
-	startStock = await Api.fetchSimple("api/event/movement", ev.id);
-	console.log(startStock);
-	console.log(categories);
-
-	let data = [];
-
-	let tablesHTML = "";
-	for(i = 0; i < categoryNames.length; i++) {
-		tablesHTML += `<table class="toggleViewBar" id="startTableDiv_`+categoryNames[i]+`" onclick="ToggleEventViews('`+categoryNames[i]+`')">
-				<tr>
-					<td style="padding-left:25px">`+categoryNames[i]+`</td>
-					<td style="width:25px;border:none;background:none"><button class="toggleArrowButton"><span class="material-icons">keyboard_arrow_up</span></button></td>
-				</tr>
-			</table>
-			<div class="content" id="startTableDiv_`+categoryNames[i]+`">`;
-		tablesHTML += '<table id="start_table_'+categoryNames[i]+'" class="startTables display cell-border responsive nowrap"></table></div>';
+function GetGoodInfo(id) {
+	for(let i = 0; i < categories.length; i++) {
+		if(categories[i].id == id) {
+			return categories[i];
+		}
 	}
+	return null;
+}
+
+async function PrintStartTables() {
+	let data = await UpdateStartTable();
+	let stockDiv = $("#startStockTables");
+	let tablesHTML = '<br><table style="color:black" class="startTables display cell-border responsive nowrap"></table></div>';
 	stockDiv.html(tablesHTML);
 
-	for(i = 0; i < categoryNames.length; i++) {
-		// Initializing dataTables
-		data[i] = {};
-		for(c = 0; c < startStock.length; c++) {
-			data[i].spec = startStock[c].goodInfo;
-			data[i].test = "Test";
-		}
-		console.log(data[i]);
-		let table = $("#start_table_"+categoryNames[i]).DataTable({
-			paging: false,
-			scrollCollapse: true,
-			info: false,
-			responsive:true,
-			data: data[i],
-			"dom": '<"stock-toolbar">',
-			"columns": [
-				{title: "Kategorie"},
-			]
-		});
+	startTable = $(".startTables").DataTable({
+		paging: false,
+		scrollCollapse: true,
+		info: false,
+		responsive:true,
+		data: data,
+		"dom": '<"stock-toolbar">',
+		rowGroup: {
+			dataSrc: 5
+		},
+		order: [[5, "asc"]],
+		"columns": [
+			{title: "Kategorie"},
+			{title: "Säcke"},
+			{title: "Neuer Sack"},
+			{title: "Gesamtgewicht"},
+			{title: "Lagerstand"},
+			{title: "Kat"}
+		]
+	});
+	AddStartTableFunctionality();
+}
+
+async function UpdateStartTable() {
+	if(startTable != null) {
+		startTable.clear();
 	}
+	//console.log(stock);
+	let stockDiv = $("#startStockTables");
+	startStock = await Api.fetchSimple("api/event/movement", ev.id);
+	//console.log(startStock);
+	//console.log(categories);
+	let data = [];
+
+	for(r = 0; r < startStock.length; r++) {
+		let st = startStock[r];
+		let cat = await Api.fetchSimple("api/goodinfo", st.goodInfo);
+
+		data[r] = [];
+		data[r][0] = "";
+		data[r][1] = "";
+		data[r][2] = "";
+		data[r][3] = "";
+		data[r][4] = "";
+		data[r][5] = cat.categorie;
+		if(cat.categorie == cat.categorie) {
+			data[r][0] = cat.specification;
+			data[r][1] = '<select class="prettydropdown arrow bagDropdown">' + st.bags.length + ' Säcke';
+			//data[r][1] += '<option selected disabled>'+st.bags.length+' Bags</option>';
+			for(let s = 0; s < st.bags.length; s++) {
+				data[r][1] += '<option>' + st.bags[s] + ' Kg</option>'
+			}
+			data[r][1] += '</select>';
+			data[r][2] = `<input id="`+cat.id+`" class="newBagInput" placeholder="Kg" />`;
+			data[r][3] = st.bags.reduce((a, b) => a + b, 0) + " Kg";
+			g = stock.find(el => el.goodInfo == cat.id);
+			if(g != null) {
+				data[r][4] = g.weight + " Kg";
+			} else {
+				data[r][4] = "-";
+			}
+		}
+	}
+
+	if(startTable != null) {
+		startTable.rows.add(data);
+		startTable.draw();
+		AddStartTableFunctionality();
+	}
+
+	return data;
+}
+function AddStartTableFunctionality() {
+	$(".newBagInput").each(async function(index) {
+		this.addEventListener('keypress', async function (e) {
+	    if (e.key === 'Enter') {
+	      let el = $($(".newBagInput")[index]);
+				let value = parseFloat(el.val());
+				if(await Api.fetchSimple("api/event/add", {Event:ev.id, GoodInfo: el.attr("id"), Bags:[value]}) == null) {
+					console.log("ERROR: Failed adding " + value + " Kg");
+				} else {
+					console.log("Added " + value + " Kg.");
+				}
+				el.val("");
+				UpdateStartTable();
+	    }
+		});
+	});
+	let drops = [];
+	$(".bagDropdown").each(function(index) {
+		drops[index] = $($(".bagDropdown")[index]).prettyDropdown({
+			hoverIntent:-1,
+		});
+	});
 }
 
 $(function () {

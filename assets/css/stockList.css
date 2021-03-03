@@ -140,6 +140,11 @@ option {
 	padding:5px;
 	min-height:40px;
 }
+.dataTables_filter input {
+	background-color: #FFF !important;
+	min-height:50px !important;
+	border-radius:0px !important;
+}
 .advancedFilter {
 	margin-left: 10px;
 	transition: 0.1s;

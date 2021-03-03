@@ -1,13 +1,19 @@
 const monthNames = ["Jänner", "Februar", "März", "April", "Mai", "June", "July", "August", "September", "Oktober", "November", "Dezember"];
 var currentdate = new Date();
 var stockTable;
+var newWareCat;
+var newWareSpec;
+var removeWareCat;
+var removeWareSpec;
+var filterByCat;
+var filterBySpec;
 
 // Server Functions
 
 async function UploadNewWare() {
 	let kg = $("#newWareKg");
-	let cat = $("#newWareCat");
-	let spec = $("#newWareSpec");
+	let cat = newWareCat;
+	let spec = newWareSpec;
 	let error = $("#newWareErrorMessage");
 
 	let weight = parseFloat(kg.val());
@@ -81,7 +87,7 @@ async function UploadNewCategory() {
 	//console.log("Uploading category: Name = " + name + " , Specification = " + spec + " , MinWeight = " + minWeight);
 
 	let data = {
-		categorie: name,
+		category: name,
 		specification: spec,
 		minweight: weight
 	};
@@ -117,11 +123,54 @@ async function GetCategories() {
 	return await Api.fetchSimple("api/goodInfo/categories");
 }
 async function GetSpecsByCategory(category) {
-	return await Api.fetchSimple("api/goodinfo/find", {Categorie: category, Specification: null});
+	return await Api.fetchSimple("api/goodinfo/find", {Category: category, Specification: null});
 }
 
 // UI Functions
 
+async function OpenNewWarePopup(fill_cat) {
+	let kg = $("#newWareKG");
+	let cat = newWareCat;
+	let spec = newWareSpec;
+	let date = $("#newWareDate");
+	let error = $("#newWareErrorMessage");
+	let warning = $("#newWareWarningMessage");
+
+	kg.val("");
+	cat.html("");
+	spec.html("");
+	error.html("");
+	warning.html("");
+
+	date.val("" + (monthNames[currentdate.getMonth()])  + " " + currentdate.getDate() + " "
+					+ currentdate.getFullYear() + ", "
+					+ currentdate.getHours() + ":"
+					+ currentdate.getMinutes() + " Uhr");
+
+	$('#newStockPopup').modal({
+		fadeDuration: 100,
+		escapeClose: false,
+		clickClose: false,
+		showClose: false
+	});
+
+	let catList = await GetCategories();
+	catList.sort();
+
+	catList.forEach(el => {
+		cat.append("<option value='" + el + "'>" + el + "</option>");
+	});
+	cat.append("<option selected disabled>Kategorie auswählen</option>");
+	kg.css("border-color", "red");
+
+	if(fill_cat != null && fill_cat != "") {
+		let info = await Api.fetchSimple("api/goodInfo", fill_cat);
+		cat.val(info.category);
+		ValidateSelectedCategory(cat, "add", info.id);
+	}
+	cat.refresh();
+	spec.refresh();
+}
 async function OpenNewCatPopup() {
 	$('#newStockCategory').modal({
 		fadeDuration: 100,
@@ -149,118 +198,10 @@ async function OpenNewCatPopup() {
 	});
 	cat.append("<option selected disabled>Kategorien</option>");
 }
-function ValidateInputKg(el, onFocus) {
-	let input = "";
-	for(let i = 0; i < el.value.length; i++) {
-		if(!isNaN(el.value[i]) || el.value[i] == ".") {
-			input += el.value[i];
-		}
-	}
-
-	if(input.length > 0) {
-		el.style.borderColor = "black";
-	} else {
-		el.style.borderColor = "red";
-	}
-
-	if(!onFocus && input.length > 0) {
-		el.value = input + " Kg";
-	} else {
-		el.value = input.trim();
-	}
-}
-function AutoFillNewCatSub(obj) {
-	let el = $(obj);
-	let name = $("#newCatName");
-
-	name.val(el.val());
-}
-async function CheckInputKg() {
-	let el = $("#newWareKg");
-	let weight = parseFloat(el.val());
-	let spec = $("#newWareSpec");
-	let goodInfo = await Api.fetchSimple("api/goodinfo", spec.val());
-	let error = $("#newWareWarningMessage");
-
-	if(weight < goodInfo.minWeight && goodInfo.minWeight > 0) {
-		error.html("Hinweis: Das Mindestgewicht sollte mehr als " + goodInfo.minWeight + " betragen.");
-	} else {
-		error.html("");
-	}
-}
-async function ValidateSelectedCategory(obj, operation, fill) {
-	let el = $(obj);
-	let specs = await GetSpecsByCategory(el.val());
-	let spec = $("#newWareSpec");
-
-	if(operation == "remove") {
-		spec = $("#removeWareSpec");
-	}
-
-	spec.html("");
-
-	specs.sort(function(a, b){
-    if(a.specification < b.specification) { return -1; }
-    if(a.specification > b.specification) { return 1; }
-    return 0;
-	});
-	specs.forEach(el => {
-		spec.append("<option value='" + el.id + "'>" + el.specification + "</option>");
-	});
-	if(operation == "add") {
-		CheckInputKg($("#newWareKg"));
-	}
-	if(fill != null || fill == "") {
-		spec.val(fill);
-	}
-}
-async function OpenNewWarePopup(fill_cat) {
-	let kg = $("#newWareKG");
-	let cat = $("#newWareCat");
-	let spec = $("#newWareSpec");
-	let date = $("#newWareDate");
-	let error = $("#newWareErrorMessage");
-	let warning = $("#newWareWarningMessage");
-
-	kg.val("");
-	cat.html("");
-	spec.html("");
-	error.html("");
-	warning.html("");
-
-	date.val("" + (monthNames[currentdate.getMonth()])  + " " + currentdate.getDate() + " "
-					+ currentdate.getFullYear() + ", "
-					+ currentdate.getHours() + ":"
-					+ currentdate.getMinutes() + " Uhr");
-
-	$('#newStockPopup').modal({
-		fadeDuration: 100,
-		escapeClose: false,
-		clickClose: false,
-		showClose: false
-	});
-
-
-	cat.html("");
-	let catList = await GetCategories();
-	catList.sort();
-
-	catList.forEach(el => {
-		cat.append("<option value='" + el + "'>" + el + "</option>");
-	});
-	cat.append("<option selected disabled>Kategorie auswählen</option>");
-	kg.css("border-color", "red");
-
-	if(fill_cat != null && fill_cat != "") {
-		let info = await Api.fetchSimple("api/goodInfo", fill_cat);
-		cat.val(info.categorie);
-		ValidateSelectedCategory(cat, "add", info.id);
-	}
-}
 async function OpenDeleteWarePopup(fill_cat) {
 	let kg = $("#removeWareKg");
-	let cat = $("#removeWareCat");
-	let spec = $("#removeWareSpec");
+	let cat = removeWareCat;
+	let spec = removeWareSpec;
 	let date = $("#removeWareDate");
 	let error = $("#removeWareErrorMessage");
 	let warning = $("#removeWareWarningMessage");
@@ -295,10 +236,84 @@ async function OpenDeleteWarePopup(fill_cat) {
 
 	if(fill_cat != null && fill_cat != "") {
 		let info = await Api.fetchSimple("api/goodInfo", fill_cat);
-		cat.val(info.categorie);
+		cat.val(info.category);
 		ValidateSelectedCategory(cat, "remove", info.id);
 	}
+	removeWareCat.refresh();
+	removeWareSpec.refresh();
 }
+
+// Valdiation Functions
+
+async function ValidateSelectedCategory(obj, operation, fill) {
+	let el = $(obj);
+	let specs = await GetSpecsByCategory(el.val());
+	let spec = newWareSpec;
+
+	if(operation == "remove") {
+		spec = removeWareSpec;
+	}
+
+	spec.html("");
+
+	specs.sort(function(a, b){
+    if(a.specification < b.specification) { return -1; }
+    if(a.specification > b.specification) { return 1; }
+    return 0;
+	});
+	specs.forEach(el => {
+		spec.append("<option value='" + el.id + "'>" + el.specification + "</option>");
+	});
+	if(operation == "add") {
+		CheckInputKg($("#newWareKg"));
+	}
+	if(fill != null || fill == "") {
+		spec.val(fill);
+	}
+	spec.refresh();
+}
+async function CheckInputKg() {
+	let el = $("#newWareKg");
+	let weight = parseFloat(el.val());
+	let spec = $("#newWareSpec");
+	let goodInfo = await Api.fetchSimple("api/goodinfo", spec.val());
+	let error = $("#newWareWarningMessage");
+
+	/*if(weight < goodInfo.minWeight && goodInfo.minWeight > 0) {
+		error.html("Hinweis: Das Mindestgewicht sollte mehr als " + goodInfo.minWeight + " betragen.");
+	} else {
+		error.html("");
+	}*/
+}
+function ValidateInputKg(el, onFocus) {
+	let input = "";
+	for(let i = 0; i < el.value.length; i++) {
+		if(!isNaN(el.value[i]) || el.value[i] == ".") {
+			input += el.value[i];
+		}
+	}
+
+	if(input.length > 0) {
+		el.style.borderColor = "black";
+	} else {
+		el.style.borderColor = "red";
+	}
+
+	if(!onFocus && input.length > 0) {
+		el.value = input + " Kg";
+	} else {
+		el.value = input.trim();
+	}
+}
+function AutoFillNewCatSub(obj) {
+	let el = $(obj);
+	let name = $("#newCatName");
+
+	name.val(el.val());
+}
+
+// Tables & Search
+
 async function PrintTable() {
 	let wares = await Api.fetchSimple("api/stock/list");
 	let categories = await Api.fetchSimple("api/goodInfos");
@@ -353,10 +368,6 @@ async function PrintTable() {
 	spec += '<option selected disabled>Sub-Kategorien</option></select>';
 	$("#stockTable_filter").append(spec);
 }
-function ExternSearch(obj) {
-	let select = $(obj);
-	CustomSearch(select.val(), "");
-}
 async function UpdateStockTable() {
 	if(stockTable != null) {
 		stockTable.clear();
@@ -370,7 +381,7 @@ async function UpdateStockTable() {
 	for(let i=0; i < wares.length; i++) {
 		data[i] = [];
 		let info = categories.find(el => el.id == wares[i].goodInfo);
-		data[i][1] = info.categorie;
+		data[i][1] = info.category;
 		data[i][0] = info.specification;
 
 		data[i][2] = '<span class="tools material-icons add" onclick="OpenDeleteWarePopup(\''+info.id+'\')">remove</span></span>';
@@ -391,6 +402,10 @@ async function UpdateStockTable() {
 	}
 	return data;
 }
+function ExternSearch(obj) {
+	let select = $(obj);
+	CustomSearch(select.val(), "");
+}
 function CustomSearch(cat, spec) {
 	let searchBar = $("");
 
@@ -409,5 +424,15 @@ $(function () {
 async function Initiliaze() {
 	await Api.init();
 	HeaderCheckLogin();
-	PrintTable();
+	await PrintTable();
+
+	newWareCat = $("#newWareCat").prettyDropdown({});
+	newWareSpec = $("#newWareSpec").prettyDropdown({});
+	removeWareCat = $("#removeWareCat").prettyDropdown({});
+	removeWareSpec = $("#removeWareSpec").prettyDropdown({});
+	filterByCat = $("#catFilter").prettyDropdown({});
+	filterBySpec = $("#specFilter").prettyDropdown({});
+
+	filterByCat.refresh();
+	filterBySpec.refresh();
 }

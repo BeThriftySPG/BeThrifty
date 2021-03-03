@@ -1080,7 +1080,7 @@
     openOnHover          : false,
     hoverIntentTimeout   : 500,
     expandToItemText     : false,
-    responsive           : false,
+    responsive           : true,
     preventWindowScroll  : true,
     inheritOriginalWidth : false,
     allowWrap            : true,
