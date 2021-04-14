@@ -58,6 +58,35 @@ function GenerateECharts() {
 		}
 	]
 	});
+	
+}
+
+function GenerateBarChart(){
+	
+	var chart2 = echarts.init($(".diagram2").find(".graph")[0], null, {renderer: 'svg'});
+
+	chart2.setOption({
+		// Damit ist das Diagramm nicht Regenbogenfarbig, sondern eintönig mit Helligkeitsstufen
+		visualMap: {
+			show: false,
+			min: 10,
+			max: 1000,
+	},
+
+	series: [{
+        name: 'Show Categories'
+		type: 'bar',
+        stack: 'chart',
+        label: {
+            position: 'right',
+            show: true
+        },
+        data: [
+		{value:400, name:'Hosen'},	// Daten werden mittels Objekt übergeben. Eine Zeile => 1 Datensatz
+		{value:335, name:'Hemden'},
+		{value:310, name:'Jacken'},
+		{value:274, name:'Röcke'}
+	]
 }
 
 // Startfunktion der Seite
