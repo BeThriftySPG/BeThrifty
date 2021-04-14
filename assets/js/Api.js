@@ -243,25 +243,33 @@ if(this.Api === undefined) {
 				fetchFromApi3(path, data).then(function(response) {
 					if(response.ok) {
 						let contentType = response.headers.get("Content-Type");
-						if(typeof(contentType) === "string" && contentType.startsWith("application/json")) {
-							response.json().then(function(obj) {
-								resolve(obj);
-							}).catch(function(_) {
-								response.text().then(function(str) {
-									resolve(str);
-								}).catch(function(error3) {
-									reject(error3);
-								});
-							});
+						if(contentType === null) {
+							resolve(undefined);
 						} else {
 							response.text().then(function(str) {
-								resolve(str);
-							}).catch(function(error2) {
-								reject(error2);
+								if(typeof(contentType) === "string" && contentType.startsWith("application/json")) {
+									try {
+										resolve(JSON.parse(str));
+									} catch (_) {
+										resolve(str);
+									}
+								} else {
+									resolve(str);
+								}
+							}).catch(function(error3) {
+								reject(error3);
 							});
 						}
 					} else {
-						resolve(null);
+						response.text().then(function(str) {
+							try {
+								resolve(JSON.parse(str));
+							} catch (_) {
+								resolve(str);
+							}
+						}).catch(function(error3) {
+							reject(error3);
+						});
 					}
 				}).catch(function(error) {
 					reject(error);
