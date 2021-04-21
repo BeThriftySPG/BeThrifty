@@ -58,11 +58,11 @@ function GenerateECharts() {
 		}
 	]
 	});
-	
+
 }
 
 function GenerateBarChart(){
-	
+
 	var chart2 = echarts.init($(".diagram2").find(".graph")[0], null, {renderer: 'svg'});
 
 	chart2.setOption({
@@ -74,26 +74,29 @@ function GenerateBarChart(){
 	},
 
 	series: [{
-        name: 'Show Categories'
-		type: 'bar',
+        name: 'Show Categories',
+				type: 'bar',
         stack: 'chart',
         label: {
             position: 'right',
             show: true
         },
         data: [
-		{value:400, name:'Hosen'},	// Daten werden mittels Objekt übergeben. Eine Zeile => 1 Datensatz
-		{value:335, name:'Hemden'},
-		{value:310, name:'Jacken'},
-		{value:274, name:'Röcke'}
-	]
+					{value:400, name:'Hosen'},	// Daten werden mittels Objekt übergeben. Eine Zeile => 1 Datensatz
+					{value:335, name:'Hemden'},
+					{value:310, name:'Jacken'},
+					{value:274, name:'Röcke'}
+				]
+			}
+		]
+	});
 }
 
 // Startfunktion der Seite
 async function Initiliaze() {
 	await Api.init();
 	// Passt den Login bereich an, je nachdem ob man Ein/Aus-geloggt ist.
-	HeaderCheckLogin();
+	await HeaderCheckLogin();
 
 	// Funktion zum Generieren der E-Charts
 	GenerateECharts();

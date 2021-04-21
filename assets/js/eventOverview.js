@@ -127,6 +127,7 @@ function GetGoodInfo(id) {
 
 async function PrintStartTables() {
 	let data = await UpdateStartTable();
+	console.log(data);
 	let stockDiv = $("#startStockTables");
 	let tablesHTML = '<br><table style="color:black" class="startTables display cell-border responsive nowrap"></table></div>';
 	stockDiv.html(tablesHTML);

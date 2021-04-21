@@ -28,6 +28,7 @@ async function UploadNewWare() {
 		return;
 	}
 
+	console.log(spec.val());
 	if(await Api.fetchSimple("api/stock/add", {GoodInfo: spec.val(), Weight: weight}) == null) {
 		error.html("Ein Fehler ist aufgetreten.");
 	} else {
