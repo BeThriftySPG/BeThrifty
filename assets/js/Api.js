@@ -2,7 +2,8 @@
 
 if(this.Api === undefined) {
 	this.Api = (function() {
-		const apiServerAdress = "https://whitehelmet.ddns.net:5001/";
+		//const apiServerAdress = "https://whitehelmet.ddns.net:5001/";
+		const apiServerAdress = "http://88.117.74.124:5000/";
 		const apiCreateUserPage = "api/user/create";
 		const apiLoginPage = "api/user/login";
 		const apiRefreshTokenPage = "api/user/refreshToken";
@@ -113,7 +114,7 @@ if(this.Api === undefined) {
 						}
 					}
 				}
-			}).catch(function(_) {
+			}).catch(function() {
 				setJwtToken(null);
 			});
 		}
@@ -250,7 +251,7 @@ if(this.Api === undefined) {
 								if(typeof(contentType) === "string" && contentType.startsWith("application/json")) {
 									try {
 										resolve(JSON.parse(str));
-									} catch (_) {
+									} catch {
 										resolve(str);
 									}
 								} else {
@@ -263,9 +264,13 @@ if(this.Api === undefined) {
 					} else {
 						response.text().then(function(str) {
 							try {
-								resolve(JSON.parse(str));
-							} catch (_) {
-								resolve(str);
+								reject(JSON.parse(str));
+							} catch {
+								if(typeof(str) !== "string" || str === "") {
+									reject("Received status code: " + response.status + " in response to " + path + " " + data);
+								} else {
+									reject(str);
+								}
 							}
 						}).catch(function(error3) {
 							reject(error3);
@@ -300,7 +305,7 @@ if(this.Api === undefined) {
 					} else {
 						resolve(false);
 					}
-				}, function(_) {
+				}, function() {
 					setJwtToken(null);
 					resolve(false);
 				});
@@ -433,4 +438,129 @@ if(this.Api === undefined) {
 
 		return output;
 	})();
+}
+
+// Helper functions
+async function GetCategories() {
+	// Get List of all Categories
+	return await Api.fetchSimple("api/goodInfo/categories");
+}
+async function GetSpecsByCategory(category) {
+	// Get Specification by Category-Id
+	return await Api.fetchSimple("api/goodinfo/find", {Category: category, Specification: null});
+}
+async function GetAvialableKg(id) {
+	// Get Avialable KG by Category-Id
+	return await Api.fetchSimple("api/stock", id);
+}
+async function GetGoodInfo(id) {
+	return await Api.fetchSimple("api/goodinfo", id);
+}
+async function GetGoodInfoList(id) {
+	return await Api.fetchSimple("api/goodInfos");
+}
+async function GetStockList() {
+	return await Api.fetchSimple("api/stock/list");
+}
+async function GetEvents() {
+	return await Api.fetchSimple("api/events");
+}
+
+// UI Functions
+async function DisplayAvialableKg(selectSource, targetId) {
+	// Displays avialable Kg by Category Id. selectSource = <select> returns id, targetId = target DOM.html()
+	let info = await Api.fetchSimple("api/stock", $("#"+selectSource).val());
+	$("#" + targetId).html("Verfügbar: " + info.good.weight + "Kg");
+}
+function ValidateInputKg(el, onFocus) {
+	let input = "";
+	for(let i = 0; i < el.value.length; i++) {
+		if(!isNaN(el.value[i]) || el.value[i] == ".") {
+			input += el.value[i];
+		}
+	}
+
+	if(input.length > 0) {
+		el.style.borderColor = "black";
+	} else {
+		el.style.borderColor = "red";
+	}
+
+	if(!onFocus && input.length > 0) {
+		el.value = input + " Kg";
+	} else {
+		el.value = input.trim();
+	}
+}
+
+// Login Functions
+async function HeaderCheckLogin() {
+	await Api.init();
+	if(Api.isLoggedin()) {
+		PrintInfo("Login status: " + Api.isLoggedin());
+		let name = (await Api.fetchSimple("Api/user")).username;
+		document.getElementsByClassName("logo")[0].style.display = "inherit";
+		document.getElementById("input-name").style.display = "none";
+		document.getElementById("input-password").style.display = "none";
+		document.getElementById("submitLoginButton").style.display = "none";
+		document.getElementById("input-stayLogedIn").style.display = "none";
+		document.getElementById("label-stayLogedIn").style.display = "none";
+		document.getElementById("logo-name").innerHTML = name;
+		document.getElementById("logo-letter").innerHTML = name[0];
+		return true;
+	} else {
+		PrintInfo("Login status: " + Api.isLoggedin());
+		//document.getElementsByClassName("logo")[0].style.display = "none";
+		//document.getElementById("logoutButton").style.display = "none";
+		//document.getElementById("logo-name").innerHTML = "Login Required";
+		//document.getElementById("logo-letter").innerHTML = "";
+		//document.getElementById("logo-name").style.position = "initial";
+		//document.getElementById("logo-name").style.marginLeft = "20px";
+		//document.getElementsByClassName("userInput")[0].style.marginTop = "20px";
+		// Empty current main content
+		document.getElementsByTagName("main")[0].innerHTML = `
+		<div style="margin:100px 100px">
+			<p style="font-size:25px">You need to be logged in to view this content.</p>
+		</div>
+		`;
+		return false;
+	}
+}
+async function login() {
+	console.log("Logging in...");
+	let username = document.getElementById("input-name").value;
+	let password = document.getElementById("input-password").value;
+	let stayLogedIn = document.getElementById("input-stayLogedIn").checked;
+
+	try {
+		let status = await Api.login(username, password, stayLogedIn);
+
+		console.log("Login status: " + status);
+		if(status) {
+			window.location.replace("/index.html");
+		} else {
+
+		}
+		Api.onRequiresRelogin = function() { console.log("RequiresRelogin"); };
+	} catch(e) {
+			console.log(e);
+	}
+}
+function logout() {
+	Api.logout();
+	window.location.replace("/index.html");
+}
+
+// Messaging and Console
+function PrintError(e, obj) {
+	if(e.detail != null) {
+		console.warn(e.detail);
+	}
+	console.error(e);
+	if(obj != null) {
+		obj.html(e.detail);
+	}
+}
+function PrintInfo(msg) {
+	console.info("Info: " + msg);
 }

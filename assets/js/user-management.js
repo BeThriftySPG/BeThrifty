@@ -16,7 +16,14 @@ var permissionNames =  { // Converts variable names to language
 	"SameUserDelete": "Eigenen Benutzer löschen",
 	"GroupCreate": "Gruppe erstellen",
 	"GroupChangePermissions": "Gruppen Berechtigung ändern",
-	"GroupDelete": "Gruppe löschen"
+	"GroupDelete": "Gruppe löschen",
+	"GoodInfoView": "Kategorien lesen",
+	"GoodInfoEdit": "Kategorien ändern",
+	"StockView": "Lagerbestand lesen",
+	"StockEdit": "Lagerbestand ändern",
+	"StockViewHistory": "Lagerbestandverlauf lesen",
+	"EventView": "Events lesen",
+	"EventEdit": "Events ändern",
 };
 
 async function FetchUsers() {
@@ -94,7 +101,6 @@ async function FetchUserGroups() {
 		option.innerHTML = val.groupname;
 		groupDrop.appendChild(option);
 	}
-	$('select').selectric('refresh');
 }
 // Fetches all avialable permissions for groups
 async function FetchPermissions() {
@@ -151,6 +157,9 @@ async function EditUser(username) {
 		userPasswordInput.value = "";
 		userGroupInput.value = user.group.groupname;
 		document.getElementById("confirmUserChangeButton").innerHTML = "Aktualisieren";
+		document.getElementById("confirmUserChangeButton").onclick = function() {
+			UpdateUser(username, usernameInput.value, userPasswordInput.value, userGroupInput.value);
+		};
 	} else {
 		document.getElementById("confirmUserChangeButton").innerHTML = "Anlegen";
 		usernameInput.value = username;
@@ -159,8 +168,34 @@ async function EditUser(username) {
 	}
 
 }
-//
+// Create User
 async function CreateUser() {
+	try {
+		Api.createUser($("#usernameInput").val(), $("#userPasswordInput").val(), $("#userGroupInput").val());
+		PrintInfo("User has been created.");
+	} catch(e) {
+		PrintError();
+	}
+}
+async function DeleteUser(name) {
+	try {
+		Api.deleteUser(name);
+		PrintInfo("User " + name + " has been deleted.")
+	} catch(e) {
+		PrintError(e);
+	}
+}
+async function UpdateUser(old, name, password, group) {
+	try {
+		Api.changePassword(old, password);
+		Api.changeGroup(old, group);
+		Api.changeUsername(old, name);
+		PrintInfo("User information updated.");
+	} catch(e) {
+		PrintError(e);
+	}
+}
+async function OpenCreateUserWindow() {
 	document.getElementById("confirmUserChangeButton").innerHTML = "Erstellen";
 	isNewUser = true;
 
@@ -283,25 +318,14 @@ function BuildEditGroupPermissions() {
 			select.style.display = "initial";
 		}
 	}
-	$('select').selectric('refresh');
 }
 
-async function Initiliaze() {
+$(async function () {
 	await Api.init();
-	HeaderCheckLogin();
-
-	// Initialize "Select" elements
-	$('select').selectric({
-		maxHeight: 200,
-		inheritOriginalWidth: true
-	});
-
-	// Loads all avialable Groups and Permissions on page-load
-	FetchUserGroups();
-	FetchPermissions();
-	FetchUsers();
-}
-
-$(function () {
-	Initiliaze();
+	if(await HeaderCheckLogin()) {
+		// Loads all avialable Groups and Permissions on page-load
+		await FetchUsers();
+		await FetchUserGroups();
+		await FetchPermissions();
+	}
 });

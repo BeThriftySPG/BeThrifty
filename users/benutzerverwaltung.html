@@ -5,8 +5,7 @@
 		<title>Benutzerverwaltung</title>
 		<link rel="icon" href="/assets/images/icon.png">
 		<link rel="stylesheet" href="/assets/css/header.css">
-    <link rel="stylesheet" href="/assets/js/jQuerySelectric/selectric.css">
-		<link rel="stylesheet" href="/assets/css/benutzerverwaltung.css">
+		<link rel="stylesheet" href="/assets/css/user-management.css">
   </head>
   <body>
     <div id="includeHeader"></div>
@@ -21,7 +20,7 @@
 	        </tr>
 	      </table>
 	      <div id="userOptionen">
-	        <button id="toggleNewUserButton" onclick="CreateUser()">Neuer Benutzer</button>
+	        <button id="toggleNewUserButton" onclick="OpenCreateUserWindow()">Neuer Benutzer</button>
 	      </div>
 	      <table id="userEditContainer">
 	        <tr><td><label for="benutzername">Benutzername</label></td></tr>
@@ -33,7 +32,7 @@
 	        <tr>
 	          <td>
 	            <button onclick="ToggleNewUser(false)">Abbrechen</button>
-	            <button id="confirmUserChangeButton">Anlegen</button>
+	            <button id="confirmUserChangeButton" onclick="CreateUser()">Anlegen</button>
 	          </td>
 	        </tr>
 	      </table>
@@ -65,10 +64,9 @@
 	    </div>
 		</main>
 
-		<script src="/assets/js/Api.js"></script>
-		<script src="/assets/js/jquery.js"></script>
-		<script src="/assets/js/benutzerverwaltung.js"></script>
-    <script src="/assets/js/jQuerySelectric/jquery.selectric.js"></script>
+		<script src="/assets/js/api.js"></script>
+		<script src="/assets/js/extensions/jquery.min.js"></script>
+		<script src="/assets/js/user-management.js"></script>
 		<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
   </body>
 </html>

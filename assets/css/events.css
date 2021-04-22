@@ -5,6 +5,23 @@
 #submitNewEventBtn {
 	margin-top:10px;
 }
+
+#startStockTables th {
+	color:white;
+	letter-spacing: 1.3px;
+}
+#addNewRowInput {
+	height:38px;
+	max-width: 100px;
+	font-size:20px;
+	padding-left: 10px;
+	border:none;
+	font-family: Quicksand;
+	color:#666;
+}
+.prettydropdown {
+	min-width: 200px;
+}
 .toggleViewBar {
 	width:100%;
 	padding:2px 10px 2px 0px;
@@ -21,7 +38,6 @@
 }
 .toggleViewBar .toggleArrowButton:hover,td:hover {
 	cursor:pointer;
-	opacity: 0.8;
 }
 .catInput {
 	outline:none;
@@ -62,6 +78,24 @@
 }
 .editEventLink:hover {
 	color:#00F;
+}
+
+.addNewRow {
+	width:100%;
+	background-color: #888;
+}
+.bagRemoveBtn {
+	border:none;
+	font-size:18px !important;
+	border-radius: 3px;
+	padding:2px 8px;
+	cursor:pointer;
+	font-family:Quicksand;
+	transition: 0.1s;
+}
+.bagRemoveBtn:hover {
+	background-color: var(--danger);
+	color:white;
 }
 
 @media only screen and (max-width: 1400px) {

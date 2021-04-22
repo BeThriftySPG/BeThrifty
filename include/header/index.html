@@ -1,14 +1,14 @@
 
+<!-- Google Font -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
 <!-- Required meta tags -->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="/include/header/fonts/icomoon/style.css">
 <link href="/assets/css/header.css" rel="stylesheet">
-<link rel="stylesheet" href="/assets/css/black_white_button.css">
+<link rel="stylesheet" href="/assets/css/black-white-button.css">
 
-<!-- Bootstrap CSS -->
+<!-- External CSS -->
 <link rel="stylesheet" href="/include/header/css/bootstrap.min.css">
-
-<!-- Style -->
 <link rel="stylesheet" href="/include/header/css/style.css">
 
 <style>
@@ -58,8 +58,8 @@
       <span class="logo-text" id="logo-name"></span>
     </div>
 		<div class="search-form">
-      <input type="text" class="catInput userInput" id="input-name" placeholder="Benutzername">
-			<input type="password" class="catInput userInput" id="input-password" placeholder="Passwort"><br>
+      <input type="text" class="catInput userInput" id="input-name" placeholder="Benutzername" autocomplete="off">
+			<input type="password" class="catInput userInput" id="input-password" placeholder="Passwort" autocomplete="off"><br>
 			<input type="checkbox" id="input-stayLogedIn" /><label id="label-stayLogedIn" for="input-stayLogedIn" style="padding-left:5px;font-size:14px">merken</label><br>
 			<button class="blackWhiteButton userSubmit" id="submitLoginButton" value="confirm" onclick="login()">Login</button>
     </div>
@@ -76,53 +76,5 @@
   </div>
 </aside>
 
-<script src="/assets/js/Api.js"></script>
 <script src="/include/header/js/popper.min.js"></script>
 <script src="/include/header/js/main.js"></script>
-<script>
-	async function HeaderCheckLogin() {
-		await Api.init();
-		if(Api.isLoggedin()) {
-			let name = (await Api.fetchSimple("Api/user")).username;
-			document.getElementById("input-name").style.display = "none";
-			document.getElementById("input-password").style.display = "none";
-			document.getElementById("submitLoginButton").style.display = "none";
-			document.getElementById("input-stayLogedIn").style.display = "none";
-			document.getElementById("label-stayLogedIn").style.display = "none";
-			document.getElementById("logo-name").innerHTML = name;
-			document.getElementById("logo-letter").innerHTML = name[0];
-		} else {
-			document.getElementsByClassName("logo")[0].style.display = "none";
-			document.getElementById("logoutButton").style.display = "none";
-			document.getElementById("logo-name").innerHTML = "Login Required";
-			document.getElementById("logo-letter").innerHTML = "";
-			document.getElementById("logo-name").style.position = "initial";
-			document.getElementById("logo-name").style.marginLeft = "20px";
-			document.getElementsByClassName("userInput")[0].style.marginTop = "20px";
-		}
-	}
-	function logout() {
-		Api.logout();
-		window.location.replace("/index.html");
-	}
-	async function login() {
-		console.log("Logging in...");
-		let username = document.getElementById("input-name").value;
-		let password = document.getElementById("input-password").value;
-		let stayLogedIn = document.getElementById("input-stayLogedIn").checked;
-
-		try {
-			let status = await Api.login(username, password, stayLogedIn);
-
-			console.log("Login status: " + status);
-			if(status) {
-				window.location.replace("/index.html");
-			} else {
-
-			}
-			Api.onRequiresRelogin = function() { console.log("RequiresRelogin"); };
-		} catch(e) {
-				console.log(e);
-		}
-	}
-</script>

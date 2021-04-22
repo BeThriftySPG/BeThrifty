@@ -92,20 +92,11 @@ function GenerateBarChart(){
 	});
 }
 
-// Startfunktion der Seite
-async function Initiliaze() {
-	await Api.init();
-	// Passt den Login bereich an, je nachdem ob man Ein/Aus-geloggt ist.
-	await HeaderCheckLogin();
-
-	// Funktion zum Generieren der E-Charts
-	GenerateECharts();
-	// Funktion zum Initialisieren des Responsive Dashboards
-	GenerateGrid();
-
-}
-
 // Wird beim Aufrufen der Seite ausgeführt
-$(function () {
-	Initiliaze();
+$(async function () {
+	await Api.init();
+	if(await HeaderCheckLogin()) {
+		GenerateECharts();
+		GenerateGrid();
+	}
 });

@@ -1,42 +1,5 @@
-function ToggleNewEvent() {
-	let div = document.querySelector("#newEventForm");
-	if(div.style.display == "none") {
-		div.style.display = "inherit";
-	} else {
-		div.style.display = "none";
-	}
-}
 
-function ToggleEventViews(name) {
-	let container = document.getElementById(name).querySelector(".content");
-	let icon = document.getElementById(name).querySelector(".material-icons");
-
-	if(container.style.display == "none") {
-		container.style.display = "inherit";
-		icon.innerHTML = "keyboard_arrow_up";
-	} else {
-		container.style.display = "none";
-		icon.innerHTML = "keyboard_arrow_down";
-	}
-}
-
-function RequiredInput(obj) {
-	let el = $(obj);
-	if(el.val().length > 0) {
-		el.css("border-color", "black");
-		el.css("background-color", "#FFF");
-	} else {
-		el.css("border-color", "red");
-		el.css("background-color", "#FEEFEF");
-	}
-
-	if($("#newEventName").val().length > 0 && $("#newEventDatum").val().length > 0 && $("#newEventOrt").val().length > 0 && $("#newEventPostleitzahl").val().length > 0) {
-		$("#submitNewEventBtn").prop("disabled", false);
-	} else {
-		$("#submitNewEventBtn").prop("disabled", true);
-	}
-}
-
+// Server functions
 async function CreateNewEvent() {
 	let data = {
 		Eventname: $("#newEventName").val(),
@@ -47,18 +10,22 @@ async function CreateNewEvent() {
 		HouseNumber: $("#newEventHausnummer").val(),
 		PhoneNumber: ""
 	};
-	await Api.fetchSimple("api/event/create", data);
-	window.location.href = "/events/eventManagement.html";
+	try {
+		await Api.fetchSimple("api/event/create", data);
+		PrintInfo("Event has been created.");
+		window.location.href = "/events/eventManagement.html";
+	} catch(e) {
+		PrintError(e);
+	}
 }
-
 async function LoadEventTables() {
-	console.log("Fetching events...");
-	let events = await Api.fetchSimple("api/events");
+	PrintInfo("Fetching events...");
+	let events = await GetEvents();
 	let eventsClosed = events.filter(ev => ev.completed == false);
 	let eventsOpened = events.filter(ev => ev.completed == true);
 	let data1 = [];
 	let data2 = [];
-	console.log("Loaded " + events.length + " total events.");
+	PrintInfo("Total events loaded: " + events.length);
 
 	for(let i = 0; i < eventsClosed.length; i++) {
 		let loc = moment(eventsClosed[i].date);
@@ -78,7 +45,7 @@ async function LoadEventTables() {
 		data2[i][2] = eventsOpened[i].city;
 		data2[i][3] = eventsOpened[i].postcode;
 	}
-	console.log(data1);
+
 	// Initializing dataTables
 	var eventOpenTable = $("#eventsOpenDiv").find(".eventTableContent").DataTable({
 		paging: false,
@@ -108,12 +75,48 @@ async function LoadEventTables() {
 	});
 }
 
-async function Initiliaze() {
-	await Api.init();
-	HeaderCheckLogin();
-	LoadEventTables();
+// UI Functions
+function ToggleNewEvent() {
+	let div = document.querySelector("#newEventForm");
+	if(div.style.display == "none") {
+		div.style.display = "inherit";
+	} else {
+		div.style.display = "none";
+	}
+}
+function ToggleEventViews(name) {
+	let container = document.getElementById(name).querySelector(".content");
+	let icon = document.getElementById(name).querySelector(".material-icons");
+
+	if(container.style.display == "none") {
+		container.style.display = "inherit";
+		icon.innerHTML = "keyboard_arrow_up";
+	} else {
+		container.style.display = "none";
+		icon.innerHTML = "keyboard_arrow_down";
+	}
+}
+function RequiredInput(obj) {
+	let el = $(obj);
+	if(el.val().length > 0) {
+		el.css("border-color", "black");
+		el.css("background-color", "#FFF");
+	} else {
+		el.css("border-color", "red");
+		el.css("background-color", "#FEEFEF");
+	}
+
+	if($("#newEventName").val().length > 0 && $("#newEventDatum").val().length > 0 && $("#newEventOrt").val().length > 0 && $("#newEventPostleitzahl").val().length > 0) {
+		$("#submitNewEventBtn").prop("disabled", false);
+	} else {
+		$("#submitNewEventBtn").prop("disabled", true);
+	}
 }
 
-$(function () {
-	Initiliaze();
+$(async function () {
+	await Api.init();
+	if(await HeaderCheckLogin()) {
+		await HeaderCheckLogin();
+		LoadEventTables();
+	}
 });

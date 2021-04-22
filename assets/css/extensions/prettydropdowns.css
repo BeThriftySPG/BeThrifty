@@ -1,6 +1,5 @@
 .prettydropdown {
   position: relative;
-  min-width: 72px; /* 70px + borders */
   display: inline-block;
 }
 .prettydropdown.loading {

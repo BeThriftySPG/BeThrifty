@@ -3,21 +3,20 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Event Overview</title>
-
-		<link rel="stylesheet" href="/assets/css/tabs.css">
-		<link rel="stylesheet" href="/assets/js/datatables/datatables.css">
-		<link rel="stylesheet" href="/assets/css/selectric.css">
-		<link rel="stylesheet" href="/assets/css/prettydropdowns.css">
+		<link rel="icon" href="/assets/images/icon.png" />
+		<link rel="stylesheet" href="/assets/js/extensions/datatables/datatables.css">
+		<link rel="stylesheet" href="/assets/css/extensions/prettydropdowns.css">
+		<!-- Custom CSS -->
 		<link rel="stylesheet" href="/assets/css/events.css">
-		<link rel="stylesheet" href="/assets/css/viewContainer.css">
-		<link rel="preconnect" href="https://fonts.gstatic.com">
+		<link rel="stylesheet" href="/assets/css/view-container.css">
+		<link rel="stylesheet" href="/assets/css/event-tabs.css">
 	</head>
 	<body>
 		<div id="includeHeader"></div>
 
-		<fieldset id="viewContainer">
+		<main>
+			<fieldset id="viewContainer">
 			<legend>Event Overview</legend>
-
 			<div class="tab_panel">
 				<ul class="tabs group">
 					<li><a class="active" href="#/one">Start</a></li>
@@ -26,6 +25,7 @@
 					<li id="infoTab"><a href="#/three"></a></li>
 				</ul>
 				<div id="tab_content">
+					<!-- Start Tab -->
 					<div id="one" class="tab">
 						<button class="blackWhiteButton eventStatusButton openEvent" id="openEventBtn" onclick="OpenCloseEvent()">-</button>
 						<div class="eventHeader eventEdit">
@@ -43,7 +43,16 @@
 									<li class="eventDate"></li>
 								</ul>
 							</div><br>
-							<div id="startStockTables">
+							<!-- DataTable -->
+							<div id="startStockTables"></div>
+							<div style="width:100%">
+								<table class="addNewRow">
+									<td style="width:200px"><select id="addNewRowCat" onchange="ValidateSelectedCategory(this, 'addNewRowSpec', 'add')"></select></td>
+									<td style="width:200px"><select id="addNewRowSpec" onchange='DisplayAvialableKg(`addNewRowSpec`, `addNewRowAvKg`)'></select></td>
+									<td><input type="text" id="addNewRowInput" value="0" onfocus="ValidateInputKg(this, true)" onfocusout="ValidateInputKg(this, false)" autocomplete="off" /></td>
+									<td id="addNewRowAvKg"></td>
+									<td><button style="float:right;margin-right:25px" class="blackWhiteButton" onclick="AddBagStartRow()">Hinzufügen</button></td>
+								</table>
 							</div>
 							<div id="editInfo">
 								<form id="eventForm" method="post">
@@ -60,6 +69,7 @@
 							</div>
 						</div>
 					</div>
+					<!-- Abschluss Tab -->
 					<div id="two" class="tab" style="display:none">
 						<button class="blackWhiteButton eventStatusButton closeEvent" id="closeEventBtn" onclick="OpenCloseEvent()">-</button>
 						<div class="eventHeader">
@@ -67,45 +77,45 @@
 							<span class="eventName"></span>
 							<div class="tab_buttons">
 								<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
-								</div>
-								<hr></hr>
-								<ul>
-									<li class="eventLocation"></li>
-									<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
-									<li class="eventDate"></li>
-								</ul>
 							</div>
+							<hr></hr>
+							<ul>
+								<li class="eventLocation"></li>
+								<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+								<li class="eventDate"></li>
+							</ul>
 						</div>
-						<div id="three" class="tab" style="display:none">
-					<div class="eventHeader">
-						<span class="material-icons headerIcon">view_quilt</span>
-						<span class="eventName"></span>
-						<div class="tab_buttons">
-							<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
+					</div>
+					<!-- Übersicht Tab -->
+					<div id="three" class="tab" style="display:none">
+						<!-- Tab Header -->
+						<div class="eventHeader">
+							<span class="material-icons headerIcon">view_quilt</span>
+							<span class="eventName"></span>
+							<div class="tab_buttons">
+								<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
+							</div>
+							<hr></hr>
+							<ul>
+								<li class="eventLocation"></li>
+								<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+								<li class="eventDate"></li>
+							</ul>
 						</div>
-						<hr></hr>
-						<ul>
-							<li class="eventLocation"></li>
-							<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
-							<li class="eventDate"></li>
-						</ul>
 					</div>
 				</div>
-				</div>
 			</div>
-
 		</fieldset>
+		</main>
 
-	<script src="/assets/js/Api.js"></script>
-	<script src="/assets/js/jquery.js"></script>
-	<script src="/assets/js/jquery.modal.js"></script>
-	<script src="/assets/js/moment.js"></script>
-	<script src="/assets/js/tabs.js"></script>
-	<script src="/assets/js/datatables/datatables.min.js"></script>
-	<script src="/assets/js/datatables/dataTables.responsive.min.js"></script>
-	<script src="/assets/js/jquery.selectric.js"></script>
-	<script src="/assets/js/jquery.prettydropdowns.js"></script>
-	<script src="/assets/js/eventOverview.js"></script>
-	<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
+		<script src="/assets/js/extensions/jquery.min.js"></script>
+		<script src="/assets/js/extensions/jquery.modal.min.js"></script>
+		<script src="/assets/js/api.js"></script>
+		<script src="/assets/js/extensions/moment.min.js"></script>
+		<script src="/assets/js/event-tabs.js"></script>
+		<script src="/assets/js/extensions/datatables/datatables.min.js"></script>
+		<script src="/assets/js/extensions/jquery.prettydropdowns.js"></script>
+		<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
+		<script src="/assets/js/event-overview.js"></script>
 	</body>
 </html>

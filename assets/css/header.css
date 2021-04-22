@@ -49,3 +49,6 @@ main {
   font-size:1.5vw;
   text-decoration: none;
 }
+.logo {
+	display:none;
+}
