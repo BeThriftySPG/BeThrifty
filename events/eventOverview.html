@@ -41,44 +41,63 @@
 								<li class="eventDate"></li>
 							</ul>
 							<br><br><br>
-							<div id="editInfo">
-								<table id="eventForm">
-									<tr>
-										<td><span>Eventname</span>
-										<td><input type="text" id="eventName" class="eventEditInput" placeholder="Eventname:" oninput="RequiredInput(this)"><br>
-									</tr>
-									<tr>
-										<td><span>Datum<span>
-										<td><input type="date" id="eventDatum" class="eventEditInput" placeholder="yyyy-mm-tt" oninput="RequiredInput(this)"><br>
-									</tr>
-									<tr>
-										<td><span>Ort</span>
-										<td><input type="text" id="eventOrt" class="eventEditInput" placeholder="Ort:" oninput="RequiredInput(this)">
-									</tr>
-									<tr>
-									<tr>
-										<td><span>PLZ</span>
-										<td><input type="text" id="eventPLZ" class="eventEditInput" placeholder="Plz:" oninput="RequiredInput(this)">
-									</tr>
-									<tr>
-										<td><span>Straße</span>
-										<td><input type="text" id="newStrasse" class="eventEditInput" placeholder="Straße:">
-									</tr>
-									<tr>
-										<td><span>Hausnummer</span>
-										<td><input type="text" id="eventHausnummer" class="eventEditInput" placeholder="Nr."><br>
-									</tr>
-									<tr>
-										<td><span>Telefonnummer</span>
-										<td><input type="text" id="eventPhone" class="eventEditInput newEventInput" placeholder="Telefonnummer"><br><br>
-									</tr>
-									<tr>
-										<td><input type="button" onclick="" id="updateEventBtn" class="blackWhiteButton" value="Aktualisieren" disabled><br><br>
-										<td>
-									</tr>
-								</table>
-								<hr></hr>
-							</div>
+							<table>
+								<tr>
+									<td>
+										<form id="editInfo" autocomplete="off">
+											<table id="eventForm">
+												<tr>
+													<td><span>Eventname</span>
+													<td><input type="text" id="eventName" class="eventEditInput" oninput="RequiredInput(this)" autocomplete="off">
+												</tr>
+												<tr>
+													<td><span>Datum<span>
+													<td><input type="date" id="eventDatum" class="eventEditInput" placeholder="yyyy-mm-tt" oninput="RequiredInput(this)" autocomplete="off">
+												</tr>
+												<tr>
+													<td><span>Ort</span>
+													<td><input type="text" id="eventOrt" class="eventEditInput" oninput="RequiredInput(this)" autocomplete="off">
+												</tr>
+												<tr>
+												<tr>
+													<td><span>PLZ</span>
+													<td><input type="text" id="eventPLZ" class="eventEditInput" oninput="RequiredInput(this)" autocomplete="off">
+												</tr>
+												<tr>
+													<td><span>Straße</span>
+													<td><input type="text" id="newStrasse" class="eventEditInput" autocomplete="off">
+												</tr>
+												<tr>
+													<td><span>Hausnummer</span>
+													<td><input type="text" id="eventHausnummer" class="eventEditInput" autocomplete="off">
+												</tr>
+												<tr>
+													<td><span>Telefonnummer</span>
+													<td><input type="text" id="eventPhone" class="eventEditInput" autocomplete="off">
+												</tr>
+												<tr>
+													<td><span>Letzte Änderung</span>
+													<td><input type="text" id="lastChange" class="eventEditInput readOnly" autocomplete="off" disabled>
+												</tr>
+												<tr>
+													<td><span>Eventstatus</span>
+													<td><input type="text" id="eventStatus" class="eventEditInput readOnly" autocomplete="off" disabled>
+												</tr>
+												<tr>
+													<td style="padding-top:25px"><input type="button" onclick="UpdateEventInformation()" id="updateEventBtn" class="blackWhiteButton" value="Aktualisieren"><br><br>
+													<td>
+												</tr>
+											</table>
+										</form>
+									</td>
+									<td>
+										<div id="graphs">
+											<div id="dia1"></div>
+										</div>
+									</td>
+								</tr>
+							</table>
+							<hr></hr>
 						</div>
 					</div>
 					<!-- Start Tab -->
@@ -99,7 +118,7 @@
 								</ul>
 							</div><br>
 							<!-- DataTable -->
-							<table id="startTable" class="eventDatatable display cell-border responsive nowrap" width="100%"></table>
+							<table id="startTable" class="eventDatatable stripe display responsive nowrap" width="100%"></table>
 							<div>
 								<table class="addNewRow">
 									<td style="width:200px"><select id="addNewRowCat" onchange="ValidateSelectedCategory(this, 'addNewRowSpec', 'add')"></select></td>
@@ -142,6 +161,8 @@
 		<script src="/assets/js/event-tabs.js"></script>
 		<script src="/assets/js/extensions/datatables/datatables.min.js"></script>
 		<script src="/assets/js/extensions/jquery.prettydropdowns.js"></script>
+		<script src="/assets/js/extensions/echarts.min.js"></script>
+		<script src="/assets/js/extensions/echart_dark.js"></script>
 		<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
 		<script src="/assets/js/event-overview.js"></script>
 	</body>

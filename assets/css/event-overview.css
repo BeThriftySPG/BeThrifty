@@ -9,6 +9,7 @@
 }
 #eventForm span {
 	padding-right: 25px;
+	color:#AAA;
 }
 .eventEditInput {
 	height:35px;
@@ -16,16 +17,25 @@
 	width:250px;
 	vertical-align: middle;
 	padding-left: 10px;
+	color:white;
+	letter-spacing: 1px;
+	color:#EEE;
+	background-color: #444;
+	border:none;
+	margin-top:5px;
+	font-size: 20px;
 }
 .eventEditInput:disabled {
 	background-color: rgba(0, 0, 0, 0);
 	border:none;
-	height:18px;
 	vertical-align: middle;
-	font-size: 20px;
-	padding: 5px;
 }
-
+.inputFalse {
+	border:solid;
+	border-width:1px;
+	background-color: #FEEFEF;
+	border-color: red;
+}
 
 .eventDatatable {
 	color:#222;
@@ -105,6 +115,17 @@
 /* Others */
 .prettydropdown {
 	min-width: 200px;
+}
+#graphs {
+	margin-left: 25px;
+}
+#dia1 {
+	float:right;
+	width:550px;
+	height:650px;
+}
+#eventForm {
+	height:650px;
 }
 
 @media only screen and (max-width: 1200px) {

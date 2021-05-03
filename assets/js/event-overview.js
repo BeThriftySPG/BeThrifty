@@ -11,7 +11,7 @@ var abschlussTable;
 var startNewRow;
 var startCatSelect;
 var startSpecSelect;
-var isEditable = false;
+var isEditable = true;
 
 // Event functions
 async function LoadEvent() {
@@ -21,19 +21,14 @@ async function LoadEvent() {
 	loc.locale("de");
 
 	let el = $(".eventEdit").find("#eventName").val(ev.eventname);
-	RequiredInput(el);
 	el = $(".eventEdit").find("#eventOrt").val(ev.city);
-	RequiredInput(el);
 	el = $(".eventEdit").find("#eventDatum").val(loc.format("YYYY-MM-DD"));
-	RequiredInput(el);
 	el = $(".eventEdit").find("#eventStrasse").val(ev.street);
-	RequiredInput(el);
 	el = $(".eventEdit").find("#eventPLZ").val(ev.postcode);
-	RequiredInput(el);
 	el = $(".eventEdit").find("#eventHausnummer").val(ev.houseNumber);
-	RequiredInput(el);
 	el = $(".eventEdit").find("#eventPhone").val(ev.phonenumber);
-	RequiredInput(el);
+	loc = moment(ev.lastChangeDate);
+	el = $(".eventEdit").find("#lastChange").val(loc.format("DD.MM.YYYY HH:mm"));
 
 	$(".eventName").html(ev.eventname);
 	$(".eventLocation").html(ev.city);
@@ -45,11 +40,13 @@ async function LoadEvent() {
 		$("#infoTab").find("a").css("color", "var(--danger)");
 		$("#infoTab").find("a").html("Geschlossen");
 		$(".addNewRow")[0].style.display = "none";
+		$(".eventEdit").find("#eventStatus").val("Abgeschlossen");
 	} else {
 		$("#closeEventBtn").html("Event Schließen");
 		$("#openEventBtn").css("display", "none");
 		$("#infoTab").find("a").css("color", "var(--teal)");
 		$("#infoTab").find("a").html("Geöffnet");
+		$(".eventEdit").find("#eventStatus").val("Laufend");
 	}
 }
 async function OpenCloseEvent() {
@@ -65,42 +62,72 @@ async function OpenCloseEvent() {
 		location.reload();
 	}
 }
+async function UpdateEventInformation() {
+	let data = {
+		Id: ev.id,
+		Eventname: $("#eventName").val(),
+		Date: $("#eventDatum").val() + "T00:00:00Z",
+		Postcode: $("#eventPLZ").val(),
+		City: $("#eventOrt").val(),
+		Street: $("#newStrasse").val(),
+		HouseNumber: $("#eventHausnummer").val(),
+		PhoneNumber: $("#eventPhone").val()
+	};
+
+	try {
+		await Api.fetchSimple("api/event/update", data);
+		PrintInfo("Event has been updated.");
+		await LoadEvent();
+		await ToggleEditView();
+		//window.location.href = "/events/eventManagement.html";
+	} catch(e) {
+		PrintError(e);
+	}
+}
 function RequiredInput(obj) {
 	let el = $(obj);
 	if(el == null || el.val() == null || isEditable == false) return;
 
 	if(el.val().length > 0) {
-		el.css("border-color", "black");
-		el.css("background-color", "#FFF");
+		el.removeClass("inputFalse");
 	} else {
-		el.css("border-color", "red");
-		el.css("background-color", "#FEEFEF");
+		el.addClass("inputFalse");
 	}
 
 	if($("#eventName").val().length > 0 && $("#eventDatum").val().length > 0 && $("#eventOrt").val().length > 0 && $("#eventPLZ").val().length > 0) {
-		$("#updateEventBtn").prop("disabled", false);
+		//$("#updateEventBtn").attr("disabled", false);
 	} else {
-		$("#updateEventBtn").prop("disabled", true);
+		//$("#updateEventBtn").attr("disabled", true);
 	}
 }
 
 // UI Functions
-function ToggleEditView() {
+async function ToggleEditView() {
+	await LoadEvent();
 	let inputs = $(".eventEditInput");
 	if(isEditable) {
 		isEditable = false;
+		$("#updateEventBtn").hide();
 		for(let i = 0; i < inputs.length; i++) {
 			let el = $(inputs[i]);
-			el.attr("disabled", true);
-			if(el.val().length == 0) {
-				el.val("");
+			if(el.hasClass("readOnly") == false) {
+				el.attr("disabled", true);
+				if(el.val().length == 0) {
+					el.val("-");
+				}
 			}
 		}
 	} else {
 		isEditable = true;
+		$("#updateEventBtn").show();
 		for(let i = 0; i < inputs.length; i++) {
 			let el = $(inputs[i]);
+			if(el.hasClass("readOnly") == false) {
 			el.attr("disabled", false);
+				if(el.val() == "-") {
+					el.val("");
+				}
+			}
 		}
 	}
 }
@@ -369,7 +396,7 @@ async function UpdateAbschlussTable() {
 
 		data[r] = [];
 		data[r][0] = "";
-		data[r][1] = "Keine Abfuhr";
+		data[r][1] = "Kein Eintrag";
 		data[r][2] = evStock.good.sumWeight + " Kg";
 		data[r][3] = "";
 		data[r][4] = cat.category;
@@ -427,9 +454,74 @@ async function UpdateAbschlussTable() {
 	return data;
 }
 
+// ECharts
+async function RenderGraph1() {
+	var chart1 = echarts.init(document.getElementById("dia1"), 'dark', {renderer: 'svg'});
+	let data1 = [
+		{
+			name: "Eingang",
+			type: "bar",
+			data: []
+		},
+		{
+			name: "Ausgang",
+			type: "bar",
+			data: []
+		}
+	]
+	let xAxis = [];
+	let stock = await Api.fetchSimple("api/event/movement", ev.id);
+	let inCount = 0;
+	let outCount = 0;
+
+	for(let i = 0; i < stock.length; i++) {
+		if(stock[i].returns == false) {
+			let good = await GetGoodInfo(stock[i].good.goodInfo);
+			data1[0].data[inCount] = stock[i].good.sumWeight;
+			xAxis[inCount] = good.specification;
+			inCount++;
+		} else {
+			data1[1].data[outCount] = stock[i].good.sumWeight;
+			outCount++;
+		}
+		//console.log(good);
+	}
+
+	chart1.setOption({
+		series : data1,
+		title: {
+        text: 'Event Differenz',
+				subtext: 'in Kg'
+    },
+    tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+            type: 'shadow'
+        }
+    },
+		legend: {
+			 data: ['Eingang', 'Ausgang'],
+			 right: 'auto'
+	 },
+		xAxis: {
+        type: 'value',
+        boundaryGap: [0, 0.01]
+    },
+		yAxis: {
+        type: 'category',
+        data: xAxis
+    },
+		grid: {
+        left: '3%',
+        right: '3%',
+        bottom: '4%',
+        containLabel: true
+    },
+	});
+}
+
 $(async function () {
-	ToggleEditView();
-	ToggleEditView();
+	$("#eventForm").hide();
 	await Api.init();
 	if(await HeaderCheckLogin()) {
 		stock = await Api.fetchSimple("api/stock/list");
@@ -439,5 +531,8 @@ $(async function () {
 		await LoadEvent();
 		await PrintStartTables();
 		await PrintAbschlussTable();
+		await ToggleEditView();
+		await RenderGraph1();
+		$("#eventForm").show();
 	}
 });
