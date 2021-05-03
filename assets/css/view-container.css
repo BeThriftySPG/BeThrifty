@@ -6,7 +6,8 @@
 	top:25px;
 	font-size: 20px;
 	border-color:#444;
-	width:1200px;
+	max-width:1200px;
+	min-width: 600px;
 }
 #viewContainer > legend {
 	font-size:40px;
@@ -20,16 +21,4 @@
 .dataTables_filter {
 	float:inherit !important;
 	text-align:inherit !important;
-}
-@media only screen and (max-width: 1400px) {
-	#viewContainer {
-		font-size: 18px;
-		width:800px;
-	}
-}
-@media only screen and (max-width: 1000px) {
-	#viewContainer {
-		font-size: 14px;
-		width:600px;
-	}
 }

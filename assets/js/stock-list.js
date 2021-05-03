@@ -297,7 +297,7 @@ async function CreateDatatable() {
 	stockTable = $("#stockTable").DataTable({
 		paging: false,
 		scrollCollapse: true,
-		info: false,
+		info: true,
 		responsive:true,
 		data: data,
 		order: [[1, "asc"]],
@@ -307,7 +307,7 @@ async function CreateDatatable() {
 		"dom": '<"stock-toolbar">frtip',
 		"columns": [
 			{title: "Bezeichnung"},
-			{title: "Kategorie"},
+			{title: "Kategorie", visible:false},
 			{title: "Gewicht", className: "alignRight"},
 			{title: "Mindestgewicht", className: "alignRight"},
 		]
@@ -349,10 +349,10 @@ async function UpdateDatatable() {
 			data[i][1] = info.category;
 			data[i][0] = info.specification;
 
-			data[i][2] = '<span class="tools material-icons add" onclick="OpenRemoveItemWindow(\''+info.id+'\')">remove</span></span>';
+			data[i][2] = '<span class="tools material-icons remove" onclick="OpenRemoveItemWindow(\''+info.id+'\')">remove</span></span>';
 
-			data[i][2] += "<span style='margin-right:10px'>" + wares[i].good.weight + " Kg" + "</span>";
-			data[i][2] += '<span class="material-icons remove" onclick="OpenAddItemWindow(\''+info.id+'\')">add</span>';
+			data[i][2] += "<span class='cellKg'>" + wares[i].good.weight + " Kg" + "</span>";
+			data[i][2] += '<span class="material-icons add" onclick="OpenAddItemWindow(\''+info.id+'\')">add</span>';
 
 			if(info.minWeight > 0) {
 				data[i][3] = info.minWeight + " Kg";

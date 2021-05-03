@@ -1,0 +1,115 @@
+/* Edit Event */
+#eventForm {
+	border-collapse: collapse;
+	height:inherit;
+	border:none;
+}
+#eventForm td {
+
+}
+#eventForm span {
+	padding-right: 25px;
+}
+.eventEditInput {
+	height:35px;
+	font-size: 18px;
+	width:250px;
+	vertical-align: middle;
+	padding-left: 10px;
+}
+.eventEditInput:disabled {
+	background-color: rgba(0, 0, 0, 0);
+	border:none;
+	height:18px;
+	vertical-align: middle;
+	font-size: 20px;
+	padding: 5px;
+}
+
+
+.eventDatatable {
+	color:#222;
+	max-width: 1200px;
+	font-size: calc(15px + 10px - 0.2vw);
+}
+.eventDatatable th {
+	color:white;
+	letter-spacing: 1.3px;
+}
+/* Bag styling */
+.bag {
+	font-size: 18px;
+}
+.bagIcon {
+	max-width: 22px;
+	vertical-align: middle;
+	margin-bottom:5px;
+	filter:brightness(0.2);
+}
+.bag_sum {
+	float:right;
+	text-align: right;
+}
+.catInput {
+	outline:none;
+	border-width:1px;
+}
+
+/* Row for adding Bag */
+.addNewRow {
+	width:100%;
+	background-color: #888;
+}
+#addNewRowInput {
+	height:38px;
+	max-width: 100px;
+	font-size:20px;
+	padding-left: 10px;
+	border:none;
+	font-family: Quicksand;
+	color:#666;
+}
+
+/* Revoke Bag Button */
+.bagRemoveBtn {
+	border:none;
+	font-size:18px !important;
+	border-radius: 1px;
+	padding:1px 5px;
+	cursor:pointer;
+	font-family:Quicksand;
+	transition: 0.1s;
+	color:#999;
+}
+.bagRemoveBtn:hover {
+	background-color: var(--danger);
+	color:white;
+}
+
+/* Withdraw Bag Button */
+.withdraw_input {
+	height:27px;
+	max-width: 100px;
+	padding-left: 10px;
+	border:none;
+	font-size: 16px;
+}
+.withdraw_input:hover {
+	background-color: #CCC;
+	transition: 0.2s;
+}
+.withdraw_button {
+	float:right;
+}
+
+/* Others */
+.prettydropdown {
+	min-width: 200px;
+}
+
+@media only screen and (max-width: 1200px) {
+	.bag_sum {
+		width:100%;
+		text-align: left;
+	}
+}

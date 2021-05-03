@@ -7,9 +7,11 @@ var categoryNames;
 var startStock;
 var endStock;
 var startTable;
+var abschlussTable;
 var startNewRow;
 var startCatSelect;
 var startSpecSelect;
+var isEditable = false;
 
 // Event functions
 async function LoadEvent() {
@@ -42,6 +44,7 @@ async function LoadEvent() {
 		$("#closeEventBtn").css("display", "none");
 		$("#infoTab").find("a").css("color", "var(--danger)");
 		$("#infoTab").find("a").html("Geschlossen");
+		$(".addNewRow")[0].style.display = "none";
 	} else {
 		$("#closeEventBtn").html("Event Schließen");
 		$("#openEventBtn").css("display", "none");
@@ -64,7 +67,7 @@ async function OpenCloseEvent() {
 }
 function RequiredInput(obj) {
 	let el = $(obj);
-	if(el == null || el.val() == null) return;
+	if(el == null || el.val() == null || isEditable == false) return;
 
 	if(el.val().length > 0) {
 		el.css("border-color", "black");
@@ -83,12 +86,22 @@ function RequiredInput(obj) {
 
 // UI Functions
 function ToggleEditView() {
-	if($("#editInfo").css("display") == "none") {
-		$("#editInfo").css("display", "inherit");
-		$("#mainInfo").css("display", "none");
+	let inputs = $(".eventEditInput");
+	if(isEditable) {
+		isEditable = false;
+		for(let i = 0; i < inputs.length; i++) {
+			let el = $(inputs[i]);
+			el.attr("disabled", true);
+			if(el.val().length == 0) {
+				el.val("");
+			}
+		}
 	} else {
-		$("#editInfo").css("display", "none");
-		$("#mainInfo").css("display", "inherit");
+		isEditable = true;
+		for(let i = 0; i < inputs.length; i++) {
+			let el = $(inputs[i]);
+			el.attr("disabled", false);
+		}
 	}
 }
 function ToggleEventViews(name) {
@@ -143,17 +156,34 @@ async function AddBagStartRow() {
 		console.error(e);
 	}
 }
-async function RemoveBagStart(selectSource, bag) {
+async function WithdrawBag(goodInfoId, inputId) {
+	try {
+		let kg = parseFloat($("#" + inputId).val());
+		let data = {
+			event: ev.id,
+			goodinfo: goodInfoId,
+			bags: [kg]
+		};
+
+		await Api.fetchSimple("api/event/withdraw", data);
+		UpdateAbschlussTable();
+		PrintInfo("Bag has been withdrawn!");
+	} catch(e) {
+		PrintError(e);
+	}
+}
+async function RemoveBag(selectSource, bag, returns) {
 	let data = {
 		event: ev.id,
 		goodinfo: selectSource,
 		weight: bag,
-		return: false
+		returns: returns
 	};
-
+	console.log(data);
 	try {
 		await Api.fetchSimple("api/event/revoke", data);
 		await UpdateStartTable();
+		await UpdateAbschlussTable();
 		console.log("Removed Bag!");
 	} catch(e) {
 		console.warn("Failed removing bag!");
@@ -212,11 +242,9 @@ async function ValidateSelectedCategory(obj, targetId, operation) {
 }
 async function PrintStartTables() {
 	let data = await UpdateStartTable();
-	let stockDiv = $("#startStockTables");
-	let tablesHTML = '<br><table style="color:black" class="startTables display cell-border responsive nowrap"></table></div>';
-	stockDiv.html(tablesHTML);
+	let table = $("#startTable");
 
-	startTable = $(".startTables").DataTable({
+	startTable = table.DataTable({
 		paging: false,
 		scrollCollapse: true,
 		info: false,
@@ -231,7 +259,7 @@ async function PrintStartTables() {
 			{title: "Kategorie"},
 			{title: "Säcke"},
 			{title: "Lagerstand"},
-			{title: "Kategorie"}
+			{title: "Kategorie", visible: false}
 		]
 	});
 	await SetupNewRowStart();
@@ -244,6 +272,9 @@ async function UpdateStartTable() {
 	stock = await Api.fetchSimple("api/stock/list");
 	let stockDiv = $("#startStockTables");
 	startStock = await Api.fetchSimple("api/event/movement", ev.id);
+	startStock = startStock.filter(function (el) {
+	  return el.returns == false;
+	});
 	let data = [];
 
 	for(r = 0; r < startStock.length; r++) {
@@ -257,20 +288,27 @@ async function UpdateStartTable() {
 		data[r][3] = cat.category;
 		if(cat.category == cat.category) {
 			data[r][0] = cat.specification;
-			data[r][1] = '<div>' + st.good.bags.length + ' Säcke ';
+			data[r][1] = '<div>' + st.good.bags.length + ' Säcke &nbsp; [';
 
 			for(let s = 0; s < st.good.bags.length; s++) {
-				data[r][1] += '<button title="Sack Löschen" class="bagRemoveBtn" onclick="RemoveBagStart(`'+cat.id+'`, '+st.good.bags[s]+')">'+ st.good.bags[s] + '</button>';
+				if(ev.completed == false) {
+					data[r][1] += '<button title="Sack Löschen" class="bagRemoveBtn" onclick="RemoveBag(`'+cat.id+'`, '+st.good.bags[s]+', false)">'+ st.good.bags[s] + '</button>';
+				} else {
+					data[r][1] += "<span class='bag'>"+st.good.bags[s]+"</span>";
+				}
 				if(s < st.good.bags.length - 1) {
-					data[r][1] += " + ";
+					data[r][1] += ", ";
 				}
 			}
-			data[r][1] += ' = ' + st.good.bags.reduce((a, b) => a + b, 0) + " Kg" + '</div>';
+			data[r][1] += '] <span class="bag_sum">' + st.good.bags.reduce((a, b) => a + b, 0) + " Kg</span>" + '</div>';
 			g = stock.find(el => el.good.goodInfo == cat.id);
 			if(g != null) {
 				data[r][2] = g.good.weight + " Kg";
 			} else {
 				data[r][2] = "-";
+			}
+			if(st.good.bags.length == 1) {
+				//data[r][1] = "1 Sack <span class='bag_sum'>" + st.good.sumWeight + " Kg</span>";
 			}
 		}
 	}
@@ -279,18 +317,127 @@ async function UpdateStartTable() {
 		startTable.rows.add(data);
 		startTable.draw();
 	}
+	document.getElementById("startTable").style.width = "100%";
+	return data;
+}
+
+// Tab "Abschluss" Functions
+async function PrintAbschlussTable() {
+	let data = await UpdateAbschlussTable();
+	let table = $("#abschlussTable");
+
+	abschlussTable = table.DataTable({
+		paging: false,
+		scrollCollapse: true,
+		info: false,
+		responsive:true,
+		data: data,
+		"dom": '<"stock-toolbar">',
+		rowGroup: {
+			dataSrc: 4
+		},
+		order: [[4, "asc"]],
+		"columns": [
+			{title: "Kategorie"},
+			{title: "Säcke"},
+			{title: "Eventlager"},
+			{title: "Neuer Sack", visible:!ev.completed},
+			{title: "Kategorie", visible:false}
+		]
+	});
+	startTable.columns.adjust().draw();
+}
+async function UpdateAbschlussTable() {
+	if(abschlussTable != null) {
+		abschlussTable.clear();
+	}
+
+	let stockDiv = $("#abschlussTable");
+	let eventStock = await Api.fetchSimple("api/event/movement", ev.id);
+	let drawStock = eventStock.filter(function (el) {
+	  return el.returns == true;
+	});
+	eventStock = eventStock.filter(function (el) {
+	  return el.returns == false;
+	});
+
+	let data = [];
+
+	for(r = 0; r < eventStock.length; r++) {
+		let evStock = startStock[r];
+		let cat = await Api.fetchSimple("api/goodinfo", evStock.good.goodInfo);
+
+		data[r] = [];
+		data[r][0] = "";
+		data[r][1] = "Keine Abfuhr";
+		data[r][2] = evStock.good.sumWeight + " Kg";
+		data[r][3] = "";
+		data[r][4] = cat.category;
+		if(cat.category == cat.category) {
+			data[r][0] = cat.specification;
+			// If the good originates from "Start"
+			if(evStock.returns == false) {
+				// Search of equivalents of evStock with "returns: true"
+				for(let d = 0; d < drawStock.length; d++) {
+					let draw = drawStock[d];
+					if(draw.good.goodInfo == evStock.good.goodInfo) {
+						// Fill in the information
+						let differenceWeight = evStock.good.sumWeight - draw.good.sumWeight;
+						data[r][1] = '<div>' + draw.good.bags.length + ' Säcke &nbsp; [';
+						data[r][2] = evStock.good.sumWeight;
+
+						// List the bags of the returned good
+						for(let s = 0; s < draw.good.bags.length; s++) {
+							if(ev.completed == false) {
+								data[r][1] += '<button title="Sack Löschen" class="bagRemoveBtn" onclick="RemoveBag(`'+cat.id+'`, '+draw.good.bags[s]+', true)">'+ draw.good.bags[s] + '</button>';
+							} else {
+								data[r][1] += "<span class='bag'>"+draw.good.bags[s]+"</span>";
+							}
+							if(s < draw.good.bags.length - 1) {
+								data[r][1] += ", ";
+							}
+						}
+						// Display Sum KG that returns
+						data[r][1] += '] <span class="bag_sum">' + draw.good.bags.reduce((a, b) => a + b, 0) + " Kg</span>" + '</div>';
+
+						if(g != null) {
+							data[r][2] = differenceWeight + " Kg";
+						} else {
+							data[r][2] = "-";
+						}
+						if(draw.good.bags.length == 1) {
+							//data[r][1] = "1 Sack <span class='bag_sum'>" + draw.good.sumWeight + " Kg</span>";
+						}
+						break;
+					}
+				}
+				if(ev.completed == false) {
+					data[r][3] = '<div><input class="withdraw_input" id="withdraw_'+r+'" placeholder="Kg Sack" /><button class="withdraw_button blackWhiteButton" onclick="WithdrawBag(`'+cat.id+'`, `withdraw_'+r+'`)">Abziehen</button></div>';
+				}
+			}
+		}
+	}
+
+	if(abschlussTable != null) {
+		abschlussTable.rows.add(data);
+		abschlussTable.draw();
+		abschlussTable.columns.adjust().draw();
+	}
+		document.getElementById("abschlussTable").style.width = "100%";
 	return data;
 }
 
 $(async function () {
+	ToggleEditView();
+	ToggleEditView();
 	await Api.init();
 	if(await HeaderCheckLogin()) {
 		stock = await Api.fetchSimple("api/stock/list");
 		categories = await Api.fetchSimple("api/goodInfos");
 		categoryNames = await GetCategories();
-		
-		await HeaderCheckLogin();
+
 		await LoadEvent();
 		await PrintStartTables();
+		await PrintAbschlussTable();
 	}
 });

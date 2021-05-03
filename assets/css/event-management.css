@@ -1,0 +1,60 @@
+.editEventLink {
+	border-bottom: 1px dotted #AAA;
+}
+.editEventLink:hover {
+	color:#00F;
+}
+
+/* Bar for toggling Eventstatus */
+.toggleViewBar {
+	width:100%;
+	padding:2px 10px 2px 0px;
+	font-size: 20px;
+}
+.toggleViewBar td {
+	width:100%;
+	background-color: #222;
+	color:white;
+	border: none;
+	border-color:#888;
+	border-radius: 2px;
+	border-width:1px;
+}
+.toggleViewBar .toggleArrowButton:hover,td:hover {
+	cursor:pointer;
+}
+.searchToolbar {
+	margin:20px 0px;
+}
+#eventsOpenDiv > .searchToolbar {
+	width:100%;
+	background-color: #EEE;
+}
+#submitNewEventBtn {
+	margin-top:10px;
+}
+/* Togglebar Arrow */
+.toggleArrowButton {
+	width:40px;
+	height:40px;
+	background-color: #222;
+	color:white;
+	border:none;
+	float:right;
+}
+.toggleArrowButton span {
+	font-size: 25px;
+	vertical-align: middle;
+}
+/* Create New Event */
+.newEventInput {
+	border-style:solid;
+	max-width: 200px;
+}
+.newEventInput.required {
+	border-color:red;
+	background-color:#FEEFEF;
+}
+.viewDivs {
+	margin-top:50px !important;
+}

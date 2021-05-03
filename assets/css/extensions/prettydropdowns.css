@@ -161,7 +161,7 @@
 
 /* Disabled */
 .prettydropdown.disabled, .prettydropdown > ul > li.disabled {
-  opacity: 0.3;
+  opacity: 1;
 }
 .prettydropdown.disabled > ul > li, .prettydropdown > ul > li.disabled {
   cursor: not-allowed;

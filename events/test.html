@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="/assets/js/extensions/datatables/datatables.css">
+		<style media="screen">
+			#wrapper {
+
+			}
+		</style>
+	</head>
+	<body>
+		<script src="/assets/js/extensions/jquery.min.js"></script>
+		<script src="/assets/js/extensions/datatables/datatables.min.js"></script>
+
+		<div id="wrapper">
+			<table id="test" class="display cell-border responsive nowrap" width="100%"></table>
+		</div>
+
+		<script type="text/javascript">
+		var test = $("#test").DataTable({
+			paging: false,
+			scrollCollapse: true,
+			responsive: true,
+			info: false,
+			data: [
+				["test", "test", "test", "test", "test", "test"],
+				["test", "test", "test", "test", "test", "test"],
+				["test", "test", "test", "test", "test", "test"],
+				["test", "test", "test", "test", "test", "test"],
+				["test", "test", "test", "test", "test", "test"],
+			],
+			responsive:true,
+			"dom": '<"stock-toolbar">',
+			"columns": [
+				{title: "Kategorie"},
+				{title: "Säcke"},
+				{title: "Eventlager"},
+			]
+		});
+		</script>
+	</body>
+</html>

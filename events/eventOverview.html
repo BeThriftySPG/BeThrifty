@@ -7,7 +7,7 @@
 		<link rel="stylesheet" href="/assets/js/extensions/datatables/datatables.css">
 		<link rel="stylesheet" href="/assets/css/extensions/prettydropdowns.css">
 		<!-- Custom CSS -->
-		<link rel="stylesheet" href="/assets/css/events.css">
+		<link rel="stylesheet" href="/assets/css/event-overview.css">
 		<link rel="stylesheet" href="/assets/css/view-container.css">
 		<link rel="stylesheet" href="/assets/css/event-tabs.css">
 	</head>
@@ -19,21 +19,76 @@
 			<legend>Event Overview</legend>
 			<div class="tab_panel">
 				<ul class="tabs group">
-					<li><a class="active" href="#/one">Start</a></li>
-					<li><a href="#/two">Abschluss</a></li>
-					<li><a href="#/three">Übersicht</a></li>
-					<li id="infoTab"><a href="#/three"></a></li>
+					<li><a class="active" href="#/one">Übersicht</a></li>
+					<li><a href="#/two">Start</a></li>
+					<li><a href="#/three">Abschluss</a></li>
 				</ul>
 				<div id="tab_content">
-					<!-- Start Tab -->
+					<!-- Übersicht Tab -->
 					<div id="one" class="tab">
-						<button class="blackWhiteButton eventStatusButton openEvent" id="openEventBtn" onclick="OpenCloseEvent()">-</button>
+						<!-- Tab Header -->
 						<div class="eventHeader eventEdit">
-							<span class="material-icons headerIcon">redo</span>
+							<span class="material-icons headerIcon">bar_chart</span>
 							<span class="eventName"></span>
 							<div class="tab_buttons">
 								<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
 								<button class="blackWhiteButton" onclick="ToggleEditView()">Bearbeiten</button>
+							</div>
+							<hr></hr>
+							<ul>
+								<li class="eventLocation"></li>
+								<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
+								<li class="eventDate"></li>
+							</ul>
+							<br><br><br>
+							<div id="editInfo">
+								<table id="eventForm">
+									<tr>
+										<td><span>Eventname</span>
+										<td><input type="text" id="eventName" class="eventEditInput" placeholder="Eventname:" oninput="RequiredInput(this)"><br>
+									</tr>
+									<tr>
+										<td><span>Datum<span>
+										<td><input type="date" id="eventDatum" class="eventEditInput" placeholder="yyyy-mm-tt" oninput="RequiredInput(this)"><br>
+									</tr>
+									<tr>
+										<td><span>Ort</span>
+										<td><input type="text" id="eventOrt" class="eventEditInput" placeholder="Ort:" oninput="RequiredInput(this)">
+									</tr>
+									<tr>
+									<tr>
+										<td><span>PLZ</span>
+										<td><input type="text" id="eventPLZ" class="eventEditInput" placeholder="Plz:" oninput="RequiredInput(this)">
+									</tr>
+									<tr>
+										<td><span>Straße</span>
+										<td><input type="text" id="newStrasse" class="eventEditInput" placeholder="Straße:">
+									</tr>
+									<tr>
+										<td><span>Hausnummer</span>
+										<td><input type="text" id="eventHausnummer" class="eventEditInput" placeholder="Nr."><br>
+									</tr>
+									<tr>
+										<td><span>Telefonnummer</span>
+										<td><input type="text" id="eventPhone" class="eventEditInput newEventInput" placeholder="Telefonnummer"><br><br>
+									</tr>
+									<tr>
+										<td><input type="button" onclick="" id="updateEventBtn" class="blackWhiteButton" value="Aktualisieren" disabled><br><br>
+										<td>
+									</tr>
+								</table>
+								<hr></hr>
+							</div>
+						</div>
+					</div>
+					<!-- Start Tab -->
+					<div id="two" class="tab" style="display:none">
+						<button class="blackWhiteButton eventStatusButton openEvent" id="openEventBtn" onclick="OpenCloseEvent()">-</button>
+						<div class="eventHeader">
+							<span class="material-icons headerIcon">redo</span>
+							<span class="eventName"></span>
+							<div class="tab_buttons">
+								<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
 							</div>
 							<hr></hr>
 							<div id="mainInfo">
@@ -44,8 +99,8 @@
 								</ul>
 							</div><br>
 							<!-- DataTable -->
-							<div id="startStockTables"></div>
-							<div style="width:100%">
+							<table id="startTable" class="eventDatatable display cell-border responsive nowrap" width="100%"></table>
+							<div>
 								<table class="addNewRow">
 									<td style="width:200px"><select id="addNewRowCat" onchange="ValidateSelectedCategory(this, 'addNewRowSpec', 'add')"></select></td>
 									<td style="width:200px"><select id="addNewRowSpec" onchange='DisplayAvialableKg(`addNewRowSpec`, `addNewRowAvKg`)'></select></td>
@@ -54,23 +109,10 @@
 									<td><button style="float:right;margin-right:25px" class="blackWhiteButton" onclick="AddBagStartRow()">Hinzufügen</button></td>
 								</table>
 							</div>
-							<div id="editInfo">
-								<form id="eventForm" method="post">
-									<input type="text" id="eventName" class="catInput newEventInput required" placeholder="Eventname:" oninput="RequiredInput(this)"><br>
-									<input type="date" id="eventDatum" class="catInput newEventInput required" placeholder="yyyy-mm-tt" oninput="RequiredInput(this)"><br>
-									<input type="text" id="eventOrt" class="catInput newEventInput required" placeholder="Ort:" oninput="RequiredInput(this)">
-									<input type="text" id="eventPLZ" class="catInput newEventInput required" placeholder="Plz:" style="width:50px" oninput="RequiredInput(this)">
-									<input type="text" id="newStrasse" class="catInput newEventInput" placeholder="Straße:" style="width:150px">
-									<input type="text" id="eventHausnummer" class="catInput newEventInput" placeholder="Nr." style="width:50px"><br>
-									<input type="text" id="eventPhone" class="catInput newEventInput" placeholder="Telefonnummer"><br><br>
-									<input type="button" onclick="" id="updateEventBtn" class="blackWhiteButton" value="Aktualisieren" disabled><br><br>
-								</form>
-								<hr></hr>
-							</div>
 						</div>
 					</div>
 					<!-- Abschluss Tab -->
-					<div id="two" class="tab" style="display:none">
+					<div id="three" class="tab" style="display:none">
 						<button class="blackWhiteButton eventStatusButton closeEvent" id="closeEventBtn" onclick="OpenCloseEvent()">-</button>
 						<div class="eventHeader">
 							<span class="material-icons headerIcon">undo</span>
@@ -84,23 +126,8 @@
 								<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
 								<li class="eventDate"></li>
 							</ul>
-						</div>
-					</div>
-					<!-- Übersicht Tab -->
-					<div id="three" class="tab" style="display:none">
-						<!-- Tab Header -->
-						<div class="eventHeader">
-							<span class="material-icons headerIcon">view_quilt</span>
-							<span class="eventName"></span>
-							<div class="tab_buttons">
-								<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
-							</div>
-							<hr></hr>
-							<ul>
-								<li class="eventLocation"></li>
-								<li>&nbsp;&nbsp;|&nbsp;&nbsp;</li>
-								<li class="eventDate"></li>
-							</ul>
+							<!-- DataTable -->
+							<table id="abschlussTable" class="eventDatatable display cell-border responsive nowrap" width="100%"></table>
 						</div>
 					</div>
 				</div>

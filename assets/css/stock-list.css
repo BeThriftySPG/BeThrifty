@@ -101,7 +101,7 @@ option {
 #stockTable {
 	box-shadow: 0px 0px 20px #CCC;
 	margin-top:30px;
-	width:inherit !important;
+	width:100% !important;
 }
 #stockTable .alignRight {
 	text-align: right;
@@ -157,14 +157,34 @@ option {
 }
 
 @media only screen and (max-width: 1400px) {
+	#stockTable {
+		width:100% !important;
+	}
+	.sorting_1 {
+		font-size: 16px !important;
+	}
 	.newWarePopup {
 		min-width:800px !important;
 	}
 	#stockList {
 		max-width:800px !important;
 	}
+	.remove, .add {
+		visibility: hidden;
+		width:0px;
+	}
+	#prettydropdown-specFilter {
+		margin-top:5px;
+		margin-left: 60px;
+	}
 }
 @media only screen and (max-width: 1000px) {
+	.remove, .add {
+		display:none !important;
+	}
+	#stockTable {
+		font-size: 20px;
+	}
 	.newWarePopup {
 		min-width:700px !important;
 	}
