@@ -36,6 +36,15 @@
 	background-color: #FEEFEF;
 	border-color: red;
 }
+.alignRight {
+	text-align: right;
+}
+.sorting {
+	text-align: left !important;
+}
+.dataTables_info {
+	color:white !important;
+}
 
 .eventDatatable {
 	color:#222;

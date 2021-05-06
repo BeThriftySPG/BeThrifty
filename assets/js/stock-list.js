@@ -306,10 +306,10 @@ async function CreateDatatable() {
 		},
 		"dom": '<"stock-toolbar">frtip',
 		"columns": [
-			{title: "Bezeichnung"},
-			{title: "Kategorie", visible:false},
-			{title: "Gewicht", className: "alignRight"},
-			{title: "Mindestgewicht", className: "alignRight"},
+			{title: "Bezeichnung",},
+			{title: "Kategorie", visible:false, width:"50%"},
+			{title: "Gewicht", className: "alignRight", width:"30%"},
+			{title: "Mindestgewicht", className: "alignRight", width:"20%"},
 		]
 	});
 

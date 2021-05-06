@@ -16,7 +16,6 @@ var isEditable = true;
 // Event functions
 async function LoadEvent() {
 	ev = await Api.fetchSimple("api/event", eventId);
-	//console.log(ev);
 	let loc = moment(ev.date);
 	loc.locale("de");
 
@@ -53,12 +52,12 @@ async function OpenCloseEvent() {
 	if(ev.completed) {
 		ev.completed = false;
 		await Api.fetchSimple("api/event/update", ev);
-		console.log("Event has been opened.");
+		PrintInfo("Event has been opened.");
 		location.reload();
 	} else {
 		ev.completed = true;
 		await Api.fetchSimple("api/event/update", ev);
-		console.log("Event has been closed.");
+		PrintInfo("Event has been closed.");
 		location.reload();
 	}
 }
@@ -163,10 +162,9 @@ async function AddBagStartRow() {
 
 		try {
 			await Api.fetchSimple("api/event/deposit", data);
-			console.log("Uploaded new bag!");
+			PrintInfo("Uploaded new bag!");
 		} catch(e) {
-			console.warn("Failed uploading new Bag!");
-			console.error(e);
+			PrintError(e);
 		}
 
 		// Reset Input
@@ -206,15 +204,14 @@ async function RemoveBag(selectSource, bag, returns) {
 		weight: bag,
 		returns: returns
 	};
-	console.log(data);
+
 	try {
 		await Api.fetchSimple("api/event/revoke", data);
 		await UpdateStartTable();
 		await UpdateAbschlussTable();
-		console.log("Removed Bag!");
+		PrintInfo("Removed Bag!");
 	} catch(e) {
-		console.warn("Failed removing bag!");
-		console.error(e);
+		PrintError(e);
 	}
 
 	try {
@@ -282,67 +279,49 @@ async function PrintStartTables() {
 			dataSrc: 3
 		},
 		order: [[3, "asc"]],
+		"dom": '<"stock-toolbar">rtip',
 		"columns": [
-			{title: "Kategorie"},
-			{title: "Säcke"},
-			{title: "Lagerstand"},
+			{title: "Kategorie", width:"35%"},
+			{title: "Säcke", width:"50%"},
+			{title: "Lagerstand", className:"alignRight", width:"10%"},
 			{title: "Kategorie", visible: false}
 		]
 	});
 	await SetupNewRowStart();
 }
 async function UpdateStartTable() {
+	let moveStock = await Api.fetchSimple("api/event/movement", ev.id);
+	let data = [];
+	stock = await Api.fetchSimple("api/stock/list");
+
+	for(let i = 0; i < moveStock.length; i++) {
+		let cat = await Api.fetchSimple("api/goodinfo", moveStock[i].goodInfo);
+		data[i] = [];
+		data[i][0] = cat.specification;
+		data[i][1] = '<div>' + moveStock[i].outgoing.length + ' Säcke &nbsp; [';
+		data[i][2] = moveStock[i].outgoingSum + " Kg";
+		data[i][3] = cat.category;
+
+		for(let s = 0; s < moveStock[i].outgoing.length; s++) {
+			if(ev.completed == false) {
+				data[i][1] += '<button title="Sack Löschen" class="bagRemoveBtn" onclick="RemoveBag(`' + cat.id + '`, ' + moveStock[i].outgoing[s] + ', false)">' + moveStock[i].outgoing[s] + '</button>';
+			} else {
+				data[i][1] += "<span class='bag'>" + moveStock[i].outgoing[s] + "</span>";
+			}
+			if(s < moveStock[i].outgoing.length - 1) data[i][1] += ", ";
+		}
+		data[i][1] += '] <span class="bag_sum">' + moveStock[i].outgoingSum + " Kg</span>" + '</div>';
+
+		let stockGood = stock.find(el => el.good.goodInfo == cat.id);
+		data[i][2] = stockGood.good.weight + " Kg";
+	}
+
 	if(startTable != null) {
 		startTable.clear();
-	}
-
-	stock = await Api.fetchSimple("api/stock/list");
-	let stockDiv = $("#startStockTables");
-	startStock = await Api.fetchSimple("api/event/movement", ev.id);
-	startStock = startStock.filter(function (el) {
-	  return el.returns == false;
-	});
-	let data = [];
-
-	for(r = 0; r < startStock.length; r++) {
-		let st = startStock[r];
-		let cat = await Api.fetchSimple("api/goodinfo", st.good.goodInfo);
-
-		data[r] = [];
-		data[r][0] = "";
-		data[r][1] = "";
-		data[r][2] = "";
-		data[r][3] = cat.category;
-		if(cat.category == cat.category) {
-			data[r][0] = cat.specification;
-			data[r][1] = '<div>' + st.good.bags.length + ' Säcke &nbsp; [';
-
-			for(let s = 0; s < st.good.bags.length; s++) {
-				if(ev.completed == false) {
-					data[r][1] += '<button title="Sack Löschen" class="bagRemoveBtn" onclick="RemoveBag(`'+cat.id+'`, '+st.good.bags[s]+', false)">'+ st.good.bags[s] + '</button>';
-				} else {
-					data[r][1] += "<span class='bag'>"+st.good.bags[s]+"</span>";
-				}
-				if(s < st.good.bags.length - 1) {
-					data[r][1] += ", ";
-				}
-			}
-			data[r][1] += '] <span class="bag_sum">' + st.good.bags.reduce((a, b) => a + b, 0) + " Kg</span>" + '</div>';
-			g = stock.find(el => el.good.goodInfo == cat.id);
-			if(g != null) {
-				data[r][2] = g.good.weight + " Kg";
-			} else {
-				data[r][2] = "-";
-			}
-			if(st.good.bags.length == 1) {
-				//data[r][1] = "1 Sack <span class='bag_sum'>" + st.good.sumWeight + " Kg</span>";
-			}
-		}
-	}
-
-	if(startTable != null) {
 		startTable.rows.add(data);
 		startTable.draw();
+		startTable.columns.adjust().draw();
+		RenderGraph1();
 	}
 	document.getElementById("startTable").style.width = "100%";
 	return data;
@@ -365,92 +344,55 @@ async function PrintAbschlussTable() {
 		},
 		order: [[4, "asc"]],
 		"columns": [
-			{title: "Kategorie"},
-			{title: "Säcke"},
-			{title: "Eventlager"},
-			{title: "Neuer Sack", visible:!ev.completed},
+			{title: "Kategorie", width:"30%"},
+			{title: "Säcke", width:"45%"},
+			{title: "Eventlager", className:"alignRight", width:"5%"},
+			{title: "Neuer Sack", visible:!ev.completed, width:"20%"},
 			{title: "Kategorie", visible:false}
 		]
 	});
 	startTable.columns.adjust().draw();
 }
 async function UpdateAbschlussTable() {
-	if(abschlussTable != null) {
-		abschlussTable.clear();
-	}
-
-	let stockDiv = $("#abschlussTable");
-	let eventStock = await Api.fetchSimple("api/event/movement", ev.id);
-	let drawStock = eventStock.filter(function (el) {
-	  return el.returns == true;
-	});
-	eventStock = eventStock.filter(function (el) {
-	  return el.returns == false;
-	});
-
+	let moveStock = await Api.fetchSimple("api/event/movement", ev.id);
 	let data = [];
 
-	for(r = 0; r < eventStock.length; r++) {
-		let evStock = startStock[r];
-		let cat = await Api.fetchSimple("api/goodinfo", evStock.good.goodInfo);
+	for(let i = 0; i < moveStock.length; i++) {
+		let cat = await Api.fetchSimple("api/goodinfo", moveStock[i].goodInfo);
+		data[i] = [];
+		data[i][0] = cat.specification;
+		data[i][1] = '<div>' + moveStock[i].outgoing.length + ' Säcke &nbsp; [';
+		data[i][2] = (moveStock[i].outgoingSum - moveStock[i].returningSum) + " Kg";
+		data[i][4] = cat.category;
 
-		data[r] = [];
-		data[r][0] = "";
-		data[r][1] = "Kein Eintrag";
-		data[r][2] = evStock.good.sumWeight + " Kg";
-		data[r][3] = "";
-		data[r][4] = cat.category;
-		if(cat.category == cat.category) {
-			data[r][0] = cat.specification;
-			// If the good originates from "Start"
-			if(evStock.returns == false) {
-				// Search of equivalents of evStock with "returns: true"
-				for(let d = 0; d < drawStock.length; d++) {
-					let draw = drawStock[d];
-					if(draw.good.goodInfo == evStock.good.goodInfo) {
-						// Fill in the information
-						let differenceWeight = evStock.good.sumWeight - draw.good.sumWeight;
-						data[r][1] = '<div>' + draw.good.bags.length + ' Säcke &nbsp; [';
-						data[r][2] = evStock.good.sumWeight;
-
-						// List the bags of the returned good
-						for(let s = 0; s < draw.good.bags.length; s++) {
-							if(ev.completed == false) {
-								data[r][1] += '<button title="Sack Löschen" class="bagRemoveBtn" onclick="RemoveBag(`'+cat.id+'`, '+draw.good.bags[s]+', true)">'+ draw.good.bags[s] + '</button>';
-							} else {
-								data[r][1] += "<span class='bag'>"+draw.good.bags[s]+"</span>";
-							}
-							if(s < draw.good.bags.length - 1) {
-								data[r][1] += ", ";
-							}
-						}
-						// Display Sum KG that returns
-						data[r][1] += '] <span class="bag_sum">' + draw.good.bags.reduce((a, b) => a + b, 0) + " Kg</span>" + '</div>';
-
-						if(g != null) {
-							data[r][2] = differenceWeight + " Kg";
-						} else {
-							data[r][2] = "-";
-						}
-						if(draw.good.bags.length == 1) {
-							//data[r][1] = "1 Sack <span class='bag_sum'>" + draw.good.sumWeight + " Kg</span>";
-						}
-						break;
-					}
-				}
+		// List the bags of the returned good
+		if(moveStock[i].returningSum > 0) {
+			for(let s = 0; s < moveStock[i].returning.length; s++) {
 				if(ev.completed == false) {
-					data[r][3] = '<div><input class="withdraw_input" id="withdraw_'+r+'" placeholder="Kg Sack" /><button class="withdraw_button blackWhiteButton" onclick="WithdrawBag(`'+cat.id+'`, `withdraw_'+r+'`)">Abziehen</button></div>';
+					data[i][1] += '<button title="Sack Löschen" class="bagRemoveBtn" onclick="RemoveBag(`' + cat.id + '`, ' + moveStock[i].returning[s] + ', true)">' + moveStock[i].returning[s] + '</button>';
+				} else {
+					data[i][1] += "<span class='bag'>" + moveStock[i].returning[s] + "</span>";
 				}
+				if(s < moveStock[i].returning.length - 1) data[i][1] += ", ";
 			}
+			data[i][1] += '] <span class="bag_sum">' + moveStock[i].returningSum + " Kg</span>" + '</div>';
+		} else {
+			data[i][1] = "Kein Eintrag";
+		}
+
+		if(ev.completed == false) {
+			data[i][3] = '<div><input class="withdraw_input" id="withdraw_' + i + '" placeholder="Kg Sack" /><button class="withdraw_button blackWhiteButton" onclick="WithdrawBag(`' + cat.id + '`, `withdraw_' + i + '`)">Abziehen</button></div>';
 		}
 	}
 
 	if(abschlussTable != null) {
+		abschlussTable.clear();
 		abschlussTable.rows.add(data);
 		abschlussTable.draw();
 		abschlussTable.columns.adjust().draw();
+		RenderGraph1();
 	}
-		document.getElementById("abschlussTable").style.width = "100%";
+	document.getElementById("abschlussTable").style.width = "100%";
 	return data;
 }
 
@@ -470,21 +412,13 @@ async function RenderGraph1() {
 		}
 	]
 	let xAxis = [];
-	let stock = await Api.fetchSimple("api/event/movement", ev.id);
-	let inCount = 0;
-	let outCount = 0;
+	let movement = await Api.fetchSimple("api/event/movement", ev.id);
 
-	for(let i = 0; i < stock.length; i++) {
-		if(stock[i].returns == false) {
-			let good = await GetGoodInfo(stock[i].good.goodInfo);
-			data1[0].data[inCount] = stock[i].good.sumWeight;
-			xAxis[inCount] = good.specification;
-			inCount++;
-		} else {
-			data1[1].data[outCount] = stock[i].good.sumWeight;
-			outCount++;
-		}
-		//console.log(good);
+	for(let i = 0; i < movement.length; i++) {
+		let good = movement[i];
+		xAxis[i] = await GetGoodInfo(good.goodInfo).specification;
+		data1[0].data[i] = good.outgoingSum;
+		data1[1].data[i] = good.returningSum;
 	}
 
 	chart1.setOption({
