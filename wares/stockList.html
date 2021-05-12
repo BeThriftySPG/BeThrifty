@@ -17,8 +17,8 @@
 		<main>
 			<fieldset id="viewContainer">
 				<legend>Warenlager</legend>
-				<button class="blackWhiteButton" style="float:right;padding:10px 15px;margin-bottom:25px;margin-left:10px" onclick="OpenRemoveItemWindow()">Ware Entfernen</button>
-				<button class="blackWhiteButton" style="float:right;padding:10px 15px;margin-bottom:25px;" onclick="OpenAddItemWindow()">Ware Hinzufügen</button><br><br>
+				<button id="removeStock" class="blackWhiteButton" style="display:none;float:right;padding:10px 15px;margin-bottom:25px;margin-left:10px" onclick="OpenRemoveItemWindow()">Ware Entfernen</button>
+				<button id="addStock" class="blackWhiteButton" style="display:none;float:right;padding:10px 15px;margin-bottom:25px;" onclick="OpenAddItemWindow()">Ware Hinzufügen</button><br><br>
 
 				<div class="viewDivs" id="eventsOpenDiv">
 
@@ -46,7 +46,7 @@
 						<select id="newWareCat" onchange="ValidateSelectedCategory(this, 'add')"></select>
 						<select id="newWareSpec" onchange="CheckInputKg()" style="margin-left:10px"></select>
 					</li>
-					<li><button class="blackWhiteButton newCatBtn" onclick="OpenCategoryCreatorWindow()">Neuer Warentyp<span class="material-icons" id="addCatIcon">add_circle</span></button></li>
+					<li><button style="display:none" id="createCategoryBtn" class="blackWhiteButton newCatBtn" onclick="OpenCategoryCreatorWindow()">Neuer Warentyp<span class="material-icons" id="addCatIcon">add_circle</span></button></li>
 					<li style="margin:0px">
 						<input id="newWareDate" disabled />
 					</li>
@@ -72,7 +72,7 @@
 						<select id="removeWareSpec" onchange="CheckInputKg()" style="margin-left:10px"></select>
 					</li>
 					<li>
-						<button class="blackWhiteButton newCatBtn" onclick="RemoveCategory()">Entferne Warentyp<span class="material-icons" id="addCatIcon">remove_circle</span></button></li>
+						<button style="display:none" id="removeCategoryBtn" class="blackWhiteButton newCatBtn" onclick="RemoveCategory()">Entferne Warentyp<span class="material-icons" id="addCatIcon">remove_circle</span></button></li>
 					</li>
 					<li style="margin:0px"><input id="removeWareDate" disabled /></li>
 					<li style="margin:0px">

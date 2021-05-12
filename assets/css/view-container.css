@@ -8,6 +8,7 @@
 	border-color:#444;
 	max-width:1200px;
 	min-width: 600px;
+	height:100%;
 }
 #viewContainer > legend {
 	font-size:40px;

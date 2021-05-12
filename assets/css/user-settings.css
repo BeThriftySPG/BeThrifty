@@ -1,0 +1,82 @@
+#splitTable {
+	width:100%;
+	font-family: sans-serif;
+	color:#444;
+}
+#splitTable td {
+	background-color: #CFCFCF;
+	padding: 10px 25px;
+	border-bottom:solid;
+	border-width:1px;
+	border-color:rgba(0, 0, 0, 0.1);
+	box-shadow: inset 0px 0px 5px #AAA;
+}
+#userDatatable {
+	color:#444;
+	border-collapse: collapse;
+}
+#userDatatable td {
+	box-shadow: none;
+}
+#logoCircle {
+	background-color: grey;
+	width:200px;
+	height:200px;
+	border-radius: 50%;
+	text-align: center;
+	vertical-align: middle;
+}
+#logoUserName {
+	display:block;
+	width:200px;
+	padding-top: 25px;
+	font-size: 25px;
+	text-align: center;
+}
+#userLetter {
+	display:block;
+	height:100%;
+	font-size: 90px;
+	padding-top: calc(50% - 50px);
+	color:white;
+	font-family: arial;
+}
+#userPermissions {
+	height:125px;
+}
+#splitTable input{
+	border:none;
+	height:30px;
+	padding-left: 5px;
+	font-size: 16px;
+	width:75%;
+}
+#splitTable input:disabled {
+	padding: 0px;
+	background-color: inherit;
+	font-size: inherit;
+}
+#splitTable button {
+	margin-top: 40px;
+}
+#editBtn {
+	width:100px;
+	margin-left:calc(50% - 100px / 2);
+}
+.term {
+	font-weight: bold;
+	font-size: 25px;
+	min-width: 300px;
+}
+.termData {
+	font-size: 25px;
+	color:#666;
+}
+.perm {
+	float:left;
+	margin:3px 5px;
+	padding:5px 10px;
+	font-size: 18px;
+	background-color: #DDD;
+	box-shadow: 0px 0px 6px #AAA;
+}

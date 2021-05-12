@@ -1,6 +1,6 @@
 
 <!-- Google Font -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<!--link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"-->
 
 <!-- Required meta tags -->
 <link rel="stylesheet" href="/include/header/fonts/icomoon/style.css">
@@ -41,7 +41,28 @@
 		font-family: arial;
 		font-size: 25px;
 	}
-
+	/* fallback */
+	@font-face {
+	  font-family: 'Material Icons';
+	  font-style: normal;
+	  font-weight: 400;
+	  src: url(https://fonts.gstatic.com/s/materialicons/v85/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+	}
+	.material-icons {
+	  font-family: 'Material Icons';
+	  font-weight: normal;
+	  font-style: normal;
+	  font-size: 24px;
+	  line-height: 1;
+	  letter-spacing: normal;
+	  text-transform: none;
+	  display: inline-block;
+	  white-space: nowrap;
+	  word-wrap: normal;
+	  direction: ltr;
+	  -webkit-font-feature-settings: 'liga';
+	  -webkit-font-smoothing: antialiased;
+	}
 </style>
 
 <aside class="sidebar">
@@ -52,7 +73,7 @@
   </div>
   <div class="side-inner">
     <div class="logo-wrap">
-      <div class="logo">
+      <div id="logoBackground" class="logo">
         <span id="logo-letter"></span>
       </div>
       <span class="logo-text" id="logo-name"></span>
@@ -66,10 +87,10 @@
     <div class="nav-menu">
       <ul>
         <li class="active"><a href="/index.html" class="d-flex align-items-center"><span class="material-icons">home</span><span class="menu-text">Home</span></a></li>
-        <li><a href="/wares/stockList.html" class="d-flex align-items-center"><span class="material-icons">all_inbox</span><span class="menu-text">Warenlager</span></a></li>
-        <li><a href="/events/eventManagement.html" class="d-flex align-items-center"><span class="material-icons">event</span><span class="menu-text">Events</span></a></li>
-        <li><a href="/users/benutzerverwaltung.html" class="d-flex align-items-center"><span class="material-icons">account_box</span><span class="menu-text">Benutzerverwaltung</span></a></li>
-        <li><a href="#" class="d-flex align-items-center"><span class="material-icons">settings</span><span class="menu-text">Settings</span></a></li>
+        <li id="menuWarenlager" style="display:none"><a href="/wares/stockList.html" class="d-flex align-items-center"><span class="material-icons">all_inbox</span><span class="menu-text">Warenlager</span></a></li>
+        <li id="menuEvent" style="display:none"><a href="/events/eventManagement.html" class="d-flex align-items-center"><span class="material-icons">event</span><span class="menu-text">Events</span></a></li>
+        <li id="menuBenutzer" style="display:none"><a href="/users/benutzerverwaltung.html" class="d-flex align-items-center"><span class="material-icons">account_box</span><span class="menu-text">Benutzerverwaltung</span></a></li>
+        <li id="menuSettings"><a href="/users/settings.html" class="d-flex align-items-center"><span class="material-icons">settings</span><span class="menu-text">Settings</span></a></li>
 				<li><a href="#" class="d-flex align-items-center"><input type="submit" class="blackWhiteButton userSubmit" id="logoutButton" value="Logout" onclick="logout()" /></a></li>
 			</ul>
     </div>

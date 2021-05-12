@@ -8,8 +8,7 @@ var removeWareSpec;
 var filterByCat;
 var filterBySpec;
 
-// Server Functions
-
+// Stocklist modification functions
 async function AddItems() {
 	let kg = $("#newWareKg");
 	let cat = newWareCat;
@@ -121,7 +120,6 @@ async function RemoveCategory() {
 }
 
 // UI Functions
-
 async function OpenAddItemWindow(fill_cat) {
 	let kg = $("#newWareKG");
 	let cat = newWareCat;
@@ -164,6 +162,10 @@ async function OpenAddItemWindow(fill_cat) {
 	}
 	cat.refresh();
 	spec.refresh();
+
+	if(Api.isAllowed("GoodInfoEdit")) {
+		$("#createCategoryBtn").show();
+	}
 }
 async function OpenRemoveItemWindow(fill_cat) {
 	let kg = $("#removeWareKg");
@@ -208,6 +210,9 @@ async function OpenRemoveItemWindow(fill_cat) {
 	}
 	removeWareCat.refresh();
 	removeWareSpec.refresh();
+	if(Api.isAllowed("GoodInfoEdit")) {
+		$("#removeCategoryBtn").show();
+	}
 }
 async function OpenCategoryCreatorWindow() {
 	$('#newStockCategory').modal({
@@ -238,7 +243,6 @@ async function OpenCategoryCreatorWindow() {
 }
 
 // Valdiation Functions
-
 async function ValidateSelectedCategory(obj, operation, fill) {
 	let el = $(obj);
 	let specs = await GetSpecsByCategory(el.val());
@@ -266,7 +270,7 @@ async function ValidateSelectedCategory(obj, operation, fill) {
 	}
 	spec.refresh();
 }
-async function CheckInputKg() {
+async function CheckInputKg() {	// Parse input Kg
 	let el = $("#newWareKg");
 	let weight = parseFloat(el.val());
 	let spec = $("#newWareSpec");
@@ -280,58 +284,65 @@ function AutoFillNewCatSub(obj) {
 	name.val(el.val());
 }
 
-// Tables & Search
-
+// Datatable & Search
 async function CreateDatatable() {
-	let wares = await GetStockList();
-	let categories = await GetGoodInfoList();
-	categories.sort(function(a, b){
-    if(a.specification < b.specification) { return -1; }
-    if(a.specification > b.specification) { return 1; }
-    return 0;
-	});
+	if(Api.isAllowed("StockView")) {
+		let wares = await GetStockList();
+		let categories = await GetGoodInfoList();
+		categories.sort(function(a, b){
+	    if(a.specification < b.specification) { return -1; }
+	    if(a.specification > b.specification) { return 1; }
+	    return 0;
+		});
 
-	let data = UpdateDatatable();
+		let data = UpdateDatatable();
 
-	// Initializing dataTables
-	stockTable = $("#stockTable").DataTable({
-		paging: false,
-		scrollCollapse: true,
-		info: true,
-		responsive:true,
-		data: data,
-		order: [[1, "asc"]],
-		rowGroup: {
-			dataSrc: 1
-		},
-		"dom": '<"stock-toolbar">frtip',
-		"columns": [
-			{title: "Bezeichnung",},
-			{title: "Kategorie", visible:false, width:"50%"},
-			{title: "Gewicht", className: "alignRight", width:"30%"},
-			{title: "Mindestgewicht", className: "alignRight", width:"20%"},
-		]
-	});
+		// Initializing dataTables
+		stockTable = $("#stockTable").DataTable({
+			paging: false,
+			scrollCollapse: true,
+			info: true,
+			responsive:true,
+			data: data,
+			order: [[1, "asc"]],
+			rowGroup: {
+				dataSrc: 1
+			},
+			"dom": '<"stock-toolbar">frtip',
+			"columns": [
+				{title: "Bezeichnung",},
+				{title: "Kategorie", visible:false, width:"50%"},
+				{title: "Gewicht", className: "alignRight", width:"30%"},
+				{title: "Mindestgewicht", className: "alignRight", width:"20%"},
+			]
+		});
 
-	// Create Advanced Filters
-	let catList = await GetCategories();
-	catList.sort();
+		// Create Advanced Filters
+		let catList = await GetCategories();
+		catList.sort();
 
-	// Category Selector
-	cat = '<select id="catFilter" class="advancedFilter" onchange="ExternSearch(this)">';
-	catList.forEach(el => {
-		cat += '<option>' + el + '</option>';
-	});
-	cat += '<option selected disabled>Kategorien</option></select>';
-	$("#stockTable_filter").append(cat);
+		// Category Selector
+		cat = '<select id="catFilter" class="advancedFilter" onchange="ExternSearch(this)">';
+		catList.forEach(el => {
+			cat += '<option>' + el + '</option>';
+		});
+		cat += '<option selected disabled>Kategorien</option></select>';
+		$("#stockTable_filter").append(cat);
 
-	// Specification Selector
-	spec = '<select id="specFilter" class="advancedFilter" onchange="ExternSearch(this)">';
-	categories.forEach(el => {
-		spec += '<option>' + el.specification + '</option>';
-	});
-	spec += '<option selected disabled>Sub-Kategorien</option></select>';
-	$("#stockTable_filter").append(spec);
+		// Specification Selector
+		spec = '<select id="specFilter" class="advancedFilter" onchange="ExternSearch(this)">';
+		categories.forEach(el => {
+			spec += '<option>' + el.specification + '</option>';
+		});
+		spec += '<option selected disabled>Sub-Kategorien</option></select>';
+		$("#stockTable_filter").append(spec);
+		if(Api.isAllowed("StockEdit")) {
+			$("#removeStock").show();
+			$("#addStock").show();
+		}
+	} else {
+		$("#viewContainer").html("<legend>Keine Berechtigungen</legend>");
+	}
 }
 async function UpdateDatatable() {
 	if(stockTable != null) {
@@ -349,10 +360,13 @@ async function UpdateDatatable() {
 			data[i][1] = info.category;
 			data[i][0] = info.specification;
 
-			data[i][2] = '<span class="tools material-icons remove" onclick="OpenRemoveItemWindow(\''+info.id+'\')">remove</span></span>';
-
+			if(Api.isAllowed("StockEdit")) {
+				data[i][2] = '<span class="tools material-icons remove" onclick="OpenRemoveItemWindow(\''+info.id+'\')">remove</span>';
+			} else { data[i][2] = ""; }
 			data[i][2] += "<span class='cellKg'>" + wares[i].good.weight + " Kg" + "</span>";
-			data[i][2] += '<span class="material-icons add" onclick="OpenAddItemWindow(\''+info.id+'\')">add</span>';
+			if(Api.isAllowed("StockEdit")) {
+				data[i][2] += '<span class="material-icons add" onclick="OpenAddItemWindow(\''+info.id+'\')">add</span>';
+			}
 
 			if(info.minWeight > 0) {
 				data[i][3] = info.minWeight + " Kg";
@@ -386,7 +400,6 @@ function CustomSearch(cat, spec) {
 $(async function () {
 	await Api.init();
 	if(await HeaderCheckLogin()) {
-		await HeaderCheckLogin();
 		await CreateDatatable();
 
 		// Initialize PrettyDropdowns

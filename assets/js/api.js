@@ -1,9 +1,9 @@
 "use strict";
 
-if(this.Api === undefined) {
+if (this.Api === undefined) {
 	this.Api = (function() {
 		//const apiServerAdress = "https://whitehelmet.ddns.net:5001/";
-		const apiServerAdress = "http://91.113.62.68:5000/";
+		const apiServerAdress = "http://91.113.62.68:5000/";	// Ip-Address of the API-Server
 		const apiCreateUserPage = "api/user/create";
 		const apiLoginPage = "api/user/login";
 		const apiRefreshTokenPage = "api/user/refreshToken";
@@ -39,12 +39,14 @@ if(this.Api === undefined) {
 			"changeGroupname": changeGroupname,
 			"changePermissions": changePermissions,
 			"deleteGroup": deleteGroup,
+			"isAllowed": checkPermission,
+			"user": null,
 			"onRequiresRelogin": function() {},
 		};
 
 		function init() {
 			return new Promise(function(resolve, _) {
-				if(initialized) {
+				if (initialized) {
 					resolve();
 					return;
 				}
@@ -52,9 +54,9 @@ if(this.Api === undefined) {
 
 				_username = localStorage.getItem("username");
 				_password = localStorage.getItem("password");
-				if(typeof(_username) === "string" && typeof(_password) === "string") {
+				if (typeof(_username) === "string" && typeof(_password) === "string") {
 					login(_username, _password).then(function(result) {
-						if(result !== true) {
+						if (result !== true) {
 							_username = null;
 							_password = null;
 							localStorage.removeItem("username");
@@ -66,7 +68,7 @@ if(this.Api === undefined) {
 					_username = null;
 					_password = null;
 					const token = sessionStorage.getItem("jwt-token");
-					if(typeof(token) !== "undefined") {
+					if (typeof(token) !== "undefined") {
 						setJwtToken(token);
 					}
 					resolve();
@@ -75,12 +77,12 @@ if(this.Api === undefined) {
 		}
 
 		function setJwtToken(token) {
-			if(typeof(token) === "string") {
+			if (typeof(token) === "string") {
 				jwtToken = token;
 				setRefreshTokenTimeout();
 				sessionStorage.setItem("jwt-token", token);
 			} else {
-				if(refreshTokenTimeout !== null) {
+				if (refreshTokenTimeout !== null) {
 					clearTimeout(refreshTokenTimeout);
 				}
 				jwtToken = null;
@@ -90,26 +92,26 @@ if(this.Api === undefined) {
 
 		function refreshToken() {
 			fetchFromApi3(apiRefreshTokenPage).then(function(response) {
-				if(response.ok) {
+				if (response.ok) {
 					response.text().then(function(token) {
 						setJwtToken(token);
 					});
 				} else {
 					setJwtToken(null);
-					if(_username !== null && _password !== null) {
+					if (_username !== null && _password !== null) {
 						login(_username, _password).then(function(result) {
-							if(result !== true) {
+							if (result !== true) {
 								_username = null;
 								_password = null;
 								localStorage.removeItem("username");
 								localStorage.removeItem("password");
-								if(typeof(output["onRequiresRelogin"]) === "function") {
+								if (typeof(output["onRequiresRelogin"]) === "function") {
 									output["onRequiresRelogin"]();
 								}
 							}
 						});
 					} else {
-						if(typeof(output["onRequiresRelogin"]) === "function") {
+						if (typeof(output["onRequiresRelogin"]) === "function") {
 							output["onRequiresRelogin"]();
 						}
 					}
@@ -121,27 +123,27 @@ if(this.Api === undefined) {
 
 		function setRefreshTokenTimeout() {
 			const expTime = JSON.parse(decodeURIComponent(atob(jwtToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/"))))["exp"] * 1000 - 10000 - Date.now();
-			if(expTime > 0) {
-				if(refreshTokenTimeout !== null) {
+			if (expTime > 0) {
+				if (refreshTokenTimeout !== null) {
 					clearTimeout(refreshTokenTimeout);
 				}
 				refreshTokenTimeout = setTimeout(refreshToken, expTime);
 			} else {
 				setJwtToken(null);
-				if(_username !== null && _password !== null) {
+				if (_username !== null && _password !== null) {
 					login(_username, _password).then(function(result) {
-						if(result !== true) {
+						if (result !== true) {
 							_username = null;
 							_password = null;
 							localStorage.removeItem("username");
 							localStorage.removeItem("password");
-							if(typeof(output["onRequiresRelogin"]) === "function") {
+							if (typeof(output["onRequiresRelogin"]) === "function") {
 								output["onRequiresRelogin"]();
 							}
 						}
 					});
 				} else {
-					if(typeof(output["onRequiresRelogin"]) === "function") {
+					if (typeof(output["onRequiresRelogin"]) === "function") {
 						output["onRequiresRelogin"]();
 					}
 				}
@@ -160,11 +162,11 @@ if(this.Api === undefined) {
 
 		function hashPassword(password) {
 			return new Promise(function(resolve, reject) {
-				if(typeof(window.crypto) !== "undefined") {
+				if (typeof(window.crypto) !== "undefined") {
 					window.crypto.subtle.digest("SHA-256", new TextEncoder().encode(password)).then(function(digestBuffer) {
 						resolve(arrayBufferBase64(digestBuffer));
 					});
-				} else if(typeof(window.msCrypto) !== "undefined") {
+				} else if (typeof(window.msCrypto) !== "undefined") {
 					const operation = window.msCrypto.subtle.digest("SHA-256", new TextEncoder().encode(password))
 					operation.oncomplete = function(e) {
 						resolve(arrayBufferBase64(e.target.result));
@@ -178,10 +180,10 @@ if(this.Api === undefined) {
 		function fetchFromApi(path, data, secondTry, resolve, reject) {
 			let promise = null;
 			const headers = {};
-			if(jwtToken !== null) {
+			if (jwtToken !== null) {
 				headers["Authorization"] = "Bearer " + jwtToken;
 			}
-			if(typeof(data) === "undefined") {
+			if (typeof(data) === "undefined") {
 				promise = fetch(apiServerAdress + path, {
 					method: "GET",
 					"headers": headers
@@ -195,9 +197,9 @@ if(this.Api === undefined) {
 				});
 			}
 			promise.then(function(response) {
-				if(response.status === 401) {
+				if (response.status === 401) {
 					setJwtToken(null);
-					if(secondTry !== true && _username !== null && _password !== null) {
+					if (secondTry !== true && _username !== null && _password !== null) {
 						fetchFromApi2(path, data, true).then(function(response2) {
 							resolve(response2);
 						}).catch(function(error2) {
@@ -216,14 +218,14 @@ if(this.Api === undefined) {
 
 		function fetchFromApi2(path, data, secondTry) {
 			return new Promise(function(resolve, reject) {
-				if(jwtToken === null && _username !== null && _password !== null) {
+				if (jwtToken === null && _username !== null && _password !== null) {
 					login(_username, _password).then(function(result) {
-						if(result !== true) {
+						if (result !== true) {
 							_username = null;
 							_password = null;
 							localStorage.removeItem("username");
 							localStorage.removeItem("password");
-							if(typeof(output["onRequiresRelogin"]) === "function") {
+							if (typeof(output["onRequiresRelogin"]) === "function") {
 								output["onRequiresRelogin"]();
 							}
 						}
@@ -242,13 +244,13 @@ if(this.Api === undefined) {
 		function fetchFromApiSimple(path, data) {
 			return new Promise(function(resolve, reject) {
 				fetchFromApi3(path, data).then(function(response) {
-					if(response.ok) {
+					if (response.ok) {
 						let contentType = response.headers.get("Content-Type");
-						if(contentType === null) {
+						if (contentType === null) {
 							resolve(undefined);
 						} else {
 							response.text().then(function(str) {
-								if(typeof(contentType) === "string" && contentType.startsWith("application/json")) {
+								if (typeof(contentType) === "string" && contentType.startsWith("application/json")) {
 									try {
 										resolve(JSON.parse(str));
 									} catch {
@@ -266,7 +268,7 @@ if(this.Api === undefined) {
 							try {
 								reject(JSON.parse(str));
 							} catch {
-								if(typeof(str) !== "string" || str === "") {
+								if (typeof(str) !== "string" || str === "") {
 									reject("Received status code: " + response.status + " in response to " + path + " " + data);
 								} else {
 									reject(str);
@@ -285,19 +287,22 @@ if(this.Api === undefined) {
 		function createUser(username, password, groupname) {
 			return new Promise(function(resolve, reject) {
 				hashPassword(password).then(function(passwordHash) {
-					fetchFromApi3(apiCreateUserPage, { Username: username, Password: passwordHash, Groupname: groupname }).then(function(response) {
-						resolve(response.ok);
-					}).catch(function(error) {
-						reject(error);
-					});
-				});
+					fetchFromApiSimple(apiCreateUserPage, {
+						Username: username,
+						Password: passwordHash,
+						Groupname: groupname
+					}).then(resolve).catch(reject);
+				}).catch(reject);
 			});
 		}
 
 		function login(username, password) {
 			return new Promise(function(resolve, _) {
-				fetchFromApi(apiLoginPage, { Username: username, Password: password }, true, function(response) {
-					if(response.ok) {
+				fetchFromApi(apiLoginPage, {
+					Username: username,
+					Password: password
+				}, true, function(response) {
+					if (response.ok) {
 						response.text().then(function(token) {
 							setJwtToken(token);
 							resolve(true);
@@ -316,14 +321,17 @@ if(this.Api === undefined) {
 			logout();
 			return new Promise(function(resolve, reject) {
 				hashPassword(password).then(function(passwordHash) {
-					if(stayLoggedIn === true) {
+					if (stayLoggedIn === true) {
 						_username = username;
 						_password = passwordHash;
 						localStorage.setItem("username", username);
 						localStorage.setItem("password", passwordHash);
 					}
-					fetchFromApi3(apiLoginPage, { Username: username, Password: passwordHash }).then(function(response) {
-						if(response.ok) {
+					fetchFromApi3(apiLoginPage, {
+						Username: username,
+						Password: passwordHash
+					}).then(function(response) {
+						if (response.ok) {
 							response.text().then(function(token) {
 								setJwtToken(token);
 								resolve(true);
@@ -355,85 +363,64 @@ if(this.Api === undefined) {
 		}
 
 		function changeUsername(oldUsername, newUsername) {
-			return new Promise(function(resolve, reject) {
-				fetchFromApi3(apiChangeUsernamePage, { OldUsername: oldUsername, NewUsername: newUsername }).then(function(response) {
-					resolve(response.ok);
-				}).catch(function(error) {
-					reject(error);
-				});
+			return fetchFromApiSimple(apiChangeUsernamePage, {
+				OldUsername: oldUsername,
+				NewUsername: newUsername
 			});
 		}
 
 		function changePassword(username, password) {
 			return new Promise(function(resolve, reject) {
 				hashPassword(password).then(function(passwordHash) {
-					fetchFromApi3(apiChangePasswordPage, { Username: username, Password: passwordHash }).then(function(response) {
-						resolve(response.ok);
-					}).catch(function(error) {
-						reject(error);
-					});
-				});
+					fetchFromApiSimple(apiChangePasswordPage, {
+						Username: username,
+						Password: passwordHash
+					}).then(resolve).catch(reject);
+				}).catch(reject);
 			});
 		}
 
 		function changeGroup(username, groupname) {
-			return new Promise(function(resolve, reject) {
-				fetchFromApi3(apiChangeGroupPage, { Username: username, Groupname: groupname }).then(function(response) {
-					resolve(response.ok);
-				}).catch(function(error) {
-					reject(error);
-				});
+			return fetchFromApiSimple(apiChangeGroupPage, {
+				Username: username,
+				Groupname: groupname
 			});
 		}
 
 		function deleteUser(username) {
-			return new Promise(function(resolve, reject) {
-				fetchFromApi3(apiDeleteUserPage, username).then(function(response) {
-					resolve(response.ok);
-				}).catch(function(error) {
-					reject(error);
-				});
-			});
+			return fetchFromApiSimple(apiDeleteUserPage, username);
 		}
 
 		function createGroup(groupname, permissions) {
-			return new Promise(function(resolve, reject) {
-				fetchFromApi3(apiCreateGroupPage, { Groupname: groupname, Permissions: permissions }).then(function(response) {
-					resolve(response.ok);
-				}).catch(function(error) {
-					reject(error);
-				});
+			return fetchFromApiSimple(apiCreateGroupPage, {
+				Groupname: groupname,
+				Permissions: permissions
 			});
 		}
 
 		function changeGroupname(oldGroupname, newGroupname) {
-			return new Promise(function(resolve, reject) {
-				fetchFromApi3(apiChangeGroupnamePage, { OldGroupname: oldGroupname, NewGroupname: newGroupname }).then(function(response) {
-					resolve(response.ok);
-				}).catch(function(error) {
-					reject(error);
-				});
+			return fetchFromApiSimple(apiChangeGroupnamePage, {
+				OldGroupname: oldGroupname,
+				NewGroupname: newGroupname
 			});
 		}
 
 		function changePermissions(groupname, permissions) {
-			return new Promise(function(resolve, reject) {
-				fetchFromApi3(apiChangePermissionsPage, { Groupname: groupname, Permissions: permissions }).then(function(response) {
-					resolve(response.ok);
-				}).catch(function(error) {
-					reject(error);
-				});
+			return fetchFromApiSimple(apiChangePermissionsPage, {
+				Groupname: groupname,
+				Permissions: permissions
 			});
 		}
 
 		function deleteGroup(groupname) {
-			return new Promise(function(resolve, reject) {
-				fetchFromApi3(apiDeleteGroupPage, groupname).then(function(response) {
-					resolve(response.ok);
-				}).catch(function(error) {
-					reject(error);
-				});
-			});
+			return fetchFromApiSimple(apiDeleteGroupPage, groupname);
+		}
+
+		function checkPermission(permission) {
+			if (output.user.group.permissions.includes(permission)) {
+				return true;
+			}
+			return false;
 		}
 
 		return output;
@@ -442,21 +429,21 @@ if(this.Api === undefined) {
 
 // Helper functions
 async function GetCategories() {
-	// Get List of all Categories
 	return await Api.fetchSimple("api/goodInfo/categories");
 }
 async function GetSpecsByCategory(category) {
-	// Get Specification by Category-Id
-	return await Api.fetchSimple("api/goodinfo/find", {Category: category, Specification: null});
+	return await Api.fetchSimple("api/goodinfo/find", {
+		Category: category,
+		Specification: null
+	});
 }
 async function GetAvialableKg(id) {
-	// Get Avialable KG by Category-Id
 	return await Api.fetchSimple("api/stock", id);
 }
 async function GetGoodInfo(id) {
 	return await Api.fetchSimple("api/goodinfo", id);
 }
-async function GetGoodInfoList(id) {
+async function GetGoodInfoList() {
 	return await Api.fetchSimple("api/goodInfos");
 }
 async function GetStockList() {
@@ -467,26 +454,26 @@ async function GetEvents() {
 }
 
 // UI Functions
-async function DisplayAvialableKg(selectSource, targetId) {
-	// Displays avialable Kg by Category Id. selectSource = <select> returns id, targetId = target DOM.html()
-	let info = await Api.fetchSimple("api/stock", $("#"+selectSource).val());
+async function DisplayAvialableKg(selectSource, targetId) {	// Inserts avialable Kg values into fields
+	// Displays avialable Kg using Category Id. selectSource = <select> returns id, targetId = target DOM.html()
+	let info = await Api.fetchSimple("api/stock", $("#" + selectSource).val());
 	$("#" + targetId).html("Verfügbar: " + info.good.weight + "Kg");
 }
 function ValidateInputKg(el, onFocus) {
 	let input = "";
-	for(let i = 0; i < el.value.length; i++) {
-		if(!isNaN(el.value[i]) || el.value[i] == ".") {
+	for (let i = 0; i < el.value.length; i++) {
+		if (!isNaN(el.value[i]) || el.value[i] == ".") {
 			input += el.value[i];
 		}
 	}
 
-	if(input.length > 0) {
+	if (input.length > 0) {
 		el.style.borderColor = "black";
 	} else {
 		el.style.borderColor = "red";
 	}
 
-	if(!onFocus && input.length > 0) {
+	if (!onFocus && input.length > 0) {
 		el.value = input + " Kg";
 	} else {
 		el.value = input.trim();
@@ -494,11 +481,13 @@ function ValidateInputKg(el, onFocus) {
 }
 
 // Login Functions
-async function HeaderCheckLogin() {
+async function HeaderCheckLogin() {	// Initializes API and Login-Sidebar
 	await Api.init();
-	if(Api.isLoggedin()) {
+	if (Api.isLoggedin()) {
 		PrintInfo("Login status: " + Api.isLoggedin());
-		let name = (await Api.fetchSimple("Api/user")).username;
+		let user = await Api.fetchSimple("Api/user");
+		if (user == null || user == undefined) return false;
+		let name = user.username;
 		document.getElementsByClassName("logo")[0].style.display = "inherit";
 		document.getElementById("input-name").style.display = "none";
 		document.getElementById("input-password").style.display = "none";
@@ -507,60 +496,93 @@ async function HeaderCheckLogin() {
 		document.getElementById("label-stayLogedIn").style.display = "none";
 		document.getElementById("logo-name").innerHTML = name;
 		document.getElementById("logo-letter").innerHTML = name[0];
+		$("#logoBackground").css("background-color", name.toColor());
+		Api.user = await Api.fetchSimple("api/user");
+		if (Api.isAllowed("StockView")) {
+			$("#menuWarenlager").show();
+		}
+		if (Api.isAllowed("EventView")) {
+			$("#menuEvent").show();
+		}
+		if (Api.isAllowed("UserCreate") || Api.isAllowed("UserDelete") || Api.isAllowed("UserEdit") || Api.isAllowed("GroupCreate") || Api.isAllowed("GroupDelete") || Api.isAllowed("GroupEdit")) {
+			$("#menuBenutzer").show();
+		}
 		return true;
 	} else {
 		PrintInfo("Login status: " + Api.isLoggedin());
-		//document.getElementsByClassName("logo")[0].style.display = "none";
-		//document.getElementById("logoutButton").style.display = "none";
-		//document.getElementById("logo-name").innerHTML = "Login Required";
-		//document.getElementById("logo-letter").innerHTML = "";
-		//document.getElementById("logo-name").style.position = "initial";
-		//document.getElementById("logo-name").style.marginLeft = "20px";
-		//document.getElementsByClassName("userInput")[0].style.marginTop = "20px";
-		// Empty current main content
 		document.getElementsByTagName("main")[0].innerHTML = `
-		<div style="margin:100px 100px">
-			<p style="font-size:25px">You need to be logged in to view this content.</p>
-		</div>
+			<div style="margin:100px 100px">
+				<p style="font-size:25px">You need to be logged in to view this content.</p>
+			</div>
 		`;
 		return false;
 	}
 }
 async function login() {
-	console.log("Logging in...");
-	let username = document.getElementById("input-name").value;
-	let password = document.getElementById("input-password").value;
-	let stayLogedIn = document.getElementById("input-stayLogedIn").checked;
+	PrintInfo("Attempting Login...");
 
 	try {
+		let username = document.getElementById("input-name").value;
+		let password = document.getElementById("input-password").value;
+		let stayLogedIn = document.getElementById("input-stayLogedIn").checked;
 		let status = await Api.login(username, password, stayLogedIn);
-
-		console.log("Login status: " + status);
-		if(status) {
-			window.location.replace("/index.html");
-		} else {
-
-		}
-		Api.onRequiresRelogin = function() { console.log("RequiresRelogin"); };
-	} catch(e) {
-			console.log(e);
+		Api.onRequiresRelogin = function() {
+			PrintInfo("RequiresRelogin");
+		};
+		PrintInfo("Login status: " + status);
+		if (status) window.location.replace("/index.html");
+	} catch (e) {
+		PrintError(e);
+	}
+}
+async function AttemptLogin(username, password, stay) {	// Login without redirection
+	try {
+		let status = await Api.login(username, password, stay);
+		PrintInfo("Login status: " + status);
+		Api.onRequiresRelogin = function() {
+			PrintInfo("RequiresRelogin");
+		};
+	} catch (e) {
+		PrintError(e);
 	}
 }
 function logout() {
-	Api.logout();
-	window.location.replace("/index.html");
+	try {
+		Api.logout();
+		PrintInfo("Logout succeeded!");
+		window.location.replace("/index.html");
+	} catch(e) {
+		PrintError(e);
+	}
 }
 
 // Messaging and Console
-function PrintError(e, obj) {
-	if(e.detail != null) {
+function PrintError(e, obj) {	// Wrapper for Console.error/warn
+	if (e.detail != null) {
 		console.warn(e.detail);
 	}
 	console.error(e);
-	if(obj != null) {
+	if (obj != null) {
 		obj.html(e.detail);
 	}
 }
-function PrintInfo(msg) {
+function PrintInfo(msg) {	// Wrapper for Console.info
 	console.info("Info: " + msg);
 }
+
+// Used for translating Permission definitions
+var permissionNames = {
+	"UserCreate": "Benutzer erstellen",
+	"UserDelete": "Benutzer löschen",
+	"UserEdit": "Benutzer bearbeiten",
+	"GroupCreate": "Gruppe erstellen",
+	"GroupDelete": "Gruppe löschen",
+	"GroupEdit": "Gruppe bearbeiten",
+	"UserSelfEdit": "Eigene Benutzerdaten bearbeiten",
+	"GoodInfoEdit": "Kategorien ändern",
+	"StockView": "Lagerbestand lesen",
+	"StockEdit": "Lagerbestand ändern",
+	"StockViewHistory": "Lagerbestandverlauf lesen",
+	"EventView": "Events lesen",
+	"EventEdit": "Events ändern",
+};

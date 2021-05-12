@@ -15,10 +15,10 @@
 		<div id="includeHeader"></div>
 
 		<main>
-			<fieldset id="viewContainer">
+			<fieldset style="display:none" id="viewContainer">
 			<legend>Events</legend>
 			<div class="viewDivs" id="newEventDiv">
-				<button id="toggleNewEvent" class="blackWhiteButton" onclick="ToggleNewEvent()">Neues Event anlegen</button>
+				<button style="display:none" id="toggleNewEvent" class="blackWhiteButton" onclick="ToggleNewEvent()">Neues Event anlegen</button>
 				<form id="newEventForm" method="post" style="display:none">
 					<input type="text" id="newEventName" class="catInput newEventInput required" placeholder="Eventname:" oninput="RequiredInput(this)"><br>
 					<input type="date" id="newEventDatum" class="catInput newEventInput required" placeholder="yyyy-mm-tt" oninput="RequiredInput(this)"><br>

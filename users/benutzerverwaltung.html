@@ -6,67 +6,72 @@
 		<link rel="icon" href="/assets/images/icon.png">
 		<link rel="stylesheet" href="/assets/css/header.css">
 		<link rel="stylesheet" href="/assets/css/user-management.css">
+		<link rel="stylesheet" href="/assets/css/view-container.css">
+		<link rel="stylesheet" href="/assets/css/extensions/prettydropdowns.css">
   </head>
   <body>
     <div id="includeHeader"></div>
 		<main>
-	    <h1>Benutzerverwaltung</h1>
-	    <div id="UserContainer">
-	      <table id="userTable">
-	        <tr>
-	          <th>Benutzername</th>
-	          <th>Gruppe</th>
-	          <th>Options</th>
-	        </tr>
-	      </table>
-	      <div id="userOptionen">
-	        <button id="toggleNewUserButton" onclick="OpenCreateUserWindow()">Neuer Benutzer</button>
-	      </div>
-	      <table id="userEditContainer">
-	        <tr><td><label for="benutzername">Benutzername</label></td></tr>
-	        <tr><td><input id="usernameInput" type="text" /></td></tr>
-	        <tr><td><label for="passwort">Passwort</label></td></tr>
-	        <tr><td><input id="userPasswordInput" type="text" /></td></tr>
-	        <tr><td><label for="berechtigungen">Berechtigungsstufe</label></td></tr>
-	        <tr><td><select id="userGroupInput"></select></td></tr>
-	        <tr>
-	          <td>
-	            <button onclick="ToggleNewUser(false)">Abbrechen</button>
-	            <button id="confirmUserChangeButton" onclick="CreateUser()">Anlegen</button>
-	          </td>
-	        </tr>
-	      </table>
-	    </div>
+			<fieldset id="viewContainer">
+	    	<legend>Benutzerverwaltung</legend>
+		    <div id="UserContainer">
+		      <table id="userTable">
+		        <tr>
+		          <th>Benutzername</th>
+		          <th>Gruppe</th>
+		          <th style="text-align:center">Options</th>
+		        </tr>
+		      </table>
+		      <div id="userOptionen">
+		        <button class="blackWhiteButton" id="toggleNewUserButton" onclick="OpenCreateUserWindow()">Neuer Benutzer</button>
+		      </div>
+		      <table id="userEditContainer">
+		        <tr><td><label for="benutzername">Benutzername</label></td></tr>
+		        <tr><td><input id="usernameInput" type="text" /></td></tr>
+		        <tr><td><label for="passwort">Passwort</label></td></tr>
+		        <tr><td><input id="userPasswordInput" type="text" placeholder="Leer = Keine Änderung" /></td></tr>
+		        <tr><td><label for="berechtigungen">Berechtigungsstufe</label></td></tr>
+		        <tr><td><select id="userGroupInput"></select></td></tr>
+		        <tr>
+		          <td>
+								<button class="blackWhiteButton" id="confirmUserChangeButton" onclick="CreateUser()">Anlegen</button>
+		            <button class="blackWhiteButton" onclick="ToggleNewUser(false)">Abbrechen</button>
+		          </td>
+		        </tr>
+		      </table>
+		    </div>
 
-	    <h1>Gruppenverwaltung</h1>
-	    <div id="groupContainer">
-	      <table id="groupTable">
-	        <tr>
-	          <th>Gruppenname</th>
-	          <th>Berechtigungen</th>
-	          <th>Optionen</th>
-	        </tr>
-	      </table>
-	      <button id="toggleNewGroupButton" onclick="CreateGroup()">Neue Gruppe</button><br>
-	      <div id="groupEditContainer">
-	        <label for="gruppenname">Gruppenname</label><br>
-	        <input id="editGroupName" type="text" />
-	        <br>
-	        <label for="group permissions">Gruppen Berechtigungen</label>
-	        <br>
-	        <select id="groupEditSelect" onchange="GroupEditAddItem()"></select>
-	        <div id="groupEditPermissionContainer" class="groupPermissionList" style="width:60%"></div>
-	        <br>
-	        <button onclick="ToggleGroupEdit(false)">Abbrechen</button>
-	        <button id="confirmGroupChangeButton" onclick="UploadGroupEdit()">Aktualisieren</button>
-	      </div>
-	      <ul id="permissionsContainer"></ul>
-	    </div>
+		    <h1>Gruppenverwaltung</h1>
+		    <div id="groupContainer">
+		      <table id="groupTable">
+		        <tr>
+		          <th>Gruppe</th>
+		          <th>Berechtigungen</th>
+		          <th>Optionen</th>
+		        </tr>
+		      </table>
+		      <button class="blackWhiteButton" id="toggleNewGroupButton" onclick="CreateGroup()">Neue Gruppe</button><br>
+		      <div id="groupEditContainer">
+		        <label for="gruppenname">Gruppe</label><br>
+		        <input id="editGroupName" type="text" autocomplete="off" />
+		        <br>
+		        <label for="group permissions">Berechtigungen</label>
+		        <br>
+		        <select id="groupEditSelect" onchange="GroupEditAddItem()"></select>
+		        <div id="groupEditPermissionContainer" class="groupPermissionList"></div>
+		        <br>
+						<button class="blackWhiteButton" id="confirmGroupChangeButton" onclick="UploadGroupEdit()">Aktualisieren</button>
+		        <button class="blackWhiteButton" onclick="ToggleGroupEdit(false)">Abbrechen</button>
+		      </div>
+		      <ul id="permissionsContainer"></ul>
+		    </div>
+			</fieldset>
 		</main>
 
 		<script src="/assets/js/api.js"></script>
 		<script src="/assets/js/extensions/jquery.min.js"></script>
-		<script src="/assets/js/user-management.js"></script>
+		<script src="/assets/js/extensions/jquery.prettydropdowns.js"></script>
 		<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
+		<script src="/assets/js/user-management.js"></script>
   </body>
 </html>

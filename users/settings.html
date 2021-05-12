@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8">
+		<title>Event Overview</title>
+		<link rel="icon" href="/assets/images/icon.png" />
+		<link rel="stylesheet" href="/assets/css/user-settings.css">
+		<!-- Custom CSS -->
+		<link rel="stylesheet" href="/assets/css/view-container.css">
+		<link rel="stylesheet" href="/assets/css/event-tabs.css">
+	</head>
+	<body>
+		<div id="includeHeader"></div>
+		<main>
+			<fieldset id="viewContainer">
+				<legend>Benutzer Einstellungen</legend>
+				<table id="splitTable">
+					<tr>
+						<td>
+							<div>
+					      <div id="logoCircle">
+					        <span id="userLetter"></span>
+					      </div>
+					      <span id="logoUserName"></span>
+					    </div>
+							<button id="editBtn" class="blackWhiteButton userEditBtn" onclick="EnterEditMode()">Bearbeiten</button>
+							<button id="saveBtn" class="blackWhiteButton userSaveBtn" onclick="UploadChanges()">Speichern</button>
+							<button id="cancelBtn" class="blackWhiteButton userCancelBtn" onclick="ExitEditMode()">Abbrechen</button>
+						</td>
+						<td style="width:100%">
+							<table id="userDatatable">
+								<tr>
+									<td class="term">Benutzername</td>
+									<td class="termData"><input id="userName"/></td>
+								</tr>
+								<tr id="passwordRow" style="display:none">
+									<td class="term">Passwort</td>
+									<td class="termData"><input type="password" id="userPassword" placeholder="Neues Passwort" /></td>
+								</tr>
+								<tr>
+									<td class="term">Gruppe</td>
+									<td class="termData" id="userGroup"></td>
+								</tr>
+								<tr>
+									<td class="term">Berechtigungen</td>
+									<td class="termData" id="userPermissions"></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<!--tr>
+						<td style="height:300px;" colspan="2"></td>
+					</tr-->
+				</table>
+			</fieldset>
+		</main>
+		<script src="/assets/js/extensions/jquery.min.js"></script>
+		<script src="/assets/js/api.js"></script>
+		<script src="/assets/js/extensions/jquery.prettydropdowns.js"></script>
+		<script>$(function(){ $("#includeHeader").load("/include/header/index.html"); });</script>
+		<script src="/assets/js/user-settings.js"></script>
+	</body>
+</html>

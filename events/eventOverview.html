@@ -16,8 +16,8 @@
 
 		<main>
 			<fieldset id="viewContainer">
-			<legend>Event Overview</legend>
-			<div class="tab_panel">
+				<legend>Event Overview</legend>
+				<div class="tab_panel">
 				<ul class="tabs group">
 					<li><a class="active" href="#/one">Übersicht</a></li>
 					<li><a href="#/two">Start</a></li>
@@ -32,7 +32,7 @@
 							<span class="eventName"></span>
 							<div class="tab_buttons">
 								<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
-								<button class="blackWhiteButton" onclick="ToggleEditView()">Bearbeiten</button>
+								<button style="display:none" id="editEventBtn" class="blackWhiteButton" onclick="ToggleEditView()">Bearbeiten</button>
 							</div>
 							<hr></hr>
 							<ul>
@@ -90,11 +90,14 @@
 											</table>
 										</form>
 									</td>
-									<td>
+									<td id="defaultGraph">
 										<div id="graphs">
 											<div id="dia1"></div>
 										</div>
 									</td>
+								</tr>
+								<tr>
+									<td colspan="2" id="overflowGraph"></td>
 								</tr>
 							</table>
 							<hr></hr>
@@ -102,11 +105,11 @@
 					</div>
 					<!-- Start Tab -->
 					<div id="two" class="tab" style="display:none">
-						<button class="blackWhiteButton eventStatusButton openEvent" id="openEventBtn" onclick="OpenCloseEvent()">-</button>
 						<div class="eventHeader">
 							<span class="material-icons headerIcon">redo</span>
 							<span class="eventName"></span>
 							<div class="tab_buttons">
+								<button style="display:none" class="blackWhiteButton eventStatusButton openEvent" id="openEventBtn" onclick="OpenCloseEvent()">-</button>
 								<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
 							</div>
 							<hr></hr>
@@ -120,7 +123,7 @@
 							<!-- DataTable -->
 							<table id="startTable" class="eventDatatable stripe display responsive nowrap" width="100%"></table>
 							<div>
-								<table class="addNewRow">
+								<table class="addNewRow" style="display:none">
 									<td style="width:200px"><select id="addNewRowCat" onchange="ValidateSelectedCategory(this, 'addNewRowSpec', 'add')"></select></td>
 									<td style="width:200px"><select id="addNewRowSpec" onchange='DisplayAvialableKg(`addNewRowSpec`, `addNewRowAvKg`)'></select></td>
 									<td><input type="text" id="addNewRowInput" value="0" onfocus="ValidateInputKg(this, true)" onfocusout="ValidateInputKg(this, false)" autocomplete="off" /></td>
@@ -132,11 +135,11 @@
 					</div>
 					<!-- Abschluss Tab -->
 					<div id="three" class="tab" style="display:none">
-						<button class="blackWhiteButton eventStatusButton closeEvent" id="closeEventBtn" onclick="OpenCloseEvent()">-</button>
 						<div class="eventHeader">
 							<span class="material-icons headerIcon">undo</span>
 							<span class="eventName"></span>
 							<div class="tab_buttons">
+								<button style="display:none" class="blackWhiteButton eventStatusButton closeEvent" id="closeEventBtn" onclick="OpenCloseEvent()">-</button>
 								<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
 							</div>
 							<hr></hr>
@@ -151,7 +154,7 @@
 					</div>
 				</div>
 			</div>
-		</fieldset>
+			</fieldset>
 		</main>
 
 		<script src="/assets/js/extensions/jquery.min.js"></script>

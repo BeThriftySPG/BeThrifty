@@ -3,57 +3,49 @@
   <head>
     <meta charset="utf-8">
 		<title>Overview</title>
-    <link rel="icon" href="/assets/images/icon.png" />
+    <link rel="icon" href="/assets/images/icon.png">
 		<link rel="stylesheet" href="/assets/css/dashboard.css">
-		<link rel="stylesheet" href="/assets/css/extensions/jquery.modal.css" />
+		<link rel="stylesheet" href="/assets/css/extensions/jquery.modal.css">
+		<link rel="stylesheet" href="/assets/css/view-container.css">
   </head>
   <body>
     <div id="includeHeader"></div>
-    <main>
-	    <div id="dashboard">
-				<h1>Dashboard</h1>
+		<main>
+			<fieldset class="dashboard" id="viewContainer">
+				<legend>Dashboard</legend>
 				<br>
 
 				<!-- Responsive Dashboard GridList -->
 				<div class="grid">
-
-					<!-- Jedes dieser Div's steht für eine Zelle, kopieren eines Divs fügt eine neue hinzu
-								mit style="width:800px;height:600px" kann man die jeweilige Größe eine Zelle festlegen -->
-				  <div class="item" style="width:400px;height:400px">
-				    <div class="item-content diagram1"> <!-- "diagram1" dient als Identifikation der Zelle da, diese sollte unique sein -->
-							<!-- Hier kommt jegliches HTML rein, in dem Fall ist es ein Diagramm -->
-							<fieldset class="graph">
-								<legend>Warenkategorien</legend>
-							</fieldset>
-							<!-- Ende -->
+				  <div id="boxCategory" class="item" style="width:400px;height:400px">
+				    <div class="item-content">
+							<h1 class="graphTitle">Warenkategorie</h1>
+							<div class="graph" id="chart1"></div>
 				    </div>
 				  </div>
 
-					<div class="item" style="width:400px">
-				    <div class="item-content diagram2">
-							<fieldset class="graph">
-								<legend>Warenkategorien - Details</legend>
-							</fieldset>
+					<div id="boxSpecs" class="item" style="width:400px;height:400px" id="specBox">
+				    <div class="item-content">
+							<h1 class="graphTitle">Spezifikation</h1>
+							<div class="graph" id="chart2"><h1 style="text-align:center;margin-top:100px;color:#AAA;font-size:20px">Kategorie auswählen</h1></div>
 				    </div>
 				  </div>
 
-					<div class="item" style="width:400px">
-				    <div class="item-content diagram3">
-							<fieldset class="graph">
-								<legend>Ongoing Events</legend>
-							</fieldset>
+					<div id="boxOngoingEvents" class="item" style="width:500px;height:400px">
+				    <div class="item-content">
+							<h1 class="graphTitle">Laufende Events</h1>
+							<div class="graph" id="chart3" style="height:300px;overflow:auto;"></div>
 				    </div>
 				  </div>
 
-					<div class="item" style="width:400px">
-				    <div class="item-content diagram4">
-							<fieldset class="graph">
-								<legend>Best Selling</legend>
-							</fieldset>
+					<div id="boxFinishedEvents" class="item" style="width:500px;height:800px">
+				    <div class="item-content">
+							<h1 class="graphTitle">Abgeschlossene Events</h1>
+							<div class="graph" id="chart4"></div>
 				    </div>
 				  </div>
 
-					<div class="item" style="width:400px">
+					<div id="boxBestSelling" class="item" style="width:400px">
 				    <div class="item-content diagram5">
 							<fieldset class="graph">
 								<legend>Best Selling - Details</legend>
@@ -61,7 +53,7 @@
 				    </div>
 				  </div>
 
-					<div class="item" style="width:400px">
+					<div id="boxLowStock" class="item" style="width:400px">
 				    <div class="item-content diagram6">
 							<fieldset class="graph">
 								<legend>Geringer Warenbestand</legend>
@@ -69,7 +61,7 @@
 				    </div>
 				  </div>
 
-					<div class="item" style="width:400px">
+					<div id="boxStockInYears" class="item" style="width:400px">
 				    <div class="item-content diagram7">
 							<fieldset class="graph">
 								<legend>Wareneingang (Jahren)</legend>
@@ -77,7 +69,7 @@
 				    </div>
 				  </div>
 
-					<div class="item" style="width:400px">
+					<div id="boxStockSoldYears" class="item" style="width:400px">
 				    <div class="item-content diagram8">
 							<fieldset class="graph">
 								<legend>Warenverkauf (Jahren)</legend>
@@ -87,12 +79,14 @@
 
 				</div>
 
-	    </div>
+	    </fieldset>
 		</main>
 
 		<script src="/assets/js/extensions/jquery.min.js"></script>
 		<script src="/assets/js/extensions/jquery.modal.min.js"></script>
 		<script src="/assets/js/extensions/echarts.min.js"></script>
+		<script src="/assets/js/extensions/echart_vintage.js"></script>
+		<script src="/assets/js/extensions/moment.min.js"></script>
 		<script src="/assets/js/api.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/muuri@0.9.3/dist/muuri.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/web-animations-js@2.3.2/web-animations.min.js"></script>

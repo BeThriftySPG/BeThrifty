@@ -1,18 +1,49 @@
+body {
+	font-family: Quicksand !important;
+}
 #userEditContainer {
 	display:none;
+	width:100%;
 }
 #groupTable {
-	width:60%;
-	border:solid;
+	width:100%;
 	border-collapse: collapse;
+}
+#groupTable th {
+	border-bottom:solid;
+	border-width:2px;
+	border-color:#888;
 }
 #groupTable td {
 	padding:15px;
-	border: solid;
 	text-align: center;
+	border-bottom:solid;
+	border-width:2px;
+	border-color:#888;
+	border-collapse: collapse;
+}
+#userTable {
+	width:50%;
+	border-collapse: collapse;
+}
+#userTable th {
+	text-align: left;
+	border-bottom:solid;
+	border-width:2px;
+	border-color:#555;
+	padding-left:5px;
+}
+#userTable td {
+	border-bottom:solid;
+	border-width:1px;
+	border-color:#AAA;
+	padding-left:5px;
 }
 #groupEditContainer {
 	display:none;
+}
+#groupEditPermissionContainer {
+	width:100%;
 }
 #groupEditSelect {
 	width: 300px;
@@ -20,8 +51,25 @@
 #userGroupInput {
 	width:150px;
 }
+#toggleNewUserButton, #toggleNewGroupButton {
+	margin-top:25px;
+}
+input {
+	width:200px;
+	height:25px;
+	padding-left: 5px;
+	font-size: 20px;
+	font-family: Quicksand;
+	border-width:1px;
+	border-color:#FFF;
+	background-color: #CCC;
+	transition: 0.1s;
+}
+input:hover {
+	background-color: #AAA;
+}
 .optionButtonTd {
-
+	
 }
 .groupPermissionList {
 	display: flex;
@@ -29,19 +77,24 @@
 	padding:10px;
 }
 .groupPermissionList div {
-	box-shadow: 0px 0px 2px #222;
-	padding:3px;
+	border:solid;
+	border-width:1px;
+	border-radius: 1px;
+	padding:3px 10px;
 	margin:4px;
+	font-size: 18px;
 }
 .optionButton {
 	padding:5px 15px 5px 15px;
 	box-shadow: 0px 0px 2px #222;
 	margin:15px;
 	text-align: center;
+	width:100px;
 }
 .optionButton:hover {
 	cursor:pointer;
-	background-color:#AAA;
+	background-color:#222;
+	color:#EEE;
 }
 .groupEditItem:hover {
 	background-color: #E22;
