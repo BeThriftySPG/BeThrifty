@@ -1,4 +1,4 @@
-# BeThriftySPG
+# BeThrifty - Spengergasse
 A school project for hosting an application for the company BeThrifty.
 
 ### Situation
