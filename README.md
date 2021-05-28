@@ -11,8 +11,14 @@ Writing a web-based application for managing events and stocks. With extra featu
 - Microsoft MVC as backend API
 - MongoDB as the underlying database technology
 - HTML and JavaScript as frontend
--- DataTables as library for displaying asynchronous compatible HTML tables
--- Apache ECharts for rendering diagrams and graphs in HTML5
+- DataTables as library for displaying asynchronous compatible HTML tables
+- Apache ECharts for rendering diagrams and graphs in HTML5
+
+### Project Team
+- Ritter as project team leader and database designer
+- Sperlich as frontend coder
+- Weichselbaum as frontend designer
+- Weißnegger as programmer for the backend MVC-API
 
 ### Website Link
 https://bethriftyspg.github.io/
