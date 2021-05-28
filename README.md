@@ -1,17 +1,17 @@
 # BeThrifty - Spengergasse
-A school project for hosting an application for the company BeThrifty.
+A graduation school project for creating a software for the company BeThrifty.
 
 ### Situation
-The company does not have any ready-made warehouse software. Excel lists are used for the internal evaluation of stock levels using the Google G-Suit. The cumbersome operation of the G-Suit leads to loss of time and prevents an improvement in the workflow.
+The company does not have any ready-made warehouse software. Excel lists are used for the internal evaluation of stock levels using Google G-Suit. The cumbersome operation of G-Suit leads to loss of time and prevents an improvement in the workflow.
 
 ### Solution
-Writing a web-based application for managing events and stocks. With extra features like user-roles and login and visual graphics like diagrams and tables for better overview.
+Writing a web-based application for managing events and stocks. With extra features like user-roles and login and visual elements like diagrams and tables for a better overview.
 
-### Integrated technologies
-- Microsoft MVC as backend API
+### Utilized technologies
+- Microsoft MVC C# as backend API
 - MongoDB as the underlying database technology
-- HTML and JavaScript as frontend
-- DataTables as library for displaying asynchronous compatible HTML tables
+- HTML/CSS, JavaScript and AJAX for the web-app
+- DataTables-library for displaying asynchronous compatible HTML tables
 - Apache ECharts for rendering diagrams and graphs in HTML5
 
 ### Project Team
