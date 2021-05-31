@@ -1,3 +1,7 @@
+var eventOpenTable;
+var eventClosedTable;
+var tableHasBeenInit = false;
+
 // Server functions
 async function CreateNewEvent() {
 	let data = {
@@ -12,7 +16,9 @@ async function CreateNewEvent() {
 	try {
 		await Api.fetchSimple("api/event/create", data);
 		PrintInfo("Event has been created.");
-		window.location.href = "/events/eventManagement.html";
+		//window.location.href = "/events/eventManagement.html";
+		await LoadEventTables();
+		$.modal.close();
 	} catch(e) {
 		PrintError(e);
 	}
@@ -47,32 +53,44 @@ async function LoadEventTables() {	// Initializes Datatables
 		}
 
 		// Initializing dataTables
-		var eventOpenTable = $("#eventsOpenDiv").find(".eventTableContent").DataTable({
-			paging: false,
-			scrollCollapse: true,
-			info: false,
-			responsive:true,
-			data: data1,
-			"columns": [
-				{title: "Eventname"},
-				{title: "Datum"},
-				{title: "Ort"},
-				{title: "Postleitzahl"},
-			]
-		});
-		var eventClosedTable = $("#eventsClosedDiv").find(".eventTableContent").DataTable({
-			paging: false,
-			scrollCollapse: true,
-			info: false,
-			responsive:true,
-			data: data2,
-			"columns": [
-				{title: "Eventname"},
-				{title: "Datum"},
-				{title: "Ort"},
-				{title: "Postleitzahl"},
-			]
-		});
+		if(tableHasBeenInit == false) {
+			eventOpenTable = $("#openEventsDatatable").DataTable({
+				paging: false,
+				scrollCollapse: true,
+				info: false,
+				responsive:true,
+				data: data1,
+				"columns": [
+					{title: "Eventname"},
+					{title: "Datum"},
+					{title: "Ort"},
+					{title: "Postleitzahl"},
+				]
+			});
+			eventClosedTable = $("#closeEventsDatatable").DataTable({
+				paging: false,
+				scrollCollapse: true,
+				info: false,
+				responsive:true,
+				data: data2,
+				"columns": [
+					{title: "Eventname"},
+					{title: "Datum"},
+					{title: "Ort"},
+					{title: "Postleitzahl"},
+				]
+			});
+			tableHasBeenInit = true;
+		} else {
+			eventOpenTable.clear();
+			eventOpenTable.rows.add(data1);
+			eventOpenTable.draw();
+
+			eventClosedTable.clear();
+			eventClosedTable.rows.add(data2);
+			eventClosedTable.draw();
+		}
+
 		if(Api.isAllowed("EventEdit")) {
 			$("#toggleNewEvent").show();
 		}
@@ -84,12 +102,12 @@ async function LoadEventTables() {	// Initializes Datatables
 
 // UI Functions
 function ToggleNewEvent() {
-	let div = document.querySelector("#newEventForm");
-	if(div.style.display == "none") {
-		div.style.display = "inherit";
-	} else {
-		div.style.display = "none";
-	}
+	var createEventPopup = $('#newEventPopup').modal({
+		fadeDuration: 100,
+		escapeClose: true,
+		clickClose: false,
+		showClose: true
+	});
 }
 function ToggleEventViews(name) {
 	let container = document.getElementById(name).querySelector(".content");
@@ -122,8 +140,8 @@ function RequiredInput(obj) {	// Validates input values for NewEvent
 
 $(async function () {
 	$("#viewContainer").hide();
-	await Api.init();
 	if(await HeaderCheckLogin()) {
+		await LoadEventTables();
 		await LoadEventTables();
 		$("#viewContainer").show();
 	}

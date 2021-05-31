@@ -1,0 +1,38 @@
+.help {
+
+}
+.help:hover {
+	color:blue !important;
+	cursor:pointer;
+}
+.helpPopup {
+	min-width:1000px;
+}
+.helpPopup img {
+	max-width:900px;
+	box-shadow: 0px 0px 4px #444;
+}
+.helpPopup ul {
+	font-size: 20px;
+	font-family: Quicksand;
+}
+.helpPopup ul li {
+	margin-top:5px;
+}
+
+@media only screen and (max-width: 1400px) {
+	.helpPopup {
+		min-width:800px;
+	}
+	.helpPopup img {
+		max-width:700px;
+	}
+}
+@media only screen and (max-width: 1000px) {
+	.helpPopup {
+		min-width:600px;
+	}
+	.helpPopup img {
+		max-width:500px;
+	}
+}

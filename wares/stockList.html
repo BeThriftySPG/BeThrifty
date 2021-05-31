@@ -5,9 +5,10 @@
 		<title>Warenliste</title>
 		<link rel="icon" href="/assets/images/icon.png" />
 		<!-- External CSS -->
-		<link rel="stylesheet" href="/assets/css/extensions/jquery.modal.css" />
+		<link rel="stylesheet" href="/assets/css/help.css">
+		<link rel="stylesheet" href="/assets/css/extensions/jquery.modal.css">
 		<link rel="stylesheet" href="/assets/css/extensions/prettydropdowns.css">
-		<link rel="stylesheet" href="/assets/js/extensions/datatables/datatables.min.css"/>
+		<link rel="stylesheet" href="/assets/js/extensions/datatables/datatables.min.css">
 		<!-- Custom CSS -->
 		<link rel="stylesheet" href="/assets/css/view-container.css">
 		<link rel="stylesheet" href="/assets/css/stock-list.css">
@@ -16,7 +17,7 @@
 		<div id="includeHeader"></div>
 		<main>
 			<fieldset id="viewContainer">
-				<legend>Warenlager</legend>
+				<legend>Warenlager<i onclick="$('#stocklistHelpPopup').modal({closeExisting: false});" style="margin-left:5px" class="material-icons help">help</i></legend>
 				<button id="removeStock" class="blackWhiteButton" style="display:none;float:right;padding:10px 15px;margin-bottom:25px;margin-left:10px" onclick="OpenRemoveItemWindow()">Ware Entfernen</button>
 				<button id="addStock" class="blackWhiteButton" style="display:none;float:right;padding:10px 15px;margin-bottom:25px;" onclick="OpenAddItemWindow()">Ware Hinzufügen</button><br><br>
 
@@ -36,7 +37,7 @@
 
 			<!-- Popup for ADDING stock -->
 			<div id="newStockPopup" class="modal newWarePopup">
-				<h1>Waren Eingang</h1>
+				<h1>Waren Eingang<i onclick="$('#createHelpPopup').modal({closeExisting: false});" style="margin-left:15px;vertical-align:top" class="material-icons help">help</i></h1>
 				<p>Hier werden neue Wareneingänge verzeichnet.</p><br>
 				<ul>
 					<li>
@@ -61,7 +62,7 @@
 
 			<!-- Popup for REMOVING stock -->
 			<div id="removeStockPopup" class="modal newWarePopup">
-				<h1>Waren Entnahme</h1>
+				<h1>Waren Entnahme<i onclick="$('#removeHelpPopup').modal({closeExisting: false});" style="margin-left:15px;vertical-align:top" class="material-icons help">help</i></h1>
 				<p>Hier werden Kilogramm von einer bestehenden Ware entfernt.</p><br>
 				<ul>
 					<li>
@@ -100,6 +101,51 @@
 				<br><br>
 				<button onclick="CreateCategory()" class="blackWhiteButton">Bestätigen</button>
 				<a rel="modal:close"><button class="blackWhiteButton">Abbrechen</button></a>
+			</div>
+
+			<!-- HELP Popup Waren Eingang -->
+			<div id="createHelpPopup" class="modal helpPopup">
+				<h1>Anleitung - Waren hinzufügen.</h1>
+				<img src="/assets/images/help/stocklist_0.jpeg" alt="">
+				<ul>
+					<li>In Warenzugang die Kilogramm eintragen.</li>
+					<li>1. Dropdown Kategorie auswählen.</li>
+					<li>2. Dropdown ist verfügbar wenn erstes gewählt wurde.</li>
+					<li><b>Neuer Warentyp</b> öffnet Popup um eine neue Kategorie anzulegen.</li>
+					<ul><li>Nur benötigt, falls eine Kategorie nicht vorhanden ist.</li></ul>
+					<li><b>Hinzufügen</b> um abzuschließen.</li>
+				</ul>
+			</div>
+
+			<!-- HELP Popup Waren Entnahme -->
+			<div id="removeHelpPopup" class="modal helpPopup">
+				<h1>Anleitung - Waren entfernen.</h1>
+				<img src="/assets/images/help/stocklist_1.jpeg" alt="">
+				<ul>
+					<li>In Warenabgang Kilogramm eintragen.</li>
+					<li>1. Dropdown Kategorie auswählen.</li>
+					<li>2. Dropdown ist verfügbar wenn erstes gewählt wurde.</li>
+					<li><b>Entferne Warentyp</b> um eine nicht refenzierte Kategorie permanent zu löschen.</li>
+					<ul>
+						<li>Nicht refenziert heißt, diese Kategorie kommt in keinem Event vor und hat keinen Eintrag im Warenlager.</li>
+						<li>Es wird die Kategorie gelöscht, die in den beiden Dropdowns gewählt wurde.</li>
+					</ul>
+					<li>"Entnehmen" um abzuschließen.</li>
+				</ul>
+			</div>
+
+			<!-- HELP Popup Warenlage -->
+			<div id="stocklistHelpPopup" class="modal helpPopup">
+				<h1>Anleitung - Warenlager</h1>
+				<img src="/assets/images/help/stocklist_2.jpeg" alt="">
+				<ul>
+					<li>Suchleiste durchsucht die ganze Tabelle nach dem Begriff.</li>
+					<li>Dropdowns neben der Suchleiste können für eine schnelle Kategorien-Suche benutzt werden.</li>
+					<li>Die <b>+</b> und <b>-</b> Symbole können angeklickt werden und dienen als Shortcuts für <b>Ware Hinzufügen</b> und <b>Ware Entfernen</b>.</li>
+					<li>Das Gewicht gibt den Lagerbestand der Kategorie an.</li>
+					<li>Das Mindestgewicht gibt an, wieviel mindestens von dieser Ware vorhanden sein sollte.</li>
+					<li>Waren können gelöscht werden. Der abgezogene Betrag darf danach nicht ins Minus gehen.</li>
+				</ul>
 			</div>
 		</main>
 		<!-- JS Libraries -->

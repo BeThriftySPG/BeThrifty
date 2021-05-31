@@ -5,6 +5,7 @@
 		<title>Events</title>
 		<link rel="icon" href="/assets/images/icon.png" />
 		<link rel="stylesheet" href="/assets/js/extensions/datatables/datatables.css">
+		<link rel="stylesheet" href="/assets/css/extensions/jquery.modal.css" />
 		<!-- Custom CSS -->
 		<link rel="stylesheet" href="/assets/css/event-management.css">
 		<link rel="stylesheet" href="/assets/css/view-container.css">
@@ -16,20 +17,11 @@
 
 		<main>
 			<fieldset style="display:none" id="viewContainer">
-			<legend>Events</legend>
-			<div class="viewDivs" id="newEventDiv">
+				<legend>Events</legend>
+				<div class="viewDivs" id="newEventDiv">
 				<button style="display:none" id="toggleNewEvent" class="blackWhiteButton" onclick="ToggleNewEvent()">Neues Event anlegen</button>
-				<form id="newEventForm" method="post" style="display:none">
-					<input type="text" id="newEventName" class="catInput newEventInput required" placeholder="Eventname:" oninput="RequiredInput(this)"><br>
-					<input type="date" id="newEventDatum" class="catInput newEventInput required" placeholder="yyyy-mm-tt" oninput="RequiredInput(this)"><br>
-					<input type="text" id="newEventOrt" class="catInput newEventInput required" placeholder="Ort:" oninput="RequiredInput(this)">
-					<input type="text" id="newEventPostleitzahl" class="catInput newEventInput required" placeholder="Plz:" style="width:50px" oninput="RequiredInput(this)">
-					<input type="text" id="newEventStrasse" class="catInput newEventInput" placeholder="Straße:" style="width:150px">
-					<input type="text" id="newEventHausnummer" class="catInput newEventInput" placeholder="Nr." style="width:50px"><br>
-					<input type="button" onclick="CreateNewEvent()" id="submitNewEventBtn" class="blackWhiteButton" value="Erstellen" disabled>
-				</form>
 			</div>
-			<div class="viewDivs" id="eventsOpenDiv">
+				<div class="viewDivs" id="eventsOpenDiv">
 				<table class="toggleViewBar" onclick="ToggleEventViews('eventsOpenDiv')">
 					<tr>
 						<td style="padding-left:25px">Eventstatus: Offen</td>
@@ -38,11 +30,11 @@
 				</table>
 				<div class="content">
 					<div style="background-color:pink" class="searchToolbar"></div>
-					<table style="width:100%;max-width:1000px;" class="eventTableContent display cell-border responsive nowrap">
+					<table id="openEventsDatatable" style="width:100%;max-width:1000px;" class="eventTableContent display cell-border responsive nowrap">
 					</table>
 				</div>
 			</div>
-			<div class="viewDivs" id="eventsClosedDiv">
+				<div class="viewDivs" id="eventsClosedDiv">
 				<table class="toggleViewBar" onclick="ToggleEventViews('eventsClosedDiv')">
 					<tr>
 						<td style="padding-left:25px">Eventstatus: Geschlossen</td>
@@ -51,11 +43,24 @@
 				</table>
 				<div class="content">
 					<div class="searchToolbar"></div>
-					<table style="width:100%;max-width:1000px" class="eventTableContent display cell-border responsive nowrap">
+					<table id="closeEventsDatatable" style="width:100%;max-width:1000px" class="eventTableContent display cell-border responsive nowrap">
 					</table>
 				</div>
 			</div>
-		</fieldset>
+			</fieldset>
+			<!-- Popup for creating Event -->
+			<div id="newEventPopup" class="modal newWarePopup">
+				<h1>Neues Event anlegen</h1>
+				<form id="newEventForm" method="post">
+					<input type="text" id="newEventName" class="catInput newEventInput required" placeholder="Eventname:" oninput="RequiredInput(this)"  autocomplete="off"><br>
+					<input type="date" id="newEventDatum" class="catInput newEventInput required" placeholder="yyyy-mm-tt" oninput="RequiredInput(this)"  autocomplete="off"><br>
+					<input type="text" id="newEventOrt" class="catInput newEventInput required" placeholder="Ort:" oninput="RequiredInput(this)"  autocomplete="off">
+					<input type="text" id="newEventPostleitzahl" class="catInput newEventInput required" placeholder="Plz:" style="width:50px" oninput="RequiredInput(this)"  autocomplete="off">
+					<input type="text" id="newEventStrasse" class="catInput newEventInput" placeholder="Straße:" autocomplete="off">
+					<input type="text" id="newEventHausnummer" class="catInput newEventInput" placeholder="Nr."  autocomplete="off" style="width:50px"><br>
+					<input type="button" onclick="CreateNewEvent()" id="submitNewEventBtn" class="blackWhiteButton" value="Erstellen" disabled>
+				</form>
+			</div>
 		</main>
 
 		<script src="/assets/js/extensions/jquery.min.js"></script>

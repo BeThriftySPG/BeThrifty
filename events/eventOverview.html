@@ -100,6 +100,7 @@
 									<td colspan="2" id="overflowGraph"></td>
 								</tr>
 							</table>
+							<button id="deleteEventBtn" class="blackWhiteButton eventStatusButton closeEvent" onclick="DeleteEvent()">Event Löschen</button>
 							<hr></hr>
 						</div>
 					</div>
@@ -109,7 +110,7 @@
 							<span class="material-icons headerIcon">redo</span>
 							<span class="eventName"></span>
 							<div class="tab_buttons">
-								<button style="display:none" class="blackWhiteButton eventStatusButton openEvent" id="openEventBtn" onclick="OpenCloseEvent()">-</button>
+								<button style="display:none" class="blackWhiteButton eventStatusButton openEvent" id="openEventBtn" onclick="OpenCloseEvent()">Event Öffnen</button>
 								<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
 							</div>
 							<hr></hr>
@@ -122,8 +123,8 @@
 							</div><br>
 							<!-- DataTable -->
 							<table id="startTable" class="eventDatatable stripe display responsive nowrap" width="100%"></table>
-							<div>
-								<table class="addNewRow" style="display:none">
+							<div id="addStartTableRow">
+								<table class="addNewRow">
 									<td style="width:200px"><select id="addNewRowCat" onchange="ValidateSelectedCategory(this, 'addNewRowSpec', 'add')"></select></td>
 									<td style="width:200px"><select id="addNewRowSpec" onchange='DisplayAvialableKg(`addNewRowSpec`, `addNewRowAvKg`)'></select></td>
 									<td><input type="text" id="addNewRowInput" value="0" onfocus="ValidateInputKg(this, true)" onfocusout="ValidateInputKg(this, false)" autocomplete="off" /></td>
@@ -139,7 +140,7 @@
 							<span class="material-icons headerIcon">undo</span>
 							<span class="eventName"></span>
 							<div class="tab_buttons">
-								<button style="display:none" class="blackWhiteButton eventStatusButton closeEvent" id="closeEventBtn" onclick="OpenCloseEvent()">-</button>
+								<button style="display:none" class="blackWhiteButton eventStatusButton closeEvent" id="closeEventBtn" onclick="OpenCloseEvent()">Event Schließen</button>
 								<button class="blackWhiteButton" onclick="window.location.href='/events/eventManagement.html'" style="margin-right:5px">Hauptseite</a>
 							</div>
 							<hr></hr>

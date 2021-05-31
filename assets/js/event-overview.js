@@ -35,28 +35,25 @@ async function LoadEvent() {	// Initializes the EventView
 		$(".eventDate").html(loc.format("ll"));
 
 		if(Api.isAllowed("EventEdit")) {
+			if(ev.completed) {
+				$("#infoTab").find("a").css("color", "var(--danger)");
+				$("#infoTab").find("a").html("Geschlossen");
+				$(".eventEdit").find("#eventStatus").val("Abgeschlossen");
+				$(".eventEdit").find("#eventStatus").css("color", "#dc3545");
+				$("#addStartTableRow").hide();
+				$("#openEventBtn").show();
+				$("#closeEventBtn").hide();
+				$("#deleteEventBtn").hide();
+			} else {
+				$("#infoTab").find("a").css("color", "var(--teal)");
+				$("#infoTab").find("a").html("Geöffnet");
+				$(".eventEdit").find("#eventStatus").val("Laufend");
+				$(".eventEdit").find("#eventStatus").css("color", "#20c997");
+				$("#addStartTableRow").show();
+				$("#openEventBtn").hide();
+				$("#closeEventBtn").show();
+			}
 			$("#editEventBtn").show();
-			$("#closeEventBtn").show();
-			$("#openEventBtn").show();
-		}
-		if(ev.completed && Api.isAllowed("EventEdit")) {
-			$("#openEventBtn").html("Event Öffnen");
-			$("#closeEventBtn").css("display", "none");
-			$("#infoTab").find("a").css("color", "var(--danger)");
-			$("#infoTab").find("a").html("Geschlossen");
-			$(".addNewRow")[0].style.display = "none";
-			$(".eventEdit").find("#eventStatus").val("Abgeschlossen");
-			$(".eventEdit").find("#eventStatus").css("color", "#dc3545");
-		} else {
-			$("#closeEventBtn").html("Event Schließen");
-			$("#openEventBtn").css("display", "none");
-			$("#infoTab").find("a").css("color", "var(--teal)");
-			$("#infoTab").find("a").html("Geöffnet");
-			$(".eventEdit").find("#eventStatus").val("Laufend");
-			$(".eventEdit").find("#eventStatus").css("color", "#20c997");
-		}
-		if(Api.isAllowed("EventEdit")) {
-			$("#openEventBtn").show();
 		}
 	} else {
 		$("#viewContainer").html("<legend>Keine Berechtigungen</legend>");
@@ -169,6 +166,15 @@ async function RemoveBag(selectSource, bag, returns) {	// Undo a bag entry
 	try {
 		await DisplayAvialableKg('addNewRowSpec', 'addNewRowAvKg');
 	} catch {}
+}
+async function DeleteEvent() {
+	try {
+		await Api.fetchSimple("api/event/delete", ev.id);
+		PrintInfo("Event has been deleted!");
+		window.location.href='/events/eventManagement.html';
+	} catch(e) {
+		PrintError("Failed to delete Event. There are probably already references to it!");
+	}
 }
 function RequiredInput(obj) {	// Validates the event edit information fields
 	let el = $(obj);
@@ -409,15 +415,15 @@ async function UpdateAbschlussTable() {
 // Render ECharts
 async function RenderGraph1() {
 	var chart1 = echarts.init(document.getElementById("dia1"), 'dark', {renderer: 'svg'});
-	let legend = ["Eingang", "Ausgang"];
+	let legend = ["Eventlager", "Verkauft"];
 	let data1 = [
 		{
-			name: "Eingang",
+			name: "Eventlager",
 			type: "bar",
 			data: []
 		},
 		{
-			name: "Ausgang",
+			name: "Verkauft",
 			type: "bar",
 			data: []
 		}
@@ -440,7 +446,7 @@ async function RenderGraph1() {
 		xAxis[i] = await GetGoodInfo(good.goodInfo).specification;
 		data1[0].data[i] = good.outgoingSum;
 		if(ev.completed && Api.isAllowed("EventEdit")) {
-			data1[1].data[i] = good.returningSum;
+			data1[1].data[i] = good.outgoingSum - good.returningSum;
 		}
 	}
 
@@ -487,7 +493,6 @@ function ResizeAdjust() {	// Responsive window size adjust
 $(async function () {
 	$("#eventForm").hide();
 	$("#viewContainer").hide();
-	await Api.init();
 	if(await HeaderCheckLogin()) {
 		stock = await Api.fetchSimple("api/stock/list");
 		categories = await Api.fetchSimple("api/goodInfos");

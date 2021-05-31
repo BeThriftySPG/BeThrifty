@@ -47,9 +47,14 @@
 	vertical-align: middle;
 }
 /* Create New Event */
+#newEventPopup {
+	min-width:700px;
+	min-height:400px;
+}
 .newEventInput {
 	border-style:solid;
-	max-width: 200px;
+	width:50%;
+	margin-top:20px;
 }
 .newEventInput.required {
 	border-color:red;

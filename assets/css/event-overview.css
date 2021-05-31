@@ -77,7 +77,7 @@
 /* Row for adding Bag */
 .addNewRow {
 	width:100%;
-	background-color: #888;
+	background-color: none;
 }
 #addNewRowInput {
 	height:38px;
@@ -87,6 +87,9 @@
 	border:none;
 	font-family: Quicksand;
 	color:#666;
+}
+#addStartTableRow {
+	margin-top:10px;
 }
 
 /* Revoke Bag Button */
@@ -108,7 +111,7 @@
 /* Withdraw Bag Button */
 .withdraw_input {
 	height:27px;
-	max-width: 100px;
+	max-width: 75px;
 	padding-left: 10px;
 	border:none;
 	font-size: 16px;
