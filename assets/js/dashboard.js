@@ -68,7 +68,7 @@ async function RenderWarenkategorieChart() {	// Category Pie-Chart
 		let total = 0;
 		for (let j = 0; j < stock.length; j++) {
 			if (GetCategoryByGoodInfo(stock[j].good.goodInfo).name == data[i].name) {
-				data[i].value += stock[j].good.weight;
+				data[i].value += RoundNumber2(stock[j].good.weight);
 			}
 		}
 	}
@@ -89,7 +89,11 @@ async function RenderWarenkategorieChart() {	// Category Pie-Chart
 		}],
 		tooltip: {
 			trigger: 'item',
-			formatter: '{b} {d} Kg'
+			formatter: function(params) {
+				let text = "<b style='font-size:16px'>" + params.name + "</b><br>";
+				text += '<span style="color:' + params.color + '" class="material-icons circle">circle</span> ' + "Gesamt" + "<span style='float:right;margin-left:15px;font-weight:bold'>" + RoundNumber2(params.value) + " Kg</span> ";
+				return text;
+			}
 		},
 	});
 	warenKatChart.on('click', function(params) {
@@ -129,8 +133,9 @@ async function RenderFinishedEventChart() {	// Finished Events Bar-Chart
 				moveIn += move[i].outgoingSum;
 				moveReturn += move[i].returningSum;
 			}
-			data[0].data[count] = moveReturn;
-			data[1].data[count] = moveIn - moveReturn;
+			data[0].data[count] = RoundNumber2(moveReturn);
+			data[1].data[count] = RoundNumber2(moveIn - moveReturn);
+
 			yAxis[count] = events[i].eventname;
 			count++;
 		}
@@ -164,6 +169,11 @@ async function RenderFinishedEventChart() {	// Finished Events Bar-Chart
 			type: 'category',
 			data: yAxis
 		},
+	});
+	ongoingEventChart.on('click', function(params) {
+		//console.log(params);
+		//return "";
+		//window.location.href = Api.apiServerAdress + "/events/eventOverview.html?id=60b64815a36c6de3218c9140";
 	});
 }
 async function RenderFinishedEventTable() {	// Finished Events Table
@@ -212,7 +222,7 @@ async function UpdateData() {	// Refresh Data
 function RenderSpecificationChart(category, percent, kg) {	// Specification Pie-Chart
 	// Doesn't need to fetch new data, since it uses the data from the "Category Pie-Chart"
 	$("#chart2").find("h1").remove();
-	$("#specBox").find(".graphTitle").html(category);
+	$("#boxSpecs").find(".graphTitle").html(category);
 	specChart = echarts.init(document.getElementById("chart2"), theme, {
 		renderer: render
 	});
@@ -250,7 +260,11 @@ function RenderSpecificationChart(category, percent, kg) {	// Specification Pie-
 		},
 		tooltip: {
 			trigger: 'item',
-			formatter: '{b} {d} Kg'
+			formatter: function(params) {
+				let text = "<b style='font-size:16px'>" + params.name + "</b><br>";
+				text += '<span style="color:' + params.color + '" class="material-icons circle">circle</span> ' + "Gesamt" + "<span style='float:right;margin-left:15px;font-weight:bold'>" + RoundNumber2(params.value) + " Kg</span> ";
+				return text;
+			}
 		},
 	});
 }
@@ -276,9 +290,8 @@ function GetStockById(id) {	// Returns (object)goodInfo using "id"
 }
 
 $(async function() {	// Executed after page load
-	await Api.init();
 	if (await HeaderCheckLogin()) {
-		await RenderAllCharts();
 		GenerateGrid();
+		await RenderAllCharts();
 	}
 });

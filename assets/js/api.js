@@ -480,6 +480,9 @@ function ValidateInputKg(el, onFocus) {
 		el.value = input.trim();
 	}
 }
+function RoundNumber2(num) {
+	return Math.round(num * 100) / 100;
+}
 
 // Login Functions
 async function HeaderCheckLogin() {	// Initializes API and Login-Sidebar

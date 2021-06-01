@@ -314,7 +314,7 @@ async function UpdateStartTable() {
 		data[i] = [];
 		data[i][0] = cat.specification;
 		data[i][1] = '<div>' + moveStock[i].outgoing.length + ' Säcke &nbsp; [';
-		data[i][2] = moveStock[i].outgoingSum + " Kg";
+		data[i][2] = RoundNumber2(moveStock[i].outgoingSum) + " Kg";
 		data[i][3] = cat.category;
 
 		for(let s = 0; s < moveStock[i].outgoing.length; s++) {
@@ -377,7 +377,7 @@ async function UpdateAbschlussTable() {
 		data[i] = [];
 		data[i][0] = cat.specification;
 		data[i][1] = '<div>' + moveStock[i].outgoing.length + ' Säcke &nbsp; [';
-		data[i][2] = (moveStock[i].outgoingSum - moveStock[i].returningSum) + " Kg";
+		data[i][2] = RoundNumber2(moveStock[i].outgoingSum - moveStock[i].returningSum) + " Kg";
 		data[i][3] = "";
 		data[i][4] = cat.category;
 
@@ -385,13 +385,13 @@ async function UpdateAbschlussTable() {
 		if(moveStock[i].returningSum > 0) {
 			for(let s = 0; s < moveStock[i].returning.length; s++) {
 				if(ev.completed == false && Api.isAllowed("EventEdit")) {
-					data[i][1] += '<button title="Sack Löschen" class="bagRemoveBtn" onclick="RemoveBag(`' + cat.id + '`, ' + moveStock[i].returning[s] + ', true)">' + moveStock[i].returning[s] + '</button>';
+					data[i][1] += '<button title="Sack Löschen" class="bagRemoveBtn" onclick="RemoveBag(`' + cat.id + '`, ' + RoundNumber2(moveStock[i].returning[s]) + ', true)">' + moveStock[i].returning[s] + '</button>';
 				} else {
 					data[i][1] += "<span class='bag'>" + moveStock[i].returning[s] + "</span>";
 				}
 				if(s < moveStock[i].returning.length - 1) data[i][1] += ", ";
 			}
-			data[i][1] += '] <span class="bag_sum">' + moveStock[i].returningSum + " Kg</span>" + '</div>';
+			data[i][1] += '] <span class="bag_sum">' + RoundNumber2(moveStock[i].returningSum) + " Kg</span>" + '</div>';
 		} else {
 			data[i][1] = "Kein Eintrag";
 		}

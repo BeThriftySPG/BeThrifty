@@ -142,7 +142,6 @@ $(async function () {
 	$("#viewContainer").hide();
 	if(await HeaderCheckLogin()) {
 		await LoadEventTables();
-		await LoadEventTables();
 		$("#viewContainer").show();
 	}
 });
