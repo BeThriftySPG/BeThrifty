@@ -7,6 +7,7 @@ var stock;
 var categories;
 var categoryInfos;
 var grid;
+var allCategories;
 // EChart Configuration
 var theme = '';	// Design: "", "vintage", "dark"
 var render = 'svg';	// Render Technology: "svg", "canvas"
@@ -104,7 +105,8 @@ async function RenderFinishedEventChart() {	// Finished Events Bar-Chart
 	ongoingEventChart = echarts.init(document.getElementById("chart4"), theme, {
 		renderer: render
 	});
-	let events = await GetEvents();
+	let events = await Api.fetchSimple("api/events/movement", 50);
+
 	// 1 => Wieviel zurück
 	// 2 => Wieviel noch im Event (Verkauf)
 	let data = [{
@@ -124,9 +126,10 @@ async function RenderFinishedEventChart() {	// Finished Events Bar-Chart
 	];
 	let yAxis = [];
 	let count = 0;
-	for (let i = 0; i < events.length && i < 25; i++) {
-		if (events[i].completed) {
-			let move = await Api.fetchSimple("api/event/movement", events[i].id);
+	for (let i = 0; i < events.length; i++) {
+		if (events[i].event.completed) {
+			//let move = await Api.fetchSimple("api/event/movement", events[i].id);
+			let move = events[i].movement;
 			let moveIn = 0;
 			let moveReturn = 0;
 			for (let i = 0; i < move.length; i++) {
@@ -136,7 +139,7 @@ async function RenderFinishedEventChart() {	// Finished Events Bar-Chart
 			data[0].data[count] = RoundNumber2(moveReturn);
 			data[1].data[count] = RoundNumber2(moveIn - moveReturn);
 
-			yAxis[count] = events[i].eventname;
+			yAxis[count] = events[i].event.eventname;
 			count++;
 		}
 	}
@@ -182,7 +185,7 @@ async function RenderFinishedEventTable() {	// Finished Events Table
 	let html = "<table class='chartTable'>";
 	html += "<thead><tr><th>Datum<th>Event</tr></thead>";
 
-	for (let i = events.length - 1; i > 0 && i > events.length - 40; i--) {
+	for (let i = events.length - 1; i > 0 && i > events.length - 50; i--) {
 		if (events[i].completed == false) {
 			let loc = moment(events[i].date);
 			let c = "";
@@ -204,19 +207,20 @@ async function UpdateData() {	// Refresh Data
 	if (Api.isAllowed("StockView")) {
 		stock = await GetStockList();
 	}
+
+	allCategories = await Api.fetchSimple("api/goodinfos");
 	categories = await GetCategories();
 	categoryInfos = [];
+
 	for (let i = 0; i < categories.length; i++) {
 		categoryInfos[i] = {
 			name: categories[i],
 			specs: [],
 			count: 0
 		};
-		let specs = await GetSpecsByCategory(categories[i]);
+		let specs = await GetSpecsByCategory2(categories[i]);
 		categoryInfos[i].count = specs.length;
-		for (let s = 0; s < specs.length; s++) {
-			categoryInfos[i].specs[s] = specs[s];
-		}
+		categoryInfos[i].specs = specs;
 	}
 }
 function RenderSpecificationChart(category, percent, kg) {	// Specification Pie-Chart
@@ -287,6 +291,17 @@ function GetStockById(id) {	// Returns (object)goodInfo using "id"
 	for (let i = 0; i < stock.length; i++) {
 		if (stock[i].good.goodInfo == id) return stock[i].good;
 	}
+}
+function GetSpecsByCategory2(cat) {
+	let specs = [];
+	let c = 0;
+	for(let i = 0; i < allCategories.length; i++) {
+		if(allCategories[i].category == cat) {
+			specs[c] = allCategories[i];
+			c++;
+		}
+	}
+	return specs;
 }
 
 $(async function() {	// Executed after page load

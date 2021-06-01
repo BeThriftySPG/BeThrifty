@@ -489,7 +489,7 @@ async function HeaderCheckLogin() {	// Initializes API and Login-Sidebar
 	await Api.init();
 	if (Api.isLoggedin()) {
 		PrintInfo("Login status: " + Api.isLoggedin());
-		let user = await Api.fetchSimple("Api/user");
+		let user = await Api.fetchSimple("api/user");
 		if (user == null || user == undefined) return false;
 		let name = user.username;
 		document.getElementsByClassName("logo")[0].style.display = "inherit";
@@ -501,7 +501,7 @@ async function HeaderCheckLogin() {	// Initializes API and Login-Sidebar
 		document.getElementById("logo-name").innerHTML = name;
 		document.getElementById("logo-letter").innerHTML = name[0];
 		$("#logoBackground").css("background-color", name.toColor());
-		Api.user = await Api.fetchSimple("api/user");
+		Api.user = user;
 		if (Api.isAllowed("StockView")) {
 			$("#menuWarenlager").show();
 		}

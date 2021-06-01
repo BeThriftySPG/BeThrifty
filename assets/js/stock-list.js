@@ -287,7 +287,6 @@ function AutoFillNewCatSub(obj) {
 // Datatable & Search
 async function CreateDatatable() {
 	if(Api.isAllowed("StockView")) {
-		let wares = await GetStockList();
 		let categories = await GetGoodInfoList();
 		categories.sort(function(a, b){
 	    if(a.specification < b.specification) { return -1; }

@@ -6,6 +6,7 @@ var categories;
 var categoryNames;
 var startStock;
 var endStock;
+var moveStock;
 var startTable;
 var abschlussTable;
 var startNewRow;
@@ -17,6 +18,7 @@ var isEditable = true;
 async function LoadEvent() {	// Initializes the EventView
 	if(Api.isAllowed("EventView")) {
 		ev = await Api.fetchSimple("api/event", eventId);
+		moveStock = await Api.fetchSimple("api/event/movement", ev.id);
 		let loc = moment(ev.date);
 		loc.locale("de");
 
@@ -192,6 +194,13 @@ function RequiredInput(obj) {	// Validates the event edit information fields
 		//$("#updateEventBtn").attr("disabled", true);
 	}
 }
+function GetCategoryById(id) {
+	for(let i = 0; i < categories.length; i++) {
+		if(categories[i].id == id) {
+			return categories[i];
+		}
+	}
+}
 
 // UI Functions
 async function ToggleEditView() {
@@ -305,12 +314,11 @@ async function PrintStartTables() {
 	await SetupNewRowStart();
 }
 async function UpdateStartTable() {
-	let moveStock = await Api.fetchSimple("api/event/movement", ev.id);
 	let data = [];
-	stock = await Api.fetchSimple("api/stock/list");
 
 	for(let i = 0; i < moveStock.length; i++) {
-		let cat = await Api.fetchSimple("api/goodinfo", moveStock[i].goodInfo);
+		//let cat = await Api.fetchSimple("api/goodinfo", moveStock[i].goodInfo);
+		let cat = GetCategoryById(moveStock[i].goodInfo);
 		data[i] = [];
 		data[i][0] = cat.specification;
 		data[i][1] = '<div>' + moveStock[i].outgoing.length + ' Säcke &nbsp; [';
@@ -369,14 +377,14 @@ async function PrintAbschlussTable() {
 	startTable.columns.adjust().draw();
 }
 async function UpdateAbschlussTable() {
-	let moveStock = await Api.fetchSimple("api/event/movement", ev.id);
 	let data = [];
 
 	for(let i = 0; i < moveStock.length; i++) {
-		let cat = await Api.fetchSimple("api/goodinfo", moveStock[i].goodInfo);
+		//let cat = await Api.fetchSimple("api/goodinfo", moveStock[i].goodInfo);
+		let cat = GetCategoryById(moveStock[i].goodInfo);
 		data[i] = [];
 		data[i][0] = cat.specification;
-		data[i][1] = '<div>' + moveStock[i].outgoing.length + ' Säcke &nbsp; [';
+		data[i][1] = '<div>' + moveStock[i].returning.length + ' Säcke &nbsp; [';
 		data[i][2] = RoundNumber2(moveStock[i].outgoingSum - moveStock[i].returningSum) + " Kg";
 		data[i][3] = "";
 		data[i][4] = cat.category;
@@ -439,10 +447,9 @@ async function RenderGraph1() {
 		legend = ["Eventlager"];
 	}
 	let xAxis = [];
-	let movement = await Api.fetchSimple("api/event/movement", ev.id);
 
-	for(let i = 0; i < movement.length; i++) {
-		let good = movement[i];
+	for(let i = 0; i < moveStock.length; i++) {
+		let good = moveStock[i];
 		xAxis[i] = await GetGoodInfo(good.goodInfo).specification;
 		data1[0].data[i] = good.outgoingSum;
 		if(ev.completed && Api.isAllowed("EventEdit")) {
@@ -460,7 +467,16 @@ async function RenderGraph1() {
         trigger: 'axis',
         axisPointer: {
             type: 'shadow'
-        }
+        },
+				formatter: function(params) {
+					let text = "<b style='font-size:16px'>" + params[0].axisValue + "</b><br>";
+					text += '<span style="color:' + params[0].color + ';font-size:12px" class="material-icons circle">circle</span> ' + params[0].seriesName + "<span style='float:right;margin-left:15px;font-weight:bold'>" + RoundNumber2(params[0].value) + " Kg</span> ";
+					text += "<br>";
+					if(params.length > 1) {
+						text += '<span style="color:' + params[1].color + ';font-size:12px" class="material-icons circle">circle</span> ' + params[1].seriesName + "<span style='float:right;margin-left:15px;font-weight:bold'>" + RoundNumber2(params[1].value) + " Kg</span> ";
+					}
+					return text;
+				}
     },
 		legend: {
 			 data: legend,
@@ -497,14 +513,13 @@ $(async function () {
 		stock = await Api.fetchSimple("api/stock/list");
 		categories = await Api.fetchSimple("api/goodInfos");
 		categoryNames = await GetCategories();
-
-		await LoadEvent();
-		await PrintStartTables();
-		await PrintAbschlussTable();
 		await ToggleEditView();
 		await RenderGraph1();
-		ResizeAdjust();
 		$("#eventForm").show();
+		await PrintStartTables();
+		await PrintAbschlussTable();
+
+		ResizeAdjust();
 	}
 });
 $(window).resize(function() {
