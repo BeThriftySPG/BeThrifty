@@ -18,7 +18,7 @@ var isEditable = true;
 async function LoadEvent() {	// Initializes the EventView
 	if(Api.isAllowed("EventView")) {
 		ev = await Api.fetchSimple("api/event", eventId);
-		moveStock = await Api.fetchSimple("api/event/movement", ev.id);
+		await RefreshEventData();
 		let loc = moment(ev.date);
 		loc.locale("de");
 
@@ -61,6 +61,9 @@ async function LoadEvent() {	// Initializes the EventView
 		$("#viewContainer").html("<legend>Keine Berechtigungen</legend>");
 	}
 	$("#viewContainer").show();
+}
+async function RefreshEventData() {
+	moveStock = await Api.fetchSimple("api/event/movement", ev.id);
 }
 async function OpenCloseEvent() {	// Changes the event value "completed"
 	try {
@@ -128,8 +131,7 @@ async function AddBagStartRow() {	// Adds a bag that shipped to the event
 			DisplayAvialableKg('addNewRowSpec', 'addNewRowAvKg');
 		} catch {}
 	} catch(e) {
-		console.warn("Uploading new bag failed!");
-		console.error(e);
+		PrintError(e);
 	}
 }
 async function WithdrawBag(goodInfoId, inputId) {	// Adds a bag that returns from the event
@@ -142,7 +144,7 @@ async function WithdrawBag(goodInfoId, inputId) {	// Adds a bag that returns fro
 		};
 
 		await Api.fetchSimple("api/event/withdraw", data);
-		UpdateAbschlussTable();
+		await UpdateAbschlussTable();
 		PrintInfo("Bag has been withdrawn!");
 	} catch(e) {
 		PrintError(e);
@@ -315,6 +317,7 @@ async function PrintStartTables() {
 }
 async function UpdateStartTable() {
 	let data = [];
+	await RefreshEventData();
 
 	for(let i = 0; i < moveStock.length; i++) {
 		//let cat = await Api.fetchSimple("api/goodinfo", moveStock[i].goodInfo);
@@ -378,6 +381,7 @@ async function PrintAbschlussTable() {
 }
 async function UpdateAbschlussTable() {
 	let data = [];
+	await RefreshEventData();
 
 	for(let i = 0; i < moveStock.length; i++) {
 		//let cat = await Api.fetchSimple("api/goodinfo", moveStock[i].goodInfo);
