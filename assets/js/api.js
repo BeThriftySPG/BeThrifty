@@ -3,8 +3,8 @@
 if (this.Api === undefined) {
 	this.Api = (function() {
 		//const apiServerAdress = "https://whitehelmet.ddns.net:5001/";
-		const apiServerAdress = "http://91.113.56.60:5000/";	// Ip-Address of the API-Server
-		//const apiServerAdress = "https://bethriftyapi.azurewebsites.net/";
+		//const apiServerAdress = "http://91.113.56.60:5000/";	// Ip-Address of the API-Server
+		const apiServerAdress = "https://bethriftyapi.azurewebsites.net/";
 		const apiCreateUserPage = "api/user/create";
 		const apiLoginPage = "api/user/login";
 		const apiRefreshTokenPage = "api/user/refreshToken";
