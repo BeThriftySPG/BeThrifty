@@ -129,16 +129,16 @@ async function OpenCreateUserWindow() {
 	EditUser("");
 }
 async function UpdateUserGroupDropdown(group) {
-	userGroupInput.html("");
+	let userGroupInput = $("#userGroupInput");
 	let groups = await Api.fetchSimple("api/groups");
 	groups.forEach(el => {
 		if(group != null && el.groupname == group) {
-			userGroupInput.append("<option selected disabled value='" + el.groupname + "'>" + el.groupname + "</option>");
+			//userGroupInput.append("<option selected disabled value='" + el.groupname + "'>" + el.groupname + "</option>");
 		} else {
 			userGroupInput.append("<option value='" + el.groupname + "'>" + el.groupname + "</option>");
 		}
 	});
-	userGroupInput.refresh();
+	//userGroupInput.refresh();
 }
 function CreateGroup() {
 	// Creates a new Group using the EditGroup function
@@ -228,8 +228,8 @@ function BuildEditGroupPermissions() {
 			select.style.display = "initial";
 		}
 	}
-	userGroupInput.refresh();
-	groupEditSelect.refresh();
+	//userGroupInput.refresh();
+	//groupEditSelect.refresh();
 }
 function InitDropdowns() {
 	userGroupInput = $("#userGroupInput").prettyDropdown({
@@ -253,7 +253,7 @@ async function CreateUser() {
 		ToggleNewUser();
 		PrintInfo("User has been created.");
 	} catch(e) {
-		PrintError();
+		PrintError(e);
 	}
 }
 async function DeleteUser(name) {
@@ -285,7 +285,7 @@ async function EditUser(username) {
 	// Fills the User-Edit Tab with the given information
 	ToggleNewUser(true);
 	const usernameInput = document.getElementById("usernameInput");
-	const userPasswordInput = document.getElementById("userGroupInput");
+	const userPasswordInput = document.getElementById("userPasswordInput");
 	const userGroupInput = document.getElementById("userGroupInput")
 	if(!isNewUser) {
 		const user = await Api.fetchSimple("api/user", username);
@@ -361,14 +361,14 @@ async function EditGroup(groupName) {	// Create or upload modified Groups, isNew
 		c++;
 	}
 	BuildEditGroupPermissions();
-	userGroupInput.refresh();
-	groupEditSelect.refresh();
+	//userGroupInput.refresh();
+	//groupEditSelect.refresh();
 }
 
 $(async function () {
 	if(await HeaderCheckLogin()) {
 		// Loads all avialable Groups and Permissions on page-load
-		InitDropdowns();
+		//InitDropdowns();
 		await FetchUsers();
 		await FetchUserGroups();
 		await FetchPermissions();
